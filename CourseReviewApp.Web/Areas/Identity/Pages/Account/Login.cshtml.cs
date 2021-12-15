@@ -1,34 +1,28 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+using CourseReviewApp.Model.DataModels;
+using CourseReviewApp.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using CourseReviewApp.Model.DataModels;
-using CourseReviewApp.Services.Interfaces;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
-        private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly IUserService _userService;
 
         public LoginModel(SignInManager<AppUser> signInManager,
-            ILogger<LoginModel> logger,
-            UserManager<AppUser> userManager, IUserService userService)
+            ILogger<LoginModel> logger, IUserService userService)
         {
-            _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _userService = userService;
@@ -48,7 +42,6 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
         {
             [Required]
             [Display(Name = "Username")]
-            //[EmailAddress]
             public string Username { get; set; }
 
             [Required]
@@ -81,16 +74,16 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-        
+
             if (ModelState.IsValid)
             {
                 AppUser user = await _userService.GetUser(u => u.UserName == Input.Username);
-                if(user == null)
+                if (user == null)
                 {
                     ModelState.AddModelError(string.Empty, "The username or password is incorrect.");
                     return Page();
                 }
-                else if(!user.IsActive)
+                else if (!user.IsActive)
                 {
                     ModelState.AddModelError(string.Empty, "User is blocked.");
                     return Page();
@@ -113,7 +106,7 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    if(!user.EmailConfirmed)
+                    if (!user.EmailConfirmed)
                     {
                         ModelState.AddModelError(string.Empty, "User's account email is not confirmed.");
                         return Page();

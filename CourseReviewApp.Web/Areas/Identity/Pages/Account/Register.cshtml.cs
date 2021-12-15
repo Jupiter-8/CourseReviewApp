@@ -49,7 +49,7 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
             string returnUrl = "~/Identity/Account/Login";
             if (ModelState.IsValid)
             {
-                var user = CreateUser(Input);
+                var user = await CreateUser(Input);
                 var result = await _userManager.CreateAsync(user.Item1, Input.Password);
                 if (result.Succeeded)
                 {
@@ -69,8 +69,8 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
 
                     await _emailSenderService.SendEmailAsync(Input.Email, "Confirm your email", body);
                     await _userManager.AddToRoleAsync(user.Item1, user.Item2.Name);
-                    TempData["LoginModalMsg"] = "Your account has been created, you must confirm your email if you want to log in. " +
-                        "A message with the email confirmation link has been sent to your email adress.";
+                    TempData["LoginModalMsg"] = "Your account has been created. If you want to log in, you must first confirm your email. " +
+                        "A message with a confirmation link has been sent to your email adress.";
 
                     return LocalRedirect(returnUrl);
                 }
@@ -95,9 +95,9 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
                 }), "Value", "Text", (await _dbContext.Roles.FirstOrDefaultAsync(r => r.RoleValue == RoleValue.Course_client)).Id);
         }
 
-        private Tuple<AppUser, Role> CreateUser(RegisterUserVm viewModel)
+        private async Task<Tuple<AppUser, Role>> CreateUser(RegisterUserVm viewModel)
         {
-            var role = _dbContext.Roles.FirstOrDefault(r => r.Id == viewModel.UserType);
+            Role role = await _dbContext.Roles.FirstOrDefaultAsync(r => r.Id == viewModel.UserType);
 
             if (role == null)
             {

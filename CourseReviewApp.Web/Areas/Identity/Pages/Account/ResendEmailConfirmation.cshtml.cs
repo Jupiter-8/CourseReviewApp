@@ -49,7 +49,7 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
             var user = await _userManager.FindByEmailAsync(Input.Email);
             if (user == null)
             {
-                ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+                ModelState.AddModelError(string.Empty, "User not found.");
                 return Page();
             }
 
@@ -67,7 +67,7 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
             body = body.Replace("{href}", callbackUrl);
 
             await _emailSenderService.SendEmailAsync(Input.Email, "Confirm your email", body);
-            TempData["LoginModalMsg"] = "A message with the email verification link has been sent to your email adress.";
+            TempData["LoginModalMsg"] = "A message with a confirmation link has been sent to your email adress.";
 
             return LocalRedirect("~/Identity/Account/Login");
         }

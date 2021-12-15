@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CourseReviewApp.Model.DataModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using CourseReviewApp.Model.DataModels;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
 {
@@ -33,7 +30,7 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(32, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
@@ -78,7 +75,7 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
             var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
             if (result.Succeeded)
             {
-                TempData["LoginModalMsg"] = "Your password has been reseted. You can log in.";
+                TempData["LoginModalMsg"] = "Your password has been reset. You can log in.";
                 return LocalRedirect("~/Identity/Account/Login");
             }
 

@@ -42,7 +42,8 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
                 var user = await _userManager.FindByEmailAsync(Input.Email);
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
-                    return RedirectToPage("./ForgotPasswordConfirmation");
+                    ModelState.AddModelError(string.Empty, "User does not exist or his email is not confirmed.");
+                    return Page();
                 }
 
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -57,7 +58,7 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
                 body = body.Replace("{href}", callbackUrl);
 
                 await _emailSenderService.SendEmailAsync(Input.Email, "Reset Password", body);
-                TempData["LoginModalMsg"] = "A message with the password reset link has been sent to your email adress.";
+                TempData["LoginModalMsg"] = "A message with a password reset link has been sent to your email adress.";
 
                 return LocalRedirect("~/Identity/Account/Login");
             }
