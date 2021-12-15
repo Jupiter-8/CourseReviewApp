@@ -1,0 +1,101 @@
+﻿@model IEnumerable<CourseVm>
+@{
+    ViewData["Title"] = ViewBag.ModeratingActions ? "Course management" : "Your courses";
+}
+
+<div class="container">
+    <div class="row my-4">
+        <div class="card bg-light col-12 p-3 min-vh-100">
+            <h1 class="font-weight-light text-center text-secondary"><i class="fas fa-book"></i> @ViewData["Title"]</h1>
+            <hr />
+            <div>
+                <table class="table table-responsive-lg" id="courses-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CategoryName)
+                            </th>
+                            <th class="col-2">
+                                @Html.DisplayNameFor(model => model.DateAdded)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Status)
+                            </th>
+                            <th class="col-2">
+                                @Html.DisplayNameFor(model => model.AvgRating)
+                            </th>
+                            <th>
+                                Reviews
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a class="card-link text-info" asp-action="Details" asp-controller="Course" asp-route-id="@item.Id">@item.Name</a>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CategoryName)
+                                </td>
+                                <td data-order="@item.DateAdded.ToString("yyyyMMdd HH:mm")">
+                                    @item.DateAdded.ToString("dd.MM.yyyy HH:mm")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AvgRating)
+                                </td>
+                                <td>
+                                    @item.Reviews.Count
+                                </td>
+                                <td>
+                                    <div class="dropdown mb-5">
+                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-cog mr-2"></i><span>Options</span>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" asp-action="ManagementDetails" asp-controller="Course" asp-route-id="@item.Id">Details</a>
+                                            @if (User.IsInRole("Course_owner") && !ViewBag.ModeratingActions)
+                                            {
+                                                <a class="dropdown-item" asp-action="AddOrEditCourse" asp-controller="Course" asp-route-id="@item.Id">Edit</a>
+                                            }
+                                            @if ((User.IsInRole("Admin") || User.IsInRole("Moderator")) && ViewBag.ModeratingActions)
+                                            {
+                                                <a class="dropdown-item" asp-action="ChangeCourseStatus" asp-controller="Course" asp-route-id="@item.Id">Change status</a>
+                                            }
+                                            @if (User.IsInRole("Admin") || (User.IsInRole("Course_owner") && !ViewBag.ModeratingActions))
+                                            {
+                                                <a class="dropdown-item" asp-action="DeleteCourse" asp-controller="Course" asp-route-id="@item.Id">Delete</a>
+                                            }
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="_ModalMsgPartial" />
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#courses-table").DataTable();
+            var msg = '@TempData["CourseManagementMsgModal"]';
+            if (msg != '') {
+                $("#msg-modal-body").html(msg);
+                $("#msg-modal").modal("show");
+             }
+        });
+    </script>
+}

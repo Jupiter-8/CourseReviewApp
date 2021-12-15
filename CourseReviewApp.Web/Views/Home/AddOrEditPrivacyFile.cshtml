@@ -1,0 +1,41 @@
+﻿@model CourseReviewApp.Web.ViewModels.AddOrEditPrivacyFileVm
+@{
+    ViewData["Title"] = "Change privacy file";
+}
+
+<div class="container">
+    <div class="row d-flex justify-content-center mt-4">
+        <div class="card bg-light p-3 col-12 col-sm-11 col-md-10 col-lg-8 col-xl-7">
+            <h1 class="font-weight-light text-center">@ViewData["Title"]</h1>
+            <hr />
+            <form enctype="multipart/form-data" asp-action="AddOrEditPrivacyFile">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group form-check">
+                    <input type="hidden" asp-for="IsNew" />
+                </div>
+                <div class="form-group">
+                    <div class="custom-file">
+                        <input id="privacy-file-input" asp-for="File" class="custom-file-input" onchange="uploadPrivacyFile(this)" />
+                        <label class="custom-file-label" for="customFile">Choose file</label>
+                        <p id="privacy-file-validation-msg" class="text-danger mt-2" hidden></p>
+                    </div>
+                    <span asp-validation-for="File" class="text-danger"></span>
+                    <hr />
+                    <p>
+                        <span>File: </span>
+                        <span id="privacy-file-name">@Model.FilePath</span>
+                    </p>
+                </div>
+                <div class="form-group d-flex justify-content-center">
+                    <button class="btn btn-success mr-3"><i class="fas fa-check mr-2"></i><span>Confirm</span></button>
+                    <button type="button" class="btn btn-danger btn-back"><i class="fas fa-times mr-2"></i><span>Cancel</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/Views/Home/add-or-edit-privacy-file.js"></script>
+}

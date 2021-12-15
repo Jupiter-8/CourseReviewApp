@@ -1,0 +1,120 @@
+﻿@model CourseReviewApp.Web.ViewModels.CourseVm
+
+<div class="container">
+    <div class="row d-flex justify-content-center my-4">
+        <div class="card bg-light p-3 col-12 col-sm-11 col-md-10 col-lg-8 col-xl-7">
+            <h1 class="font-weight-light text-center">Course details</h1>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+                <dt class="col-sm-3">
+                    Author
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Owner.FullName)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.DateAdded)
+                </dt>
+                <dd class="col-sm-9">
+                    @Model.DateAdded.ToString("dd.MM.yyyy HH:mm")
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.DateEdited)
+                </dt>
+                <dd class="col-sm-9">
+                    @(Model.DateEdited != null ? Model.DateEdited.Value.ToString("dd.MM.yyyy mm:ss") : "Was not edited")
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Duration)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Duration) h
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Language)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Language)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Status)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Status)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.CategoryName)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.CategoryName)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.CourseWebsiteUrl)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.CourseWebsiteUrl)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.AvgRating)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.AvgRating)
+                </dd>
+                <dt class="col-sm-3">
+                    Reviews
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Reviews.Count)
+                </dd>
+            </dl>
+            <div class="accordion" id="accordion">
+                <div class="card">
+                    <div class="card-header" id="heading-1">
+                        <h2 class="mb-0">
+                            <button class="btn btn-block text-left shadow-none" type="button" data-toggle="collapse" data-target="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
+                                <h5 class="text-decoration-none font-weight-light"><i class="fas fa-chevron-down collapse-arrow-icon"></i> Course contents</h5>
+                            </button>
+                        </h2>
+                    </div>
+
+                    <div id="collapse-1" class="collapse collapse-change-arrow hide" aria-labelledby="heading-1" data-parent="#accordion">
+                        <div class="card-body">
+                            <h5>Short description</h5>
+                            <p>@Model.ShortDescription</p>
+                            <h5>Long description</h5>
+                            <p>@Model.LongDescription</p>
+                            <h5>Learning skills</h5>
+                            <ol>
+                                @foreach (var skill in Model.LearningSkills)
+                                {
+                                    <li>@skill.Name</li>
+                                }
+                            </ol>
+                            @if(Model.LearningSkills.Count == 0)
+                            {
+                                <p>No learning skills</p>
+                            }
+                            <h5>Image</h5>
+                            <div class="row d-flex justify-content-center mt-3">
+                                <div class="col-8">
+                                    <div class="embed-responsive embed-responsive-4by3">
+                                        <img class="embed-responsive-item" src="~/Images/Courses/@Model.ImagePath"></img>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center text-white my-3">
+                <a class="btn btn-success btn-back"><i class="fas fa-chevron-left mr-2"></i><span>Back</span></a>
+            </div>
+        </div>
+    </div>
+</div>

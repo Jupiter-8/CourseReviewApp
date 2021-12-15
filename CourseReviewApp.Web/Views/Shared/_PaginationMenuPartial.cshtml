@@ -1,0 +1,31 @@
+﻿@model dynamic
+
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <nav>
+            <ul class="pagination">
+                <li class="@(Model.IsFirstPage ? "page-item disabled" : "page-item")">
+                    <a class="page-link text-info" aria-label="Previous" asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller asp-route-categoryId="@ViewBag.CategoryId"
+                       asp-route-searchString=@ViewBag.SearchString asp-route-page="@(Model.PageNumber - 1)" asp-route-ownerId="@ViewBag.OwnerId" asp-route-isMainCategory="@ViewBag.IsMainCategory">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                @for (int i = 1; i <= Model.PageCount; i++)
+                {
+                    var liClass = (i == Model.PageNumber ? "page-item active" : "page-item");
+                    var aClass = (i == Model.PageNumber ? "page-link text-white" : "page-link text-info");
+                    <li class='@liClass'>
+                        <a class="@aClass" asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller asp-route-ownerId="@ViewBag.OwnerId" asp-route-categoryId="@ViewBag.CategoryId"
+                           asp-route-sortOrder=@ViewBag.SortOrder asp-route-searchString=@ViewBag.SearchString asp-route-page="@i" asp-route-isMainCategory="@ViewBag.IsMainCategory">@i</a>
+                    </li>
+                }
+                <li class="@(Model.IsLastPage ? "page-item disabled" : "page-item")">
+                    <a class="page-link text-info" aria-label="Next" asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller asp-route-ownerId="@ViewBag.OwnerId" asp-route-categoryId="@ViewBag.CategoryId"
+                       asp-route-sortOrder=@ViewBag.SortOrder asp-route-searchString=@ViewBag.SearchString asp-route-page="@(Model.PageNumber + 1)" asp-route-isMainCategory="@ViewBag.IsMainCategory">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+﻿using CourseReviewApp.Model.DataModels;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+
+namespace CourseReviewApp.Services.Interfaces
+{
+    public interface IReviewService
+    {
+        Task<Review> GetReview(Expression<Func<Review, bool>> filter);
+        IEnumerable<Review> GetReviews(Expression<Func<Review, bool>> filter = null);
+        Task AddOrEditReview(Review review);
+        Task DeleteReview(int id);
+        Task<bool> VoteForReviewHelpfullness(int userId, int reviewId);
+        Task AddOrEditOwnerComment(OwnerComment ownerComment);
+        Task<OwnerComment> GetOwnerComment(Expression<Func<OwnerComment, bool>> filter);
+        Task DeleteOwnerComment(int id);
+    }
+}

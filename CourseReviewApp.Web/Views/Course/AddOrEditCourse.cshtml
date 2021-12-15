@@ -1,0 +1,199 @@
+﻿@model CourseReviewApp.Web.ViewModels.AddOrEditCourseVm
+@{
+    ViewData["Title"] = Model.Id.HasValue ? "Edit course" : "Add course";
+}
+
+<div class="container">
+    <div class="row justify-content-center my-4">
+        <div class="card bg-light p-3 col-11 col-sm-11 col-md-10 col-lg-8 col-xl-7">
+            <h1 class="font-weight-light text-center">@ViewData["Title"]</h1>
+            <hr />
+            <form enctype="multipart/form-data" asp-action="AddOrEditCourse">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input asp-for="Id" type="hidden" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <div class="d-flex">
+                        <input asp-for="Name" class="form-control col-12" autocomplete="off" />
+                        <button class="btn btn-transparent btn-pos btn-clear" type="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ShortDescription" class="control-label"></label>
+                    <div class="d-flex">
+                        <textarea asp-for="ShortDescription" class="form-control col-12" rows="3"></textarea>
+                        <button class="btn btn-transparent btn-pos btn-clear h-25" type="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <span asp-validation-for="ShortDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LongDescription" class="control-label"></label>
+                    <div class="d-flex">
+                        <textarea asp-for="LongDescription" class="form-control col-12" rows="20"></textarea>
+                        <button class="btn btn-pos btn-clear h-25" type="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <span asp-validation-for="LongDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CourseWebsiteUrl" class="control-label"></label>
+                    <div class="d-flex">
+                        <input asp-for="CourseWebsiteUrl" class="form-control col-12" autocomplete="off" />
+                        <button class="btn btn-transparent btn-pos btn-clear h-25" type="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <span asp-validation-for="CourseWebsiteUrl" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col">
+                            <label asp-for="ParentCategoryId" class="control-label"></label>
+                            <select asp-for="ParentCategoryId" asp-items="ViewBag.Categories" class="form-control">
+                                <option value="" selected></option>
+                            </select>
+                            <span asp-validation-for="ParentCategoryId" class="text-danger"></span>
+                        </div>
+                        <div class="col">
+                            <label asp-for="CategoryId" class="control-label"></label>
+                            <select asp-for="CategoryId" class="form-control">
+                            </select>
+                            <span asp-validation-for="CategoryId" class="text-danger" id="subcategory-validation-msg"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col">
+                            <label asp-for="Duration" class="control-label"></label>
+                            <input asp-for="Duration" type="number" step="1" min="1" class="form-control" autocomplete="off" />
+                            <span asp-validation-for="Duration" class="text-danger"></span>
+                        </div>
+                        <div class="col">
+                            <label asp-for="Language" class="control-label"></label>
+                            <div class="d-flex">
+                                <input asp-for="Language" class="form-control col-12" autocomplete="off" />
+                                <button class="btn btn-transparent btn-pos btn-clear" type="button">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <span asp-validation-for="Language" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+
+                </div>
+                <div class="form-group">
+                    <input asp-for="OwnerId" type="hidden" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <input asp-for="ImagePath" type="hidden" />
+                </div>
+                <div class="form-group">
+                    <input asp-for="DateAdded" type="hidden" />
+                </div>
+                <div class="form-group">
+                    <input asp-for="DateEdited" type="hidden" />
+                </div>
+                <div class="form-group">
+                    <input id="course-img-to-delete" asp-for="ImgToDelete" type="hidden" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Image" class="control-label"></label>
+                    <div class="custom-file">
+                        <input id="course-img-input" asp-for="Image" class="custom-file-input" onchange="uploadCourseImg(this)" />
+                        <label class="custom-file-label">Choose image</label>
+                        <span asp-validation-for="Image" class="text-danger" id="course-img-validation-msg"></span>
+                    </div>
+                    <p class="mt-4">
+                        <span>Image: </span>
+                        <span id="course-img-name">@(!string.IsNullOrEmpty(Model.ImagePath) ? Model.ImagePath : "default_course_image.jpg")</span>
+                    </p>
+                    <div class="row d-flex justify-content-center mt-3">
+                        <div class="col-8">
+                            <div class="embed-responsive embed-responsive-4by3">
+                                <img class="embed-responsive-item" id="course-img" src="@(!string.IsNullOrEmpty(Model.ImagePath) ? $"\\Images\\Courses\\{Model.ImagePath}" : "\\Images\\Courses\\default_course_image.jpg")" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button id="delete-course-image-btn" type="button" class="btn btn-sm btn-danger mb-3">
+                        <i class="fas fa-trash-alt mr-2"></i><span>Delete image</span>
+                    </button>
+                </div>
+                <div class="accordion" id="skills-accordion">
+                    @{ var anySkillExists = Model.LearningSkills.Any(ls => !string.IsNullOrEmpty(ls.Name)); }
+                    <div>
+                        <div class="card-header" id="headingOne">
+                            <h2 class="mb-0">
+                                <button class="btn text-decoration-none btn-block text-left shadow-none" type="button" data-toggle="collapse" data-target="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
+                                    <i id="collapse-icon" class="@(anySkillExists ? "fas fa-chevron-up" : "fas fa-chevron-down")"></i> Leargning skills (optional)
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapse-1" class="@(anySkillExists ? "collapse show" : "collapse hide")" aria-labelledby="heading-1" data-parent="#skills-accordion">
+                            <div class="card-body">
+                                <p>
+                                    Note:
+                                    @if (Model.Id.HasValue)
+                                    {
+                                        <span>To delete unwanted learning skill just clear his input field.</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Empty input fields will be ignored in building the learning skill list.</span>
+                                    }
+                                </p>
+                                @for (int i = 0; i < Model.LearningSkills.Count; i++)
+                                {
+                                    <div class="col-10">
+                                        @{ var ind = i + 1; }
+                                        <label class="control-label">Skill @ind:</label>
+                                        <div class="d-flex">
+                                            <input class="form-control" autocomplete="off" asp-for="LearningSkills[i].Name" type="text" />
+                                            <button class="btn btn-transparent btn-pos btn-clear" type="button">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                        <input asp-for="LearningSkills[i].CourseId" type="hidden" />
+                                        <input asp-for="LearningSkills[i].Id" type="hidden" />
+                                        <span asp-validation-for="LearningSkills[i].Name" class="text-danger"></span>
+                                    </div>
+                                }
+                                <hr />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row d-flex justify-content-center mt-5">
+                    <button class="btn btn-success mr-3"><i class="fas fa-check mr-2"></i><span>Confirm</span></button>
+                    <button type="button" class="btn btn-danger btn-back"><i class="fas fa-times mr-2"></i><span>Cancel</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/Views/Course/add-or-edit-course.js"></script>
+    @if(Model.Id.HasValue)
+    {
+        <script>
+            $(document).ready(function () {
+                getSubCategories(@Model.ParentCategoryId, @Model.CategoryId);
+            });
+        </script>
+    }
+}

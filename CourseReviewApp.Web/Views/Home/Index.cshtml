@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="jumbotron bg-light border">
+            <h1 class="display-4">Hello in the Course review app!</h1>
+            <p class="lead">
+                This app is a place where you can review online courses. Please
+                <a class="card-link text-info" asp-area="Identity" asp-page="/Account/Login">log in</a> if you want to add or review a online course.
+                If you don't have an account yet you can <a class="card-link ml-0 text-info" asp-area="Identity" asp-page="/Account/Register">register</a> now.
+            </p>
+            <hr class="my-4">
+            <p>Before you add your first course or review you should read our <a class="card-link text-info" asp-action="Privacy">privacy</a>.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 mt-5">
+            <div class="d-flex justify-content-center mb-3">
+                <h1 class="font-weight-light">Last added reviews</h1>
+            </div>
+            <hr />
+            <div class="d-flex justify-content-center mt-3">
+                <div id="last-added-reviews-load-spinner" class="spinner-border text-secondary carousel-load-spinner" role="status">
+
+                </div>
+                <p id="last-added-reviews-msg" class="text-danger font-weight-bold" hidden></p>
+            </div>
+            <div id="last-added-reviews">
+
+            </div>
+        </div>
+        <hr />
+    </div>
+
+    <div class="row d-flex justify-content-center mt-2">
+        <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-5">
+            <div class="d-flex justify-content-center">
+                <h1 class="font-weight-light">Last added courses</h1>
+            </div>
+            <hr />
+            <div class="d-flex justify-content-center mt-3">
+                <div id="last-added-courses-load-spinner" class="spinner-border text-secondary carousel-load-spinner" role="status">
+
+                </div>
+                <p id="last-added-courses-msg" class="text-danger font-weight-bold" hidden></p>
+            </div>
+            <div id="last-added-courses">
+
+            </div>
+        </div>
+
+        <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-5">
+            <div class="d-flex justify-content-center">
+                <h1 class="font-weight-light">Best rated courses</h1>
+            </div>
+            <hr />
+            <div class="d-flex justify-content-center mt-3">
+                <div id="best-rated-courses-load-spinner" class="spinner-border text-secondary carousel-load-spinner" role="status">
+
+                </div>
+                <p id="best-rated-courses-msg" class="text-danger font-weight-bold" hidden></p>
+            </div>
+            <div id="best-rated-courses">
+
+            </div>
+        </div>
+    </div>
+    <div class="row d-flex justify-content-center mt-5 mb-3">
+        <a class="btn btn-info" asp-action="Index" asp-controller="Course">
+            <i class="fas fa-bars mr-2"></i><span>All courses</span>
+        </a>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/Views/Home/home-index.js"></script>
+}

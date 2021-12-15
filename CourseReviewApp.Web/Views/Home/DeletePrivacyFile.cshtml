@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Delete privacy file";
+}
+
+<div class="container">
+    <div class="row d-flex justify-content-center mt-4">
+        <div class="card bg-light p-3 col-12 col-sm-11 col-md-10 col-lg-8 col-xl-7">
+            <h2 class="font-weight-light mb-3">Are you sure that you want to delete privacy file?</h2>
+            <hr />
+            <form asp-action="DeletePrivacyFile">
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-success mr-3"><i class="fas fa-check mr-2"></i><span>Confirm</span></button>
+                    <button type="button" class="btn btn-danger btn-back"><i class="fas fa-times mr-2"></i><span>Cancel</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

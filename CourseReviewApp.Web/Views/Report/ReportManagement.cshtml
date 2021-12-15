@@ -1,0 +1,83 @@
+﻿@model IEnumerable<ReviewReportVm>
+@{
+    ViewData["Title"] = "Report management";
+}
+
+<div class="container">
+    <div class="row my-4">
+        <div class="card bg-light col-12 p-3 min-vh-100">
+            <h1 class="font-weight-light text-center text-secondary"><i class="fas fa-flag"></i> @ViewData["Title"]</h1>
+            <hr />
+            <table class="table table-responsive-lg" id="reports-table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ReportReason)
+                        </th>
+                        <th>
+                            Report details
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ReportingUserName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.DateAdded)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.ReportReason.ToString().Replace('_', ' ')
+                            </td>
+                            <td>
+                                <a class="text-decoration-none text-info" asp-action="ReportDetails" asp-route-id="@item.Id">Show details</a>
+                            </td>
+                            <td>
+                                @if (item.ReportingUserId.HasValue)
+                                {
+                                    <span>@item.ReportingUserName</span>
+                                }
+                                else
+                                {
+                                    <span class="font-italic">User doesn't exist</span>
+                                }
+                            </td>
+                            <td data-order="@item.DateAdded.ToString("yyyyMMdd HH:mm")">
+                                @item.DateAdded.ToString("dd/MM/yyyy HH:mm")
+                            </td>
+                            <td>
+                                <div class="dropdown mb-5">
+                                    <button class="btn btn-sm btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-cog mr-2"></i><span>Options</span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a asp-action="DeleteReviewReport" asp-route-id="@item.Id" class="dropdown-item">Delete report</a>
+                                        <a asp-action="DeleteReview" asp-controller="Review" asp-route-id="@item.ReviewId" class="dropdown-item">Delete review</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<partial name="_ModalMsgPartial" />
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var msg = '@TempData["ReportManagementMsgModal"]';
+            if (msg != '') {
+                $("#msg-modal-body").html(msg);
+                $("#msg-modal").modal("show");
+            }
+            $("#reports-table").DataTable();
+        });
+    </script>
+}

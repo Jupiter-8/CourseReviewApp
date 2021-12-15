@@ -1,0 +1,81 @@
+﻿@model CourseReviewApp.Web.ViewModels.AddOrEditReviewVm
+@{
+    ViewData["Title"] = Model.Id.HasValue ? "Edit your review" : "Add your review";
+}
+
+<div class="container">
+    <div class="row d-flex justify-content-center my-4">
+        <div class="card bg-light p-3 col-12 col-sm-11 col-md-10 col-lg-8 col-xl-7">
+            <h1 class="font-weight-light text-center">@ViewData["Title"]</h1>
+            <hr />
+            <h4 class="font-weight-light">For course: <span class="font-weight-bolder">@ViewBag.CourseName</span></h4>
+            <form asp-action="AddOrEditReview" asp-controller="Review">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input asp-for="Id" type="hidden" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Contents" class="control-label"></label>
+                    <div class="d-flex">
+                        <textarea asp-for="Contents" class="form-control col-12" rows="15"></textarea>
+                        <button class="btn btn-transparent btn-pos btn-clear h-25" type="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <span asp-validation-for="Contents" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="WasHelpfullCount" type="hidden" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="RatingValue" class="control-label"></label>
+                    <div id="star-select" class="d-flex">
+                        <select asp-for="RatingValue" class="form-control fa text-warning col-12">
+                            <option id="option-1" class="text-warning" value="1">&#xf005; &#xf006; &#xf006; &#xf006; &#xf006;</option>
+                            <option id="option-2" class="text-warning" value="2">&#xf005; &#xf005; &#xf006; &#xf006; &#xf006;</option>
+                            <option id="option-3" class="text-warning" value="3">&#xf005; &#xf005; &#xf005; &#xf006; &#xf006;</option>
+                            <option id="option-4" class="text-warning" value="4">&#xf005; &#xf005; &#xf005; &#xf005; &#xf006;</option>
+                            <option id="option-5" class="text-warning" value="5">&#xf005; &#xf005; &#xf005; &#xf005; &#xf005;</option>
+                        </select>
+                        <div class="arrow-pos">
+                            <i class="fas fa-angle-down"></i>
+                        </div>
+                    </div>
+                    <span asp-validation-for="RatingValue" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="CourseId" type="hidden" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <input asp-for="AuthorId" type="hidden" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <input asp-for="DateAdded" type="hidden" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <input asp-for="DateEdited" type="hidden" class="form-control" />
+                </div>
+                <div class="form-group row d-flex justify-content-center mt-5">
+                    <button class="btn btn-success mr-3"><i class="fas fa-check mr-2"></i><span>Confirm</span></button>
+                    <button type="button" class="btn btn-danger btn-back"><i class="fas fa-times mr-2"></i><span>Cancel</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        if (navigator.userAgent.indexOf("Firefox") != -1) {
+            $("#option-1").html("&#9733;&#9734;&#9734;&#9734;&#9734;");
+            $("#option-2").html("&#9733;&#9733;&#9734;&#9734;&#9734;");
+            $("#option-3").html("&#9733;&#9733;&#9733;&#9734;&#9734;");
+            $("#option-4").html("&#9733;&#9733;&#9733;&#9733;&#9734;");
+            $("#option-5").html("&#9733;&#9733;&#9733;&#9733;&#9733;");
+        }
+    </script>
+}
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">

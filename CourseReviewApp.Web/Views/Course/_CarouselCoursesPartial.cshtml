@@ -1,0 +1,51 @@
+﻿@model IEnumerable<CourseVm>
+
+<div class="col-12">
+    <div id="@ViewBag.CarouselId" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#@ViewBag.CarouselId" data-slide-to="0" class="active"></li>
+            <li data-target="#@ViewBag.CarouselId" data-slide-to="1"></li>
+            <li data-target="#@ViewBag.CarouselId" data-slide-to="2"></li>
+            <li data-target="#@ViewBag.CarouselId" data-slide-to="3"></li>
+            <li data-target="#@ViewBag.CarouselId" data-slide-to="4"></li>
+        </ol>
+        <div class="carousel-inner">
+            @foreach (var course in Model)
+            {
+                <div class="@(course == Model.First() ? "carousel-item active" : "carousel-item")">
+                    <div class="embed-responsive embed-responsive-4by3">
+                        <img class="embed-responsive-item" src="~/Images/Courses/@course.ImagePath" />
+                    </div>
+                    <div class="carousel-caption d-md-block">
+                        <div class="bg-white rounded">
+                            <h6>
+                                <a class="text-info card-link"
+                                   asp-action="Details" asp-controller="Course" asp-route-id="@course.Id">@course.Name</a>
+                            </h6>
+                            <div>
+                                <span class="text-secondary font-weight-bold mr-1">@course.AvgRating.ToString("0.00")</span>
+                                <partial name="_StarRatingHalfsPartial" model="@course.AvgRating" />
+                                <span class="text-secondary ml-1">(@course.Reviews.Count)</span>
+                            </div>
+                            <span class="text-secondary"><small><i class="fas fa-calendar-alt"></i> @course.DateAdded.ToString("dd.MM.yyyy")</small></span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <a class="carousel-control-prev" href="#@ViewBag.CarouselId" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#@ViewBag.CarouselId" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+</div>
+
+<script>
+    $(".carousel").carousel({
+        interval: 10000
+    })
+</script>

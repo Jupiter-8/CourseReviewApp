@@ -1,0 +1,113 @@
+﻿@model IEnumerable<CourseVm>
+@{
+    ViewData["Title"] = "Courses";
+}
+
+<div class="container mt-4 p-0">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb font-weight-bold">
+                    <li class="breadcrumb-item active">Courses</li>
+                    @if (string.IsNullOrEmpty(ViewBag.OwnerName))
+                    {
+                        if (string.IsNullOrEmpty(ViewBag.ParentCategoryName))
+                        {
+                            <li class="breadcrumb-item active" asp-action="Index" asp-route-categoryId="@ViewBag.CategoryId">@ViewBag.CategoryName</li>
+                        }
+                        else
+                        {
+                            <li class="breadcrumb-item active">
+                                <a class="text-decoration-none text-info"
+                                   asp-action="Index" asp-route-categoryId="@ViewBag.ParentCategoryId" asp-route-isMainCategory="true">@ViewBag.ParentCategoryName</a>
+                            </li>
+                            <li class="breadcrumb-item active">@ViewBag.CategoryName</li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="breadcrumb-item active">@ViewBag.OwnerName</li>
+                    }
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4 col-md-12 col-sm-12 mb-2">
+            @await Component.InvokeAsync("Category")
+        </div>
+        <div class="col-lg-8 col-md-12 col-sm-12 mt-2">
+            <div class="d-flex">
+                <div><partial name="_SearchMenuPartial" /></div>
+                <div class="dropdown ml-3">
+                    <a class="btn btn-info" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-sort"></i>
+                        <span class="mx-2">
+                            @(!string.IsNullOrEmpty(ViewBag.SortOrder) ? ViewBag.SortOrder : "Sort")
+                        </span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller asp-route-ownerId="@ViewBag.OwnerId" asp-route-isMainCategory="@ViewBag.IsMainCategory"
+                           asp-route-sortOrder="Name ascending" asp-route-searchString=@ViewBag.SearchString asp-route-categoryId="@ViewBag.CategoryId" class="dropdown-item">Name ascending</a>
+                        <a asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller asp-route-ownerId="@ViewBag.OwnerId" asp-route-isMainCategory="@ViewBag.IsMainCategory"
+                           asp-route-sortOrder="Name descending" asp-route-searchString=@ViewBag.SearchString asp-route-categoryId="@ViewBag.CategoryId" class="dropdown-item">Name descending</a>
+                        <a asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller asp-route-ownerId="@ViewBag.OwnerId" asp-route-isMainCategory="@ViewBag.IsMainCategory"
+                           asp-route-sortOrder="Oldest" asp-route-searchString=@ViewBag.SearchString asp-route-categoryId="@ViewBag.CategoryId" class="dropdown-item">Oldest</a>
+                        <a asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller asp-route-ownerId="@ViewBag.OwnerId" asp-route-isMainCategory="@ViewBag.IsMainCategory"
+                           asp-route-sortOrder="Newest" asp-route-searchString=@ViewBag.SearchString asp-route-categoryId="@ViewBag.CategoryId" class="dropdown-item">Newest</a>
+                        <a asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller asp-route-ownerId="@ViewBag.OwnerId" asp-route-isMainCategory="@ViewBag.IsMainCategory"
+                           asp-route-sortOrder="Best rating" asp-route-searchString=@ViewBag.SearchString asp-route-categoryId="@ViewBag.CategoryId" class="dropdown-item">Best rating</a>
+                        <a asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller asp-route-ownerId="@ViewBag.OwnerId" asp-route-isMainCategory="@ViewBag.IsMainCategory"
+                           asp-route-sortOrder="Worst rating" asp-route-searchString=@ViewBag.SearchString asp-route-categoryId="@ViewBag.CategoryId" class="dropdown-item">Worst rating</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row ml-lg-3 mt-2 p-4 d-flex justify-content-center">
+                @if (Model != null)
+                {
+                    @foreach (var item in Model)
+                    {
+                        <div class="containter mb-3 w-100 bg-light rounded small-course-card border">
+                            <div class="row no-gutters py-3 pl-3">
+                                <div class="col-4 col-md-4">
+                                    <div class="row d-flex justify-content-center">
+                                        <div class="col-12">
+                                            <div class="embed-responsive embed-responsive-4by3">
+                                                <img class="embed-responsive-item" src="~/Images/Courses/@item.ImagePath" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-8 col-md-8">
+                                    <div class="px-3 h-100">
+                                        <h5 class="card-title">
+                                            <a class="card-link text-info" asp-controller="Course" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
+                                        </h5>
+                                        <p class="card-text mb-2 h-50">@item.ShortDescription</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="small-course-card-footer">
+                                <div class="d-flex">
+                                    <span class="mr-auto"></span>
+                                    <span class="text-secondary font-weight-bold">@item.AvgRating.ToString("0.00")</span>
+                                    <div class="ml-2">
+                                        <partial name="_StarRatingHalfsPartial" model="@item.AvgRating" />
+                                    </div>
+                                    <span class="text-secondary ml-1">(@item.Reviews.Count)</span>
+                                </div>
+                                <div class="d-flex">
+                                    <span class="mr-auto"></span>
+                                    <span><small class="text-muted mr-2"><i class="fas fa-user-tie"></i> @item.Owner.FullName</small></span>
+                                    <span class="card-text ml-1"><small class="text-muted"><i class="fas fa-calendar-plus"></i> @item.DateAdded.ToShortDateString()</small></span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <partial name="_PaginationMenuPartial" />
+                }
+                <h5 class="text-danger col-12 text-center" @ViewBag.ResultsExist>No results</h5>
+            </div>
+        </div>
+    </div>
+</div>

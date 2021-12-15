@@ -1,0 +1,19 @@
+﻿@model dynamic
+
+<div class="container">
+    <div class="row">
+        <form asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller method="get" class="form-inline">
+            <div class="form-group mx-sm-3 mb-2">
+                <div class="input-group">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-info rounded-left"><i class="fas fa-search"></i></button>
+                    </div>
+                    <input type="text" class="form-control" name="SearchString" autocomplete="off" placeholder="search by name" value="@ViewBag.SearchString">
+                </div>
+                <input type="hidden" class="form-control" name="categoryId" autocomplete="off" value="@ViewBag.CategoryId">
+                <input type="hidden" class="form-control" name="ownerId" autocomplete="off" value="@ViewBag.OwnerId">
+                <input type="hidden" class="form-control" name="isMainCategory" autocomplete="off" value="@ViewBag.IsMainCategory?.ToString()">
+            </div>
+        </form>
+    </div>
+</div>

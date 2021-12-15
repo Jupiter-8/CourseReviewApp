@@ -1,0 +1,87 @@
+﻿@model CourseReviewApp.Web.ViewModels.ReviewVm
+@{
+    ViewData["Title"] = "Delete review";
+}
+
+<div class="container">
+    <div class="d-flex row justify-content-center mt-4">
+        <div class="card bg-light p-3 col-12 col-sm-11 col-md-10 col-lg-8 col-xl-7">
+            <h1 class="font-weight-light text-center">Confirm review deletion</h1>
+            <hr />
+            <h3 class="font-weight-light mb-3">@(User.IsInRole("Admin") ? "Review" : "Your review")</h3>
+            <dl class="row">
+                @if (User.IsInRole("Admin"))
+                {
+                    <dt class="col-sm-3">
+                        Author
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.Author.FullName)
+                    </dd>
+                }
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.DateAdded)
+                </dt>
+                <dd class="col-sm-9">
+                    @Model.DateAdded.ToString("dd.MM.yyyy HH:mm:ss")
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.DateEdited)
+                </dt>
+                <dd class="col-sm-9">
+                    @(Model.DateEdited != null ? Model.DateEdited.Value.ToString("dd.MM.yyyy HH:mm") : "Was not edited")
+                </dd>
+                <dt class="col-sm-3 mt-2">
+                    @Html.DisplayNameFor(model => model.RatingValue)
+                </dt>
+                <dd class="col-sm-9 mt-2">
+                    <partial name="_StarRatingPartial" model="@Model.RatingValue" />
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.WasHelpfullCount)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.WasHelpfullCount)
+                    <span>@(Model.WasHelpfullCount > 1 || Model.WasHelpfullCount == 0 ? "times" : "time")</span>
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Contents)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Contents)
+                </dd>
+            </dl>
+            @if (Model.OwnerComment != null)
+            {
+                <div class="accordion" id="accordion">
+                    <div class="card">
+                        <div class="card-header" id="heading-1">
+                            <h2 class="mb-0">
+                                <button class="btn btn-block text-left shadow-none" type="button" data-toggle="collapse" data-target="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
+                                    <h5 class="text-decoration-none font-weight-light"><i class="fas fa-chevron-down collapse-arrow-icon"></i> Course owner's comment for this review</h5>
+                                </button>
+                            </h2>
+                        </div>
+
+                        <div id="collapse-1" class="collapse collapse-change-arrow hide hide" aria-labelledby="heading-1" data-parent="#accordion">
+                            <div class="card-body">
+                                <partial name="_OwnerCommentPartial.cshtml" model="@Model.OwnerComment" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <form asp-action="DeleteReview">
+                <div class="form-group row d-flex justify-content-center mt-5">
+                    <input type="hidden" asp-for="CourseId" />
+                    <input type="hidden" asp-for="AuthorId" />
+                    <input type="hidden" asp-for="CourseName" />
+                    <input type="hidden" asp-for="Author.ReviewInfoEmailsEnabled" />
+                    <input type="hidden" asp-for="Author.Email" />
+                    <button class="btn btn-success mr-3"><i class="fas fa-check mr-2"></i><span>Confirm</span></button>
+                    <button type="button" class="btn btn-danger btn-back"><i class="fas fa-times mr-2"></i><span>Cancel</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

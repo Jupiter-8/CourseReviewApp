@@ -1,0 +1,46 @@
+﻿@model IEnumerable<CourseReviewApp.Web.ViewModels.CategoryVm>
+
+<div class="container">
+    <div class="accordion col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" id="accordionMenu">
+        <h2 class="font-weight-light text-center">Categories</h2>
+        <hr />
+        @if (Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                if (!item.ParentCategoryId.HasValue)
+                {
+                    var idStr = item.Id.ToString();
+                    var isExpanded = TempData["ExpandedCategoryId"] == null ? false : idStr == TempData["ExpandedCategoryId"].ToString();
+                    <div class="card border-0">
+                        <div class="card category-menu-parent rounded-0" id=@($"heading-{idStr}")>
+                            <div class="d-flex">
+                                <btn class="btn col-10 mr-auto text-left rounded-0" type="button" data-toggle="collapse" data-target=@($"#colapse-{idStr}") aria-expanded="true" aria-controls=@($"colapse-{idStr}")>
+                                    <span class="font-weight text-dark">@item.Name</span>
+                                </btn>
+                                <a class="btn col-2 bg-light text-secondary rounded-0"
+                                   asp-controller="Course" asp-action="Index" asp-route-categoryId="@item.Id" asp-route-isMainCategory="true">
+                                    <i class="fas fa-angle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div id=@($"colapse-{idStr}") class="@(isExpanded ? "collapse show category-menu-child" : "collapse hide category-menu-child")" aria-labelledby=@($"heading-{idStr}") data-parent="#accordionMenu">
+                            @foreach (var subCategory in item.SubCategories.OrderBy(sc => sc.Name))
+                            {
+                                <div class="card rounded-0 border-top-0">
+                                    <a class="btn btn-light text-left rounded-0" asp-controller="Course" asp-action="Index" asp-route-categoryId="@subCategory.Id">
+                                        <span class="ml-2">@subCategory.Name (@subCategory.ActiveCoursesCount)</span>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+        }
+        else
+        {
+            <h5 class="text-danger">Unable to load categories</h5>
+        }
+    </div>
+</div>

@@ -1,0 +1,36 @@
+﻿@model CourseReviewApp.Web.ViewModels.OwnerCommentVm
+
+<div class="container">
+    <div class="row">
+        <h5 class="font-weight-light mb-3">Owner's comment</h5>
+        <dl class="row">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.AuthorName)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.AuthorName)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.DateAdded)
+            </dt>
+            <dd class="col-sm-9">
+                @Model.DateAdded.ToString("dd.MM.yyyy HH:mm:ss")
+            </dd>
+            @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+            {
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.DateEdited)
+                </dt>
+                <dd class="col-sm-9">
+                    @(Model.DateEdited.HasValue ? Model.DateEdited.Value.ToString("dd.MM.yyyy HH:mm:ss") : "Was not edited")
+                </dd>
+            }
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Contents)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Contents)
+            </dd>
+        </dl>
+    </div>
+</div>

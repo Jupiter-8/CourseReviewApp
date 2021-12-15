@@ -1,0 +1,88 @@
+﻿@model IEnumerable<CourseReviewApp.Web.ViewModels.CategoryVm>
+@{
+    ViewData["Title"] = "Category management";
+}
+
+<div class="container">
+    <div class="row my-4">
+        <div class="card bg-light col-12 p-3 min-vh-100">
+            <h1 class="font-weight-light text-center text-secondary"><i class="fas fa-folder-open"></i> @ViewData["Title"]</h1>
+            <hr />
+            <div class="mb-3">
+                <a asp-action="AddOrEditCategory" class="btn btn-success"><i class="fas fa-plus mr-2"></i><span>New category</span></a>
+            </div>
+            <div>
+                <table class="table table-responsive-lg" id="categories-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ParentCategoryName)
+                            </th>
+                            <th>
+                                Subcategories
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CoursesCount)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ActiveCoursesCount)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ParentCategoryName)
+                                </td>
+                                <td>
+                                    <p class="text-center">@Html.DisplayFor(model => item.SubCategoriesCount)</p>
+                                </td>
+                                <td>
+                                    <p class="text-center">@Html.DisplayFor(modelItem => item.CoursesCount)</p>
+
+                                </td>
+                                <td>
+                                    <p class="text-center">@Html.DisplayFor(modelItem => item.ActiveCoursesCount)</p>
+                                </td>
+                                <td>
+                                    <div class="dropdown mb-5">
+                                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-cog mr-2"></i><span>Options</span>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a asp-action="AddOrEditCategory" asp-route-id="@item.Id" class="dropdown-item">Edit</a>
+                                            <a asp-action="DeleteCategory" asp-route-id="@item.Id" class="dropdown-item">Delete</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="_ModalMsgPartial" />
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#categories-table").DataTable();
+            var msg = '@TempData["CategoryManagementMsgModal"]';
+            if (msg != '') {
+                $("#msg-modal-body").html(msg);
+                $("#msg-modal").modal("show");
+             }
+        });
+    </script>
+}

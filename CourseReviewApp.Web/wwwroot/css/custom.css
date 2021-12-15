@@ -1,0 +1,218 @@
+﻿/* user rules */
+
+.main-color {
+    background: rgb(44,187,156);
+}
+
+html {
+    overflow-y: scroll;
+}
+
+.modal-open {
+    padding-right: 0 !important;
+}
+
+nav .navbar-nav li a {
+    color: white !important;
+}
+
+nav .navbar-nav li button:hover {
+    color: #2c3e50 !important;
+}
+
+nav .navbar-nav li a:hover {
+    color: #2c3e50 !important;
+}
+
+.helpfull-btn-container {
+    height: 1.5rem;
+}
+
+.save-user-avatar-img {
+    height: 10rem;
+    width: 8rem;
+}
+
+.course-author-img {
+    height: 7rem;
+    width: 6rem;
+}
+
+#reviews-load-spinner {
+    height: 3rem;
+    width: 3rem;
+}
+
+.carousel-load-spinner {
+    height: 4rem;
+    width: 4rem;
+}
+
+.review-author-img {
+    height: 4rem;
+}
+
+.category-menu-parent {
+    background: #9fd3c7;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+}
+
+div:last-child > .category-menu-parent {
+    border-bottom: 0;
+}
+
+.category-menu-parent {
+    transition-duration: 0.3s;
+}
+
+.category-menu-parent:hover {
+    background: rgba(159, 211, 199, 0.8);
+}
+
+.accordion > div:last-child > div.category-menu-child > div:first-child {
+    border-top: 1px solid #9fd3c7 !important;
+}
+
+.user-details-img {
+    height: 7rem;
+    width: 6rem;
+}
+
+#review-carousel-title {
+    height: 40px;
+}
+
+.carousel .carousel-indicators li {
+    background-color: gray;
+}
+
+.carousel-control {
+    color: #bada55;
+}
+
+.btn-pos {
+    position: relative;
+    z-index: 1;
+    left: -36px;
+    color: gray;
+    box-shadow: none !important;
+    border: 0;
+}
+
+.arrow-pos {
+    position: relative;
+    z-index: 1;
+    left: -16px;
+    top: 8px;
+    color: gray;
+    pointer-events: none;
+}
+
+.nav-pill-non-active {
+    color: #17a2b8;
+}
+
+.nav-pill-active {
+    background: #17a2b8;
+    color: white;
+}
+
+.nav-pill-active:hover {
+    background: #17a2b8;
+    color: white;
+}
+
+.page-item.active .page-link {
+    background-color: #17a2b8 !important;
+    border-color: #17a2b8 !important;
+    color: white !important;
+}
+
+.page-link {
+    color: #17a2b8 !important;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: #17a2b8 !important;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #17a2b8 !important;
+    border-color: #17a2b8 !important;
+}
+
+.btn-rounded {
+    border-radius: 15px !important;
+}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #17a2b8 !important;
+    border-color: #17a2b8 !important;
+    box-shadow: none;
+}
+
+.custom-checkbox .custom-control-input:checked:focus ~ .custom-control-label::before {
+    box-shadow: none;
+    border-color: #17a2b8 !important;
+}
+
+.custom-checkbox .custom-control-input:focus ~ .custom-control-label::before {
+    box-shadow: none;
+    border-color: gray !important;
+}
+
+.small-course-card {
+    height: 250px;
+}
+
+.small-course-card-footer{
+    position: relative;
+    bottom: 5px;
+    right: 15px;
+}
+
+body {
+    background: #ececec;
+}
+
+.breadcrumb {
+    background: #9fd3c7 !important;
+}
+
+#review-carousel-content {
+    height: 220px;
+}
+
+@media (max-width: 576px) {
+    #review-carousel-content {
+        height: 350px;
+    }
+}
+
+@media (min-width: 576px) {
+    #navbar-collapse-btn {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) {
+    #review-carousel-content {
+        height: 180px;
+    }
+}
+
+@media (min-width: 992px) {
+    #review-carousel-content {
+        height: 150px;
+    }
+}
+
+.jumbotron {
+    background: #9fd3c7 !important;
+}
+
+#star-select select {
+    -webkit-appearance: none;
+}

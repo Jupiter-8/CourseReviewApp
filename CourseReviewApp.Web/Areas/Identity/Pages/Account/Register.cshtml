@@ -1,0 +1,125 @@
+@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container">
+    <div class="row d-flex justify-content-center mt-4">
+        <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5 card p-4 bg-light">
+            <div class="d-flex justify-content-center mb-3 mr-5">
+                <h1 class="text-secondary"><i class="fas fa-user-plus"></i> @ViewData["Title"]</h1>
+            </div>
+            <form method="post">
+                <div class="form-group">
+                    <label asp-for="Input.Username"></label>
+                    <div class="d-flex">
+                        <input asp-for="Input.Username" class="form-control shadow-none col-12" autocomplete="off" />
+                        <button class="btn btn-transparent btn-pos btn-clear" type="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <span asp-validation-for="Input.Username" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Email"></label>
+                    <div class="d-flex">
+                        <input asp-for="Input.Email" class="form-control shadow-none col-12" autocomplete="off" />
+                        <button class="btn btn-transparent btn-pos btn-clear" type="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Password"></label>
+                    <div class="d-flex">
+                        <input asp-for="Input.Password" class="form-control shadow-none col-12" autocomplete="off" />
+                        <button class="btn btn-transparent btn-pos btn-clear" type="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.ConfirmPassword"></label>
+                    <div class="d-flex">
+                        <input asp-for="Input.ConfirmPassword" class="form-control shadow-none col-12" autocomplete="off" />
+                        <button class="btn btn-transparent btn-pos btn-clear" type="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Firstname"></label>
+                    <div class="d-flex">
+                        <input asp-for="Input.Firstname" class="form-control shadow-none col-12" autocomplete="off" />
+                        <button class="btn btn-transparent btn-pos btn-clear" type="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <span asp-validation-for="Input.Firstname" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Lastname"></label>
+                    <div class="d-flex">
+                        <input asp-for="Input.Lastname" class="form-control shadow-none col-12" autocomplete="off" />
+                        <button class="btn btn-transparent btn-pos btn-clear" type="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <span asp-validation-for="Input.Lastname" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.UserType"></label>
+                    <select asp-for="Input.UserType" class="form-control shadow-none" onchange="displayHiddenRegisterFields(this.options[this.selectedIndex].text)"
+                            asp-items="@ViewData["Roles"] as IEnumerable<SelectListItem>"></select>
+                    <span asp-validation-for="Input.UserType" class="text-danger"></span>
+                </div>
+                <div id="course-owner-fields" hidden>
+                    <div class="form-group">
+                        <label asp-for="Input.WebsiteUrl"></label>
+                        <div class="d-flex">
+                            <input id="register-websiteurl-input" asp-for="Input.WebsiteUrl" class="form-control shadow-none col-12" autocomplete="off" />
+                            <button class="btn btn-transparent btn-pos btn-clear" type="button">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Brandname"></label>
+                        <div class="d-flex">
+                            <input id="register-brandname-input" asp-for="Input.Brandname" class="form-control shadow-none col-12" autocomplete="off" />
+                            <button class="btn btn-transparent btn-pos btn-clear" type="button">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <p>
+                        <input style="visibility:hidden" type="text" value="0" asp-for="Input.TermsAccepted" id="terms-accept-input" />
+                    </p>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="terms-accept-checkbox">
+                        <label class="custom-control-label" for="terms-accept-checkbox">
+                            I agree to the
+                            <a class="card-link text-info" href="~/Privacy/privacy_file.pdf" target="_blank">Terms and Conditions</a>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-info mt-3">Register</button>
+                </div>
+                <div asp-validation-summary="All" class="text-danger mt-3"></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/Pages/register.js"></script>
+}

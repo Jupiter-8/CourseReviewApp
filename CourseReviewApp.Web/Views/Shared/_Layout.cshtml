@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Course review app</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/custom.css?Version=1" />
+    <link rel="stylesheet" href="~/lib/DataTables-1.11.3/datatables.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-toggleable-lg navbar-light main-color border-bottom box-shadow mb-3 py-3">
+            <div class="container">
+                <a class="navbar-brand text-white font-weight-bold" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-comment-alt"></i> Course review app</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation" id="navbar-collapse-btn">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1 mt-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-white font-weight-bold mx-1" asp-area="" asp-controller="Course" asp-action="Index"><i class="fas fa-bars"></i> Courses</a>
+                        </li>
+                        @if (User.IsInRole("Course_owner"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link font-weight-bold mx-1" asp-area="" asp-controller="Course" asp-action="OwnerCoursesManagement"><i class="fas fa-folder"></i> My courses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link font-weight-bold mx-1" asp-area="" asp-controller="Course" asp-action="AddOrEditCourse"><i class="fas fa-plus"></i> Add course</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                        {
+                            <li class="nav-item">
+                                <div class="dropdown">
+                                    <a class="btn dropdown-toggle font-weight-bold shadow-none pl-1" href="#" role="button" id="management-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-sliders-h"></i> Management
+                                    </a>
+
+                                    <div class="dropdown-menu bg-secondary" aria-labelledby="management-dropdown">
+                                        <a class="nav-link font-weight-bold ml-2" asp-controller="Course" asp-action="CourseManagement"><i class="fas fa-book"></i> Courses</a>
+                                        <a class="nav-link font-weight-bold ml-2" asp-controller="Report" asp-action="ReportManagement"><i class="fas fa-flag"></i> Reports</a>
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <a class="nav-link font-weight-bold ml-2" asp-controller="Category" asp-action="CategoryManagement"><i class="fas fa-folder-open"></i> Categories</a>
+                                            <a class="nav-link font-weight-bold ml-2" asp-controller="User" asp-action="UserManagement"><i class="fas fa-users-cog"></i> Users</a>
+                                        }
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted bg-light">
+        <div class="container">
+            &copy; 2021 - Course review app - <a class="card-link text-info" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/DataTables-1.11.3/datatables.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

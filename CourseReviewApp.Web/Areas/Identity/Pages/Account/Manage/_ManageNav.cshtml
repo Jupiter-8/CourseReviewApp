@@ -1,0 +1,22 @@
+@inject SignInManager<AppUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item"><a class="nav-link nav-pill-non-active @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Profile</a></li>
+    <li class="nav-item"><a class="nav-link nav-pill-non-active @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">Email</a></li>
+    <li class="nav-item"><a class="nav-link nav-pill-non-active @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a></li>
+    @if (User.IsInRole("Course_owner"))
+    {
+        <li class="nav-item"><a class="nav-link nav-pill-non-active @ManageNavPages.CourseOwnerSettingsNavClass(ViewContext)" id="course-owner-settings" asp-page="./CourseOwnerSettings">Course owner settings</a></li>
+    }
+    @if (User.IsInRole("Course_client"))
+    {
+        <li class="nav-item"><a class="nav-link nav-pill-non-active @ManageNavPages.CourseClientSettingsNavClass(ViewContext)" id="course-client-settings" asp-page="./CourseClientSettings">Course client settings</a></li>
+    }
+    <li class="nav-item"><a class="nav-link nav-pill-non-active @ManageNavPages.SaveUserAvatarNavClass(ViewContext)" id="save-user-avatar" asp-page="./SaveUserAvatar">Save user avatar</a></li>
+    @if (!User.IsInRole("Admin"))
+    {
+        <li class="nav-item"><a class="nav-link nav-pill-non-active @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Delete account</a></li>
+    }
+</ul>

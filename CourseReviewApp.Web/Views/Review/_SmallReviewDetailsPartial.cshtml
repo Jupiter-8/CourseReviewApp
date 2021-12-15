@@ -1,0 +1,39 @@
+﻿@model CourseReviewApp.Web.ViewModels.ReviewVm
+
+<div class="container">
+    <div class="row">
+        <h4 class="font-weight-light mb-3">Review</h4>
+        <dl class="row">
+            <dt class="col-sm-3">
+                Author
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Author.FullName)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.DateAdded)
+            </dt>
+            <dd class="col-sm-9">
+                @Model.DateAdded.ToString("dd.MM.yyyy HH:mm:ss")
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.DateEdited)
+            </dt>
+            <dd class="col-sm-9">
+                @(Model.DateEdited.HasValue ? Model.DateEdited.Value.ToString("dd.MM.yyyy HH:mm:ss") : "Was not edited")
+            </dd>
+            <dt class="col-sm-3">
+                Rating
+            </dt>
+            <dd class="col-sm-9">
+                <partial name="_StarRatingPartial" model="@Model.RatingValue" />
+            </dd>
+            <dt class="col-sm-3">
+                Contents
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Contents)
+            </dd>
+        </dl>
+    </div>
+</div>

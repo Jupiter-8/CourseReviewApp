@@ -1,0 +1,94 @@
+﻿@model IEnumerable<CourseReviewApp.Web.ViewModels.UserVm>
+@{
+    ViewData["Title"] = "User management";
+}
+
+<div class="container">
+    <div class="row my-4">
+        <div class="card bg-light col-12 p-3 min-vh-100">
+            <h1 class="font-weight-light text-center text-secondary"><i class="fas fa-users-cog"></i> @ViewData["Title"]</h1>
+            <hr />
+            <table class="table table-responsive-lg" id="users-table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FullName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RegistrationDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.IsActive)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Roles)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FullName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td data-order="@item.RegistrationDate.ToString("yyyyMMdd HH:mm")">
+                                @item.RegistrationDate.ToString("dd.MM.yyyy HH:mm")
+                            </td>
+                            <td>
+                                @(item.IsActive ? "Active" : "Blocked")
+                            </td>
+                            <td>
+                                @foreach (var role in item.Roles)
+                                {
+                                    <span class="d-block">@role.Replace('_', ' ')</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="dropdown mb-5">
+                                    <button class="btn btn-sm btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-cog mr-2"></i><span>Options</span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" asp-action="UserDetails" asp-route-id="@item.Id">Details</a>
+                                        <a class="dropdown-item" asp-action="ChangeUserStatus" asp-route-id="@item.Id">Change status</a>
+                                        @if (!item.Roles.Contains("Moderator"))
+                                        {
+                                            <a class="dropdown-item" asp-action="AssignModeratorRole" asp-route-id="@item.Id">Assign moderator role</a>
+                                        }
+                                        else
+                                        {
+                                            <a class="dropdown-item" asp-action="UnassignModeratorRole" asp-route-id="@item.Id">Unassign moderator role</a>
+                                        }
+                                        <a class="dropdown-item" asp-action="DeleteUser" asp-route-id="@item.Id">Delete</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<partial name="_ModalMsgPartial" />
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#users-table").DataTable();
+            var msg = '@TempData["UsersManagementMsgModal"]';
+            if (msg != '') {
+                $("#msg-modal-body").html(msg);
+                $("#msg-modal").modal("show");
+            }
+        });
+    </script>
+}

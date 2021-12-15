@@ -1,0 +1,59 @@
+﻿@model CourseReviewApp.Web.ViewModels.CategoryVm
+@{
+    ViewData["Title"] = "Delete category";
+}
+
+<div class="container">
+    <div class="row d-flex justify-content-center mt-4">
+        <div class="card bg-light p-3 col-12 col-sm-11 col-md-10 col-lg-8 col-xl-7">
+            <h1 class="font-weight-light text-center">Category deletion confirmation</h1>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+                @if (Model.ParentCategoryId.HasValue)
+                {
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.ParentCategoryName)
+                    </dt>
+                    <dd class="col-sm-9">
+                        @Html.DisplayFor(model => model.ParentCategoryName)
+                    </dd>
+                }
+            </dl>
+
+            <div class="text-danger">
+                @if (!Model.ParentCategoryId.HasValue && Model.SubCategoriesCount != 0)
+                {
+                    <p>@Model.SubCategories.Count @(Model.SubCategoriesCount > 1 ? "subcategories" : "subcategory") will be deleted.</p>
+                }
+                @if (Model.ParentCategoryId.HasValue)
+                {
+                    if (Model.CoursesCount != 0)
+                    {
+                        <p>@Model.CoursesCount @(Model.CoursesCount > 1 ? "courses" : "course") will lost category.</p>
+                    }
+                }
+                else
+                {
+                    if (Model.SubCategoriesCoursesCount != 0)
+                    {
+                        <p>@Model.SubCategoriesCoursesCount @(Model.SubCategoriesCoursesCount > 1 ? "courses" : "course") will lost category.</p>
+                    }
+                }
+            </div>
+
+            <form asp-action="DeleteCategory">
+                <div class="form-group row d-flex justify-content-center mt-5">
+                    <input asp-for="Name" type="hidden" />
+                    <button class="btn btn-success mr-3"><i class="fas fa-check mr-2"></i><span>Confirm</span></button>
+                    <button type="button" class="btn btn-danger btn-back"><i class="fas fa-times mr-2"></i><span>Cancel</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

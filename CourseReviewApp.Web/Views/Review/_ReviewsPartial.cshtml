@@ -1,0 +1,188 @@
+﻿@model IEnumerable<ReviewVm>
+
+<div class="container px-0 mt-3 col-xl-11">
+    <div class="d-flex row mt-5 mb-3 ml-0">
+        <div class="dropdown">
+            <a class="btn btn-info" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-sort"></i><span id="sort-span" class="mx-2">Sort</span>
+            </a>
+            <div class="dropdown-menu">
+                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, 'Worst rating', '@ViewBag.FilterValue', false, @Model.Count())">Worst rating</button>
+                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, 'Best rating', '@ViewBag.FilterValue', false, @Model.Count())">Best rating</button>
+                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, 'Oldest', '@ViewBag.FilterValue', false, @Model.Count())">Oldest</button>
+                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, 'Newest', '@ViewBag.FilterValue', false, @Model.Count())">Newest</button>
+                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, 'Most helpfull', '@ViewBag.FilterValue', false, @Model.Count())">Most helpfull</button>
+            </div>
+        </div>
+        <div class="dropdown ml-3">
+            <a class="btn btn-info" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="d-flex">
+                    <i class="fas fa-filter mt-1"></i>
+                    <span class="mx-2">
+                        @if (ViewBag.FilterValue != 0)
+                        {
+                            <partial name="_StarRatingPartial" model="@(RatingValue)ViewBag.FilterValue" />
+                        }
+                        else
+                        {
+                            <span>Filter</span>
+                        }
+                    </span>
+                </div>
+            </a>
+            <div class="dropdown-menu">
+                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', 0, false, 0)">No filter</button>
+                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', 1, false, @Model.Count())"><partial name="_StarRatingPartial" model="@RatingValue.Rating_1"></button>
+                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', 2, false, @Model.Count())"><partial name="_StarRatingPartial" model="@RatingValue.Rating_2"></button>
+                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', 3, false, @Model.Count())"><partial name="_StarRatingPartial" model="@RatingValue.Rating_3"></button>
+                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', 4, false, @Model.Count())"><partial name="_StarRatingPartial" model="@RatingValue.Rating_4"></button>
+                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', 5, false, @Model.Count())"><partial name="_StarRatingPartial" model="@RatingValue.Rating_5"></button>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+        <h5 class="text-danger">
+            @ViewBag.FilterResultsMsg
+        </h5>
+    </div>
+    <div id="reviews-container" @ViewBag.ReviewsVisible>
+        @foreach (var review in Model)
+        {
+            var revId = review.Id.ToString();
+            <div class="@(User.IsInRole("Course_client") && review.AuthorId == int.Parse(userManager.GetUserId(User))
+                ? "card mb-3 bg-light border-info" : "card mb-3 bg-light")">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-2 col-sm-2 col-md-2 col-lg-1 col-xl-1">
+                            <img src="~/Images/Avatars/@review.Author.AvatarPath" class="img-fluid review-author-img" />
+                        </div>
+                        <div class="col-10 col-sm-10 col-md-10 col-lg-11 col-xl-11">
+                            <p>
+                                <span class="font-weight-bold text-secondary"><i class="fas fa-user-alt"></i> @review.Author.FullName</span>
+                                <span class="text-secondary">
+                                    <small>
+                                        (@review.Author.ReviewsCount
+                                        @(review.Author.ReviewsCount > 1 ? "reviews" : "review"),
+                                        @review.Author.UserWasHelpfullCount
+                                        @(review.Author.UserWasHelpfullCount > 1 ? "were" : "was") helpfull)
+                                    </small>
+                                </span>
+                                <span class="float-right text-secondary mt-3 mt-xl-0 mt-sm-0 mt-md-0 mt-lg-0">
+                                    @if (review.DateEdited != null)
+                                    {
+                                        <span>edited |</span>
+                                    }
+                                    <span><i class="fas fa-calendar-alt"></i> @review.DateAdded.ToString("dd/MM/yyyy HH:mm")</span>
+                                </span>
+                                <partial name="_StarRatingPartial" model="review.RatingValue" />
+                            </p>
+                            <p>@review.Contents</p>
+                            <div class="float-right">
+                                @{
+                                    var userId = userManager.GetUserId(User);
+                                    var btnClass = "btn btn-danger text-white";
+                                    var hidden = "";
+                                    if (userId != null)
+                                    {
+                                        var voteExists = review.HelpfullReviews.Any(hr => hr.UserId == int.Parse(userId));
+                                        if (!voteExists)
+                                        {
+                                            btnClass = "btn btn-outline-danger text-dark";
+                                            hidden = "hidden";
+                                        }
+                                    }
+                                    if (userId == null || User.IsInRole("Course_owner") || User.IsInRole("Admin")
+                                        || review.Author.Id == int.Parse(userManager.GetUserId(User)))
+                                    {
+                                        btnClass = "btn disabled btn-outline-danger text-dark";
+                                        hidden = "hidden";
+                                    }
+                                }
+
+                                <a id=@($"btn-id-{revId}") class='@btnClass'
+                                   onclick="voteForReviewHelpfullness(@review.Id, '@($"cnt-id-{revId}")', '@($"btn-id-{revId}")', '@($"msg-id-{revId}")')">
+                                    <i class="fas fa-heart"></i> Was helpfull <span id=@($"cnt-id-{revId}")>@review.HelpfullReviews.Count</span>
+                                </a>
+                                <div class="helpfull-btn-container"><p id=@($"msg-id-{revId}") @hidden>Thanks for your vote</p></div>
+                            </div>
+                            <div>
+                                @if (User.IsInRole("Course_client") && review.AuthorId == int.Parse(userManager.GetUserId(User)))
+                                {
+                                    <a class="btn btn-sm btn-outline-success mb-2 mt-1"
+                                       asp-action="AddOrEditReview" asp-controller="Review" asp-route-courseId="@review.CourseId" asp-route-reviewId="@review.Id">
+                                        <i class="fas fa-edit mr-2"></i><span>Edit</span>
+                                    </a>
+                                }
+                                @if ((User.IsInRole("Course_client") || User.IsInRole("Course_owner")) && review.AuthorId != int.Parse(userManager.GetUserId(User))
+                                && !review.ReviewReports.Any(rr => rr.ReportingUserId == int.Parse(userManager.GetUserId(User))))
+                                {
+                                    <a class="btn btn-sm btn-outline-primary mb-2 mt-1"
+                                       asp-action="ReportReview" asp-controller="Report" asp-route-id="@review.Id">
+                                        <i class="fas fa-flag mr-2"></i><span>Report</span>
+                                    </a>
+                                }
+                                @if (User.IsInRole("Course_owner") && review.CourseOwnerId == int.Parse(userManager.GetUserId(User))
+                                && review.OwnerComment == null)
+                                {
+                                    <a class="btn btn-sm btn-outline-success ml-2 mb-2 mt-1"
+                                       asp-action="AddOrEditOwnerComment" asp-controller="Review" asp-route-reviewId="@review.Id">
+                                        <i class="fas fa-comment mr-2"></i><span>Add comment</span>
+                                    </a>
+                                }
+                                @if (User.IsInRole("Course_client") && review.AuthorId == int.Parse(userManager.GetUserId(User)))
+                                {
+                                    <a class="btn btn-sm btn-outline-danger ml-2 mb-2 mt-1" asp-action="DeleteReview" asp-route-id="@review.Id">
+                                        <i class="fas fa-trash-alt mr-2"></i><span>Delete</span>
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    @if (review.OwnerComment != null)
+                    {
+                        <div class="card card-inner mt-5 col-lg-8 px-0">
+                            <div>
+                                <h5 class="card-header">Course owner's comment</h5>
+                                <div class="m-3">
+                                    <span class="font-weight-bold text-secondary"><i class="fas fa-user-tie"></i> @review.OwnerComment.AuthorName</span>
+                                    <div class="float-right text-muted">
+                                        @if (review.OwnerComment.DateEdited != null)
+                                        {
+                                            <span><small>edited |</small></span>
+                                        }
+                                        <span><small><i class="fas fa-calendar-alt"></i> @review.OwnerComment.DateAdded.ToString("dd/MM/yyyy HH:mm")</small></span>
+                                    </div>
+                                    <p class="card-text mt-3 mb-2">@review.OwnerComment.Contents</p>
+                                </div>
+                                @if (User.IsInRole("Course_owner") && review.OwnerComment.AuthorId == int.Parse(userManager.GetUserId(User)))
+                                {
+                                    <div class="d-flex mb-3">
+                                        <a class="btn btn-sm btn-outline-success ml-3 "
+                                           asp-action="AddOrEditOwnerComment" asp-controller="Review" asp-route-reviewId="@review.Id" asp-route-commentId="@review.OwnerComment.Id">
+                                            <i class="fas fa-edit mr-2"></i><span>Edit</span>
+                                        </a>
+                                        <a class="btn btn-sm btn-outline-danger ml-2"
+                                           asp-action="DeleteOwnerComment" asp-controller="Review" asp-route-id="@review.OwnerComment.Id">
+                                            <i class="fas fa-trash-alt mr-2"></i><span>Delete</span>
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<div class="d-flex justify-content-center mt-5 col-12">
+    <button class="btn btn-info text-white" @ViewBag.LoadBtnDisabled hidden onclick="loadReviews( @Model.First().CourseId, '@ViewBag.SortOrder', '@ViewBag.FilterValue', true, @Model.Count() )"
+            id="load-reviews-btn">
+        <i class="fas fa-comments mr-2"></i><span>Load more reviews</span>
+    </button>
+</div>
+<div class="d-flex justify-content-center col-12">
+    <p class="text-danger font-weight-bold" @ViewBag.LastReviewMsgVisible>No more reviews</p>
+</div>
+
+<script src="~/js/Views/Review/reviews-partial.js"></script>

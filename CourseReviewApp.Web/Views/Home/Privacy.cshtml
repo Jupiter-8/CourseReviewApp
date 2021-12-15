@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Privacy";
+}
+
+<div class="container">
+    <div class="row d-flex justify-content-center mt-4">
+        <div class="col-12 col-sm-12 col-md-10 col-lg-10 col-xl-10 card p-3 bg-light min-vh-100">
+            <h1 class="font-weight-light text-center">@ViewData["Title"]</h1>
+            <hr />
+            <h4 class="font-weight-light mb-5">Before you start actively using our application you should read our terms and conditions.</h4>
+            <h5 class="font-weight-light">Bellow is a link to the document file where you can find our privacy, regulations, FAQ and review writing rules.</h5>
+            @if (ViewBag.FileExists)
+            {
+                <a class="card-link my-3 text-info" asp-append-version="true" href="~/Privacy/@ViewBag.FileName" target="_blank">
+                    <i class="fas fa-link"></i> Privacy PDF
+                </a>
+            }
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="row ml-0 mt-3">
+                    <a class="btn btn-sm btn-info" asp-action="AddOrEditPrivacyFile">
+                        <i class="fas fa-edit mr-2"></i><span>Change privacy file</span>
+                    </a>
+                    @if (ViewBag.FileExists)
+                    {
+                        <a class="btn btn-labeled btn-sm btn-danger ml-3" asp-action="DeletePrivacyFile">
+                            <i class="fas fa-edit mr-2"></i><span>Delete privacy file</span>
+                        </a>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<partial name="_ModalMsgPartial" />
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var msg = '@TempData["PrivacyMsgModal"]';
+            if (msg != '') {
+                $("#msg-modal-body").html(msg);
+                $("#msg-modal").modal("show");
+            }
+        });
+    </script>
+}

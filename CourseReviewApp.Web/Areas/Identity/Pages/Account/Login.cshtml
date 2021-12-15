@@ -1,0 +1,67 @@
+@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container">
+    <div class="row d-flex justify-content-center mt-4">
+        <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5 card p-4 bg-light">
+            <div class="d-flex justify-content-center mr-5">
+                <h1 class="text-secondary mb-4"><i class="fas fa-sign-in-alt"></i> @ViewData["Title"]</h1>
+            </div>
+            <section>
+                <form id="account" method="post">
+                    <div class="input-group mb-3">
+                        <div class="input-group-append">
+                            <span class="input-group-text rounded-left border-right-0"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input asp-for="Input.Username" class="form-control rounded-right shadow-none" placeholder="Username" />
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-append">
+                            <span class="input-group-text rounded-left border-right-0"><i class="fas fa-key"></i></span>
+                        </div>
+                        <input asp-for="Input.Password" class="form-control rounded-right shadow-none" placeholder="Password" />
+                    </div>
+                    <div class="form-group mt-2">
+                        <div class="custom-control custom-checkbox">
+                            <input asp-for="Input.RememberMe" type="checkbox" class="custom-control-input">
+                            <label class="custom-control-label" asp-for="Input.RememberMe">
+                                Remember me
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group d-flex justify-content-center">
+                        <button type="submit" class="btn btn-info col-3">Login</button>
+                    </div>
+                    <div class="form-group">
+                        <p>
+                            <a class="card-link text-info" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register</a>
+                        </p>
+                        <p>
+                            <a id="forgot-password" class="card-link text-info" asp-page="./ForgotPassword">Forgot password</a>
+                        </p>
+                        <p>
+                            <a id="resend-confirmation" class="card-link text-info" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+                        </p>
+                    </div>
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
+<partial name="_ModalMsgPartial" />
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        var msg = '@TempData["LoginModalMsg"]';
+        if (msg != '') {
+            $("#msg-modal-body").html(msg);
+            $("#msg-modal").modal("show");
+        }
+    </script>
+}

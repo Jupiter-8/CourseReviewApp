@@ -1,0 +1,16 @@
+@page
+@model ConfirmEmailModel
+@{
+    ViewData["Title"] = "Confirm email";
+}
+
+<div class="d-flex justify-content-center mt-5">
+    <div class="card p-3 border-info">
+        <h1 class="text-secondary">@ViewData["Title"]</h1>
+        <hr />
+        <p>@Model.StatusMessage</p>
+        <div class="d-flex justify-content-center mt-3">
+            <a class="btn btn-success col-3" asp-area="Identity" asp-page="/Account/Login">Login page</a>
+        </div>
+    </div>
+</div>

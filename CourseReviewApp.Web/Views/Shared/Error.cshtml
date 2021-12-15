@@ -1,0 +1,19 @@
+@using CourseReviewApp.Web.ViewModels
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="container">
+    <div class="d-flex row justify-content-center mt-4">
+        <div class="card bg-light p-3 col-12 col-sm-11 col-md-10 col-lg-8 col-xl-7">
+            <h1 class="text-danger text-center"><i class="fas fa-exclamation-triangle"></i> Error</h1>
+            <hr />
+            <h3 class="text-danger mb-5">An error occurred while processing your request.</h3>
+            @if (!string.IsNullOrEmpty(Model.Message))
+            {
+                <p class="font-weight-bold">Message: @Model.Message</p>
+            }
+        </div>
+    </div>
+</div>

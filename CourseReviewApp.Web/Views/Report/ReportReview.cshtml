@@ -1,0 +1,51 @@
+﻿@model CourseReviewApp.Web.ViewModels.ReportReviewVm
+@{
+    ViewData["Title"] = "Report review";
+}
+
+<div class="container">
+    <div class="row d-flex justify-content-center mt-4">
+        <div class="card bg-light p-3 col-12 col-sm-11 col-md-10 col-lg-8 col-xl-7">
+            <h1 class="font-weight-light text-center">@ViewData["Title"]</h1>
+            <hr />
+            <div class="mt-1">
+                <partial name="/Views/Review/_SmallReviewDetailsPartial.cshtml" model="@Model.Review" />
+            </div>
+            <hr />
+            <h3 class="font-weight-light mt-1">Report</h3>
+            <form asp-action="ReportReview">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input asp-for="ReviewId" type="hidden" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <input asp-for="ReportingUserId" type="hidden" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="ReportContents" class="control-label"></label>
+                    <div class="d-flex">
+                        <textarea asp-for="ReportContents" class="form-control col-12" rows="6"></textarea>
+                        <button class="btn btn-transparent btn-pos btn-clear h-25" type="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <span asp-validation-for="ReportContents" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ReportReason" class="control-label"></label>
+                    <select asp-for="ReportReason" asp-items="@ViewBag.ReportReasonValues" class="form-control">
+                    </select>
+                    <span asp-validation-for="ReportReason" class="text-danger"></span>
+                </div>
+                <div class="form-group d-flex justify-content-center mt-5">
+                    <button class="btn btn-success mr-3"><i class="fas fa-check mr-2"></i><span>Confirm</span></button>
+                    <button type="button" class="btn btn-danger btn-back"><i class="fas fa-times mr-2"></i><span>Cancel</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
