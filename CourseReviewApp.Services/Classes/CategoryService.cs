@@ -21,83 +21,50 @@ namespace CourseReviewApp.Services.Classes
 
         public async Task<Category> GetCategory(Expression<Func<Category, bool>> filter)
         {
-            try
-            {
-                if (filter == null)
-                    throw new ArgumentNullException("Filter expression is null.");
-                Category category = await DbContext.Categories.FirstOrDefaultAsync(filter);
+            if (filter == null)
+                throw new ArgumentNullException("Filter expression is null.");
+            Category category = await DbContext.Categories.FirstOrDefaultAsync(filter);
 
-                return category;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, ex.Message);
-                throw;
-            }
+            return category;
         }
 
         public IEnumerable<Category> GetCategories(Expression<Func<Category, bool>> filter = null)
         {
-            try
-            {
-                IQueryable<Category> categories = DbContext.Categories.AsQueryable();
-                if (filter != null)
-                    categories = categories.Where(filter);
+            IQueryable<Category> categories = DbContext.Categories.AsQueryable();
+            if (filter != null)
+                categories = categories.Where(filter);
 
-                return categories;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, ex.Message);
-                throw;
-            }
+            return categories;
         }
 
         public async Task AddOrEditCategory(Category category)
         {
-            try
+            if (category == null)
+                throw new ArgumentNullException("Model is null.");
+            if (category.ParentCategoryId.HasValue)
             {
-                if (category == null)
-                    throw new ArgumentNullException("Model is null.");
-                if (category.ParentCategoryId.HasValue)
-                {
-                    bool parentCategoryExists = await DbContext.Categories.AnyAsync(c => c.Id == category.ParentCategoryId);
-                    if (!parentCategoryExists)
-                        throw new KeyNotFoundException($"Category with id: {category.ParentCategoryId} not found.");
-                }
-
-                if (category.Id != 0)
-                    DbContext.Categories.Update(category);
-                else
-                    await DbContext.Categories.AddAsync(category);
-
-                await DbContext.SaveChangesAsync();
+                bool parentCategoryExists = await DbContext.Categories.AnyAsync(c => c.Id == category.ParentCategoryId);
+                if (!parentCategoryExists)
+                    throw new KeyNotFoundException($"Category with id: {category.ParentCategoryId} not found.");
             }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, ex.Message);
-                throw;
-            }
+            if (category.Id != 0)
+                DbContext.Categories.Update(category);
+            else
+                await DbContext.Categories.AddAsync(category);
+
+            await DbContext.SaveChangesAsync();
         }
 
         public async Task DeleteCategory(int id)
         {
-            try
-            {
-                Category category = await DbContext.Categories
+            Category category = await DbContext.Categories
                     .Include(c => c.SubCategories)
                     .FirstOrDefaultAsync(c => c.Id == id);
-                if (category == null)
-                    throw new KeyNotFoundException($"Category with id: {id} not found.");
-                DbContext.Categories.Remove(category);
+            if (category == null)
+                throw new KeyNotFoundException($"Category with id: {id} not found.");
+            DbContext.Categories.Remove(category);
 
-                await DbContext.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, ex.Message);
-                throw;
-            }
+            await DbContext.SaveChangesAsync();
         }
     }
 }

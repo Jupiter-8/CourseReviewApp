@@ -14,6 +14,7 @@ using CourseReviewApp.Web.Services.Classes;
 using CourseReviewApp.Web.Services.Interfaces;
 using System.Net;
 using System.Net.Mail;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace CourseReviewApp.Web
 {
@@ -76,6 +77,7 @@ namespace CourseReviewApp.Web
             factory.AddFile("Logs/log.txt");
             if (env.IsDevelopment())
             {
+                //app.UseExceptionHandler("/Error");
                 app.UseDeveloperExceptionPage();
                 app.UseStatusCodePages();
                 app.UseMigrationsEndPoint();

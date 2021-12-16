@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
+using CourseReviewApp.Model.DataModels;
+using CourseReviewApp.Web.Services.Interfaces;
+using CourseReviewApp.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using CourseReviewApp.Model.DataModels;
-using CourseReviewApp.Web.ViewModels;
-using CourseReviewApp.Web.Services.Interfaces;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -84,19 +83,6 @@ namespace CourseReviewApp.Web.Controllers
             TempData["PrivacyMsgModal"] = "The privacy file has been deleted.";
 
             return RedirectToAction("Privacy");
-        }
-
-        [HttpGet]
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error(string message)
-        {
-            ErrorViewModel viewModel = new ErrorViewModel
-            {
-                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
-                Message = message
-            };
-
-            return View(viewModel);
         }
     }
 }

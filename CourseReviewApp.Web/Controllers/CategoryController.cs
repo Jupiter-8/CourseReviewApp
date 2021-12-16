@@ -44,7 +44,7 @@ namespace CourseReviewApp.Web.Controllers
             {
                 Category category = await _categoryService.GetCategory(c => c.Id == id);
                 if (category == null)
-                    return RedirectToAction("Error", "Home", new { message = "Category not found." });
+                    throw new KeyNotFoundException($"Category with id: {id} not found.");
 
                 AddOrEditCategoryVm viewModel = Mapper.Map<AddOrEditCategoryVm>(category);
                 TempData["PreviousCategoryState"] = JsonSerializer.Serialize(viewModel);
@@ -64,12 +64,10 @@ namespace CourseReviewApp.Web.Controllers
                 if (viewModel.Id.HasValue && JsonSerializer.Serialize(viewModel) == TempData["PreviousCategoryState"].ToString())
                 {
                     TempData["CategoryManagementMsgModal"] = "Category has not been edited.";
-                    TempData.Remove("PreviousCategoryState");
                     return RedirectToAction("CategoryManagement");
                 }
 
                 await _categoryService.AddOrEditCategory(Mapper.Map<Category>(viewModel));
-                TempData.Remove("PreviousCategoryState");
                 TempData["CategoryManagementMsgModal"] = viewModel.Id.HasValue ?
                     "Category has been edited." : $"The {viewModel.Name} category has been added.";
 
@@ -84,7 +82,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             Category category = await _categoryService.GetCategory(c => c.Id == id);
             if (category == null)
-                return RedirectToAction("Error", "Home", new { message = "Category not found." });
+                throw new KeyNotFoundException($"Category with id: {id} not found.");
 
             return View(Mapper.Map<CategoryVm>(category));
         }
