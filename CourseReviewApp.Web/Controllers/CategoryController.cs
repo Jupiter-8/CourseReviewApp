@@ -107,7 +107,7 @@ namespace CourseReviewApp.Web.Controllers
         public IActionResult GetSubCategories(int id)
         {
             IEnumerable<Category> categories = _categoryService.GetCategories(c => c.ParentCategoryId == id);
-            var subCategories = categories.Select(c => new { Id = c.Id, Name = c.Name }).ToList();
+            var subCategories = categories.Select(c => new { id = c.Id, name = c.Name }).ToList();
 
             return Json(subCategories);
         }
