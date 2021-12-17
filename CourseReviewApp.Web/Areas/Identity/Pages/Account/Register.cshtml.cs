@@ -1,17 +1,14 @@
+using CourseReviewApp.Model.DataModels;
+using CourseReviewApp.Services.Interfaces;
+using CourseReviewApp.Web.Services.Interfaces;
+using CourseReviewApp.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using CourseReviewApp.DAL.EntityFramework;
-using CourseReviewApp.Model.DataModels;
-using CourseReviewApp.Web.ViewModels;
-using CourseReviewApp.Web.Services.Interfaces;
 using System;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,20 +17,20 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
-        private readonly AppDbContext _dbContext;
         private readonly UserManager<AppUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSenderService _emailSenderService;
         private readonly IFileService _fileService;
+        private readonly IUserService _userService;
 
         public RegisterModel(UserManager<AppUser> userManager, ILogger<RegisterModel> logger,
-            IEmailSenderService emailSenderService, AppDbContext dbContext, IFileService fileTool)
+            IEmailSenderService emailSenderService, IFileService fileTool, IUserService userService)
         {
             _userManager = userManager;
             _logger = logger;
             _emailSenderService = emailSenderService;
-            _dbContext = dbContext;
             _fileService = fileTool;
+            _userService = userService;
         }
 
         [BindProperty]
@@ -41,7 +38,6 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync()
         {
-            await LoadUserRoles();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -74,7 +70,6 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
 
                     return LocalRedirect(returnUrl);
                 }
-                await LoadUserRoles();
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
@@ -84,25 +79,11 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private async Task LoadUserRoles()
-        {
-            ViewData["Roles"] = new SelectList(_dbContext.Roles.Where(r => r.Name != "Admin" && r.Name != "Moderator")
-                .OrderBy(r => r.Name)
-                .Select(r => new
-                {
-                    Text = r.Name.Replace('_', ' '),
-                    Value = r.Id
-                }), "Value", "Text", (await _dbContext.Roles.FirstOrDefaultAsync(r => r.RoleValue == RoleValue.Course_client)).Id);
-        }
-
         private async Task<Tuple<AppUser, Role>> CreateUser(RegisterUserVm viewModel)
         {
-            Role role = await _dbContext.Roles.FirstOrDefaultAsync(r => r.Id == viewModel.UserType);
-
+            Role role = await _userService.GetRole(r => r.Id == viewModel.UserType);
             if (role == null)
-            {
                 throw new InvalidOperationException("Role not exists.");
-            }
 
             switch (role.RoleValue)
             {
@@ -117,6 +98,7 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
                         AvatarPath = "default_user_avatar.jpg",
                         IsActive = true,
                     }, role);
+
                 case RoleValue.Course_owner:
                     return new Tuple<AppUser, Role>(new CourseOwner
                     {
@@ -130,7 +112,9 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
                         AvatarPath = "default_user_avatar.jpg",
                         IsActive = true,
                     }, role);
-                default: return null;
+
+                default:
+                    return null;
             }
         }
     }

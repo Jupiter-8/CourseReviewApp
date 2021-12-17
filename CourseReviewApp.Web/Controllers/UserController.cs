@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
+using CourseReviewApp.Model.DataModels;
+using CourseReviewApp.Services.Interfaces;
+using CourseReviewApp.Web.Services.Interfaces;
+using CourseReviewApp.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using CourseReviewApp.Model.DataModels;
-using CourseReviewApp.Services.Interfaces;
-using CourseReviewApp.Web.ViewModels;
-using CourseReviewApp.Web.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,7 +40,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             AppUser user = await _userService.GetUser(u => u.Id == id);
             if (user == null)
-                throw new KeyNotFoundException($"User with id: {id} not found.");
+                throw new InvalidOperationException($"User with id: {id} not found.");
 
             return View(Mapper.Map<ChangeUserStatusVm>(user));
         }
@@ -69,7 +70,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             AppUser user = await _userService.GetUser(u => u.Id == id);
             if (user == null)
-                throw new KeyNotFoundException($"User with id: {id} not found.");
+                throw new InvalidOperationException($"User with id: {id} not found.");
 
             return View(Mapper.Map<UserVm>(user));
         }
@@ -96,7 +97,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             AppUser user = await _userService.GetUser(u => u.Id == id);
             if (user == null)
-                throw new KeyNotFoundException($"User with id: {id} not found.");
+                throw new InvalidOperationException($"User with id: {id} not found.");
 
             return View(Mapper.Map<UserVm>(user));
         }
@@ -106,7 +107,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             AppUser user = await _userService.GetUser(u => u.Id == id);
             if (user == null)
-                throw new KeyNotFoundException($"User with id: {id} not found.");
+                throw new InvalidOperationException($"User with id: {id} not found.");
             if (user.Roles.Contains("Moderator"))
             {
                 TempData["UsersManagementMsgModal"] = $"Selected user already has the Moderator role.";
@@ -138,7 +139,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             AppUser user = await _userService.GetUser(u => u.Id == id);
             if (user == null)
-                throw new KeyNotFoundException($"User with id: {id} not found.");
+                throw new InvalidOperationException($"User with id: {id} not found.");
             if (!user.Roles.Contains("Moderator"))
             {
                 TempData["UsersManagementMsgModal"] = $"Selected user hasn't got the Moderator role.";

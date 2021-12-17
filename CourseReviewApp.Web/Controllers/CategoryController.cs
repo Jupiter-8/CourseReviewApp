@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
+using CourseReviewApp.Model.DataModels;
+using CourseReviewApp.Services.Interfaces;
+using CourseReviewApp.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using CourseReviewApp.Model.DataModels;
-using CourseReviewApp.Services.Interfaces;
-using CourseReviewApp.Web.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -44,7 +45,7 @@ namespace CourseReviewApp.Web.Controllers
             {
                 Category category = await _categoryService.GetCategory(c => c.Id == id);
                 if (category == null)
-                    throw new KeyNotFoundException($"Category with id: {id} not found.");
+                    throw new InvalidOperationException($"Category with id: {id} not found.");
 
                 AddOrEditCategoryVm viewModel = Mapper.Map<AddOrEditCategoryVm>(category);
                 TempData["PreviousCategoryState"] = JsonSerializer.Serialize(viewModel);
@@ -82,7 +83,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             Category category = await _categoryService.GetCategory(c => c.Id == id);
             if (category == null)
-                throw new KeyNotFoundException($"Category with id: {id} not found.");
+                throw new InvalidOperationException($"Category with id: {id} not found.");
 
             return View(Mapper.Map<CategoryVm>(category));
         }

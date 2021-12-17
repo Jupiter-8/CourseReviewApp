@@ -1,4 +1,8 @@
 ﻿using AutoMapper;
+using CourseReviewApp.Model.DataModels;
+using CourseReviewApp.Services.Interfaces;
+using CourseReviewApp.Web.Services.Interfaces;
+using CourseReviewApp.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -6,10 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using PagedList;
-using CourseReviewApp.Model.DataModels;
-using CourseReviewApp.Services.Interfaces;
-using CourseReviewApp.Web.ViewModels;
-using CourseReviewApp.Web.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -146,7 +146,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             Course course = await _courseService.GetCourse(c => c.Id == id);
             if (course == null)
-                throw new KeyNotFoundException($"Course with id: {id} not found.");
+                throw new InvalidOperationException($"Course with id: {id} not found.");
 
             string userId = UserManager.GetUserId(User);
             if (course.Status == CourseStatus.Active || (!string.IsNullOrEmpty(userId) && (User.IsInRole("Admin") || User.IsInRole("Moderator")
@@ -186,7 +186,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             Course course = await _courseService.GetCourse(c => c.Id == id);
             if (course == null)
-                throw new KeyNotFoundException($"Course with id: {id} not found.");
+                throw new InvalidOperationException($"Course with id: {id} not found.");
             if (User.IsInRole("Course_owner"))
             {
                 if (course.OwnerId != int.Parse(UserManager.GetUserId(User)))
@@ -211,7 +211,7 @@ namespace CourseReviewApp.Web.Controllers
             {
                 Course course = await _courseService.GetCourse(c => c.Id == id);
                 if (course == null)
-                    throw new KeyNotFoundException($"Course with id: {id} not found.");
+                    throw new InvalidOperationException($"Course with id: {id} not found.");
                 if (course.OwnerId != userId)
                     throw new UnauthorizedAccessException("No access to a resource.");
 
@@ -260,7 +260,7 @@ namespace CourseReviewApp.Web.Controllers
                     string imgPath = await _fileService.SaveCourseImage(viewModel, destFolder);
                     viewModel.ImagePath = imgPath;
                 }
-                else if (viewModel.Image == null && !string.IsNullOrEmpty(viewModel.ImagePath) && viewModel.ImgToDelete 
+                else if (viewModel.Image == null && !string.IsNullOrEmpty(viewModel.ImagePath) && viewModel.ImgToDelete
                     && viewModel.ImagePath != "default_course_image.jpg")
                 {
                     _fileService.DeleteFile(Path.Combine(destFolder, viewModel.ImagePath));
@@ -286,11 +286,11 @@ namespace CourseReviewApp.Web.Controllers
         {
             Course course = await _courseService.GetCourse(c => c.Id == id);
             if (course == null)
-                throw new KeyNotFoundException($"Course with id: {id} not found.");
+                throw new InvalidOperationException($"Course with id: {id} not found.");
             if (User.IsInRole("Course_owner"))
             {
                 int ownerId = int.Parse(UserManager.GetUserId(User));
-                if(course.OwnerId != ownerId)
+                if (course.OwnerId != ownerId)
                     throw new UnauthorizedAccessException("No access to a resource.");
             }
 
@@ -316,7 +316,7 @@ namespace CourseReviewApp.Web.Controllers
             }
 
             TempData["CourseManagementMsgModal"] = $"The {viewModel.Name} course has been deleted";
-            if(User.IsInRole("Course_owner"))
+            if (User.IsInRole("Course_owner"))
                 return RedirectToAction("OwnerCoursesManagement");
             else
                 return RedirectToAction("CourseManagement");
@@ -328,7 +328,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             Course course = await _courseService.GetCourse(c => c.Id == id);
             if (course == null)
-                throw new KeyNotFoundException($"Course with id: {id} not found.");
+                throw new InvalidOperationException($"Course with id: {id} not found.");
 
             var enumValues = from CourseStatus s in Enum.GetValues(typeof(CourseStatus))
                              select new
@@ -350,14 +350,14 @@ namespace CourseReviewApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if(viewModel.Status.ToString() == TempData["PreviousCourseStatus"].ToString())
+                if (viewModel.Status.ToString() == TempData["PreviousCourseStatus"].ToString())
                 {
                     TempData["CourseManagementMsgModal"] = $"The status of the course {viewModel.Name} has not been changed.";
                     return RedirectToAction("CourseManagement");
                 }
                 await _courseService.ChangeCourseStatus(viewModel.Id, viewModel.Status);
 
-                if(viewModel.OwnerHasCourseInfoEmailsEnabled)
+                if (viewModel.OwnerHasCourseInfoEmailsEnabled)
                 {
                     await _emailSenderService.SendDefaultMessageEmailAsync(viewModel.OwnerEmail, "Course status",
                         $"The status of your course: {viewModel.Name} has been changed to {viewModel.Status} by moderation.");

@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
+using CourseReviewApp.Model.DataModels;
+using CourseReviewApp.Services.Interfaces;
+using CourseReviewApp.Web.Services.Interfaces;
+using CourseReviewApp.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using CourseReviewApp.Model.DataModels;
-using CourseReviewApp.Services.Interfaces;
-using CourseReviewApp.Web.ViewModels;
-using CourseReviewApp.Web.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
 
 namespace CourseReviewApp.Web.Controllers
 {
@@ -37,7 +37,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             Course course = await _courseService.GetCourse(c => c.Id == courseId);
             if (course == null)
-                throw new KeyNotFoundException($"Course with id: {courseId} not found.");
+                throw new InvalidOperationException($"Course with id: {courseId} not found.");
 
             AddOrEditReviewVm viewModel = null;
             ViewBag.CourseName = course.Name;
@@ -47,7 +47,7 @@ namespace CourseReviewApp.Web.Controllers
             {
                 Review review = await _reviewService.GetReview(r => r.Id == reviewId);
                 if (review == null)
-                    throw new KeyNotFoundException($"Review with id: {reviewId} not found.");
+                    throw new InvalidOperationException($"Review with id: {reviewId} not found.");
                 if (review.AuthorId != userId)
                     throw new UnauthorizedAccessException("No access to a resource.");
 
@@ -97,7 +97,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             Review review = await _reviewService.GetReview(r => r.Id == id);
             if (review == null)
-                throw new KeyNotFoundException($"Review with id: {id} not found.");
+                throw new InvalidOperationException($"Review with id: {id} not found.");
             if (User.IsInRole("Course_client"))
             {
                 if (review.AuthorId != int.Parse(UserManager.GetUserId(User)))
@@ -137,10 +137,10 @@ namespace CourseReviewApp.Web.Controllers
         {
             Review review = await _reviewService.GetReview(r => r.Id == reviewId);
             if (review == null)
-                throw new KeyNotFoundException($"Review with id: {reviewId} not found.");
+                throw new InvalidOperationException($"Review with id: {reviewId} not found.");
 
             int userId = int.Parse(UserManager.GetUserId(User));
-            if(review.Course.OwnerId != userId)
+            if (review.Course.OwnerId != userId)
                 throw new UnauthorizedAccessException("No access to a resource.");
 
             AddOrEditOwnerCommentVm viewModel = new()
@@ -191,7 +191,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             Review review = await _reviewService.GetReview(r => r.Id == id);
             if (review == null)
-                throw new KeyNotFoundException($"Review with id: {id} not found.");
+                throw new InvalidOperationException($"Review with id: {id} not found.");
 
             return View(Mapper.Map<ReviewVm>(review));
         }
@@ -306,7 +306,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             OwnerComment ownerComment = await _reviewService.GetOwnerComment(ow => ow.Id == id);
             if (ownerComment == null)
-                throw new KeyNotFoundException($"Owner's comment with id: {id} not found.");
+                throw new InvalidOperationException($"Owner's comment with id: {id} not found.");
             if (User.IsInRole("Course_owner") && ownerComment.AuthorId != int.Parse(UserManager.GetUserId(User)))
                 throw new UnauthorizedAccessException("No access to a resource.");
 

@@ -1,23 +1,24 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using AutoMapper;
+using CourseReviewApp.Model.DataModels;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace CourseReviewApp.Web.Controllers
 {
-    public class ErrorController : Controller
+    public class ErrorController : BaseController
     {
-        private readonly ILogger _logger;
-
-        public ErrorController(ILogger logger)
+        public ErrorController(ILogger logger, IMapper mapper, UserManager<AppUser> userManager) 
+            : base(logger, mapper, userManager)
         {
-            _logger = logger;
         }
 
         [Route("Error")]
         public IActionResult Error()
         {
             IExceptionHandlerPathFeature exceptionDetails = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
-            _logger.LogError(exceptionDetails.Error.ToString());
+            Logger.LogError(exceptionDetails.Error.ToString());
 
             return View("Error");
         }

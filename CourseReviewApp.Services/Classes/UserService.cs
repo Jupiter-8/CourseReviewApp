@@ -45,6 +45,15 @@ namespace CourseReviewApp.Services.Classes
             return users;
         }
 
+        public async Task<Role> GetRole(Expression<Func<Role, bool>> filter)
+        {
+            if (filter == null)
+                throw new ArgumentNullException("Filter expression is null.");
+            Role role = await DbContext.Roles.FirstOrDefaultAsync(filter);
+
+            return role;
+        }
+
         public async Task ChangeUserStatus(int id, bool status)
         {
             AppUser user = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == id);

@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
+using CourseReviewApp.Model.DataModels;
+using CourseReviewApp.Services.Interfaces;
+using CourseReviewApp.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using CourseReviewApp.Model.DataModels;
-using CourseReviewApp.Services.Interfaces;
-using CourseReviewApp.Web.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +40,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             Review review = await _reviewService.GetReview(r => r.Id == id);
             if (review == null)
-                throw new KeyNotFoundException($"Review with id: {id} not found.");
+                throw new InvalidOperationException($"Review with id: {id} not found.");
 
             ReportReviewVm viewModel = new()
             {
@@ -82,7 +82,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             ReviewReport reviewReport = await _reportService.GetReviewReport(rr => rr.Id == id);
             if (reviewReport == null)
-                throw new KeyNotFoundException($"Review with id: {id} not found.");
+                throw new InvalidOperationException($"Review with id: {id} not found.");
 
             return View(Mapper.Map<ReviewReportVm>(reviewReport));
         }
@@ -109,7 +109,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             ReviewReport reviewReport = await _reportService.GetReviewReport(rr => rr.Id == id);
             if (reviewReport == null)
-                throw new KeyNotFoundException($"Review with id: {id} not found.");
+                throw new InvalidOperationException($"Review with id: {id} not found.");
 
             return View(Mapper.Map<ReviewReportVm>(reviewReport));
         }
