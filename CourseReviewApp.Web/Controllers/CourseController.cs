@@ -146,7 +146,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             Course course = await _courseService.GetCourse(c => c.Id == id);
             if (course == null)
-                return RedirectToAction("Error", "Home", new { message = "Course not found." });
+                throw new KeyNotFoundException($"Course with id: {id} not found.");
 
             string userId = UserManager.GetUserId(User);
             if (course.Status == CourseStatus.Active || (!string.IsNullOrEmpty(userId) && (User.IsInRole("Admin") || User.IsInRole("Moderator")
@@ -177,7 +177,7 @@ namespace CourseReviewApp.Web.Controllers
                 return View(Mapper.Map<CourseVm>(course));
             }
 
-            return RedirectToAction("Error", "Home", new { message = "You don't have access to this resource." });
+            throw new UnauthorizedAccessException("No access to a resource.");
         }
 
         [HttpGet]
@@ -186,11 +186,11 @@ namespace CourseReviewApp.Web.Controllers
         {
             Course course = await _courseService.GetCourse(c => c.Id == id);
             if (course == null)
-                return RedirectToAction("Error", "Home", new { message = "Course not found." });
+                throw new KeyNotFoundException($"Course with id: {id} not found.");
             if (User.IsInRole("Course_owner"))
             {
                 if (course.OwnerId != int.Parse(UserManager.GetUserId(User)))
-                    return RedirectToAction("Error", "Home", new { message = "You don't have access to this resource." });
+                    throw new UnauthorizedAccessException("No access to a resource.");
             }
 
             return View(Mapper.Map<CourseVm>(course));
@@ -211,9 +211,9 @@ namespace CourseReviewApp.Web.Controllers
             {
                 Course course = await _courseService.GetCourse(c => c.Id == id);
                 if (course == null)
-                    return RedirectToAction("Error", "Home", new { message = "Course not found." });
+                    throw new KeyNotFoundException($"Course with id: {id} not found.");
                 if (course.OwnerId != userId)
-                    return RedirectToAction("Error", "Home", new { message = "You don't have access to this resource." });
+                    throw new UnauthorizedAccessException("No access to a resource.");
 
                 viewModel = Mapper.Map<AddOrEditCourseVm>(course);
                 viewModel.ParentCategoryId = course.Category?.ParentCategoryId;
@@ -290,12 +290,12 @@ namespace CourseReviewApp.Web.Controllers
         {
             Course course = await _courseService.GetCourse(c => c.Id == id);
             if (course == null)
-                return RedirectToAction("Error", "Home", new { message = "Course not found." });
+                throw new KeyNotFoundException($"Course with id: {id} not found.");
             if (User.IsInRole("Course_owner"))
             {
                 int ownerId = int.Parse(UserManager.GetUserId(User));
                 if(course.OwnerId != ownerId)
-                    return RedirectToAction("Error", "Home", new { message = "You cannot delete a course that is not yours." });
+                    throw new UnauthorizedAccessException("No access to a resource.");
             }
 
             return View(Mapper.Map<DeleteCourseVm>(course));
