@@ -20,7 +20,7 @@ namespace CourseReviewApp.Web.Services.Classes
 
         public async Task SendEmailAsync(string recipient, string subject, string body)
         {
-            MailMessage message = new MailMessage();
+            MailMessage message = new();
             string host = _config.GetValue<string>("Email:Smtp:Username");
             message.From = new MailAddress(host);
             message.To.Add(recipient);

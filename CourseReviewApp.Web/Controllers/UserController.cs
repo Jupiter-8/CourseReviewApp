@@ -39,7 +39,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             AppUser user = await _userService.GetUser(u => u.Id == id);
             if (user == null)
-                return RedirectToAction("Error", "Home", new { message = "User not found." });
+                throw new KeyNotFoundException($"User with id: {id} not found.");
 
             return View(Mapper.Map<ChangeUserStatusVm>(user));
         }
@@ -69,7 +69,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             AppUser user = await _userService.GetUser(u => u.Id == id);
             if (user == null)
-                return RedirectToAction("Error", "Home", new { message = "User not found." });
+                throw new KeyNotFoundException($"User with id: {id} not found.");
 
             return View(Mapper.Map<UserVm>(user));
         }
@@ -96,7 +96,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             AppUser user = await _userService.GetUser(u => u.Id == id);
             if (user == null)
-                return RedirectToAction("Error", "Home", new { message = "User not found." });
+                throw new KeyNotFoundException($"User with id: {id} not found.");
 
             return View(Mapper.Map<UserVm>(user));
         }
@@ -106,8 +106,8 @@ namespace CourseReviewApp.Web.Controllers
         {
             AppUser user = await _userService.GetUser(u => u.Id == id);
             if (user == null)
-                return RedirectToAction("Error", "Home", new { message = "User not found." });
-            if(user.Roles.Contains("Moderator"))
+                throw new KeyNotFoundException($"User with id: {id} not found.");
+            if (user.Roles.Contains("Moderator"))
             {
                 TempData["UsersManagementMsgModal"] = $"Selected user already has the Moderator role.";
                 return RedirectToAction("UserManagement");
@@ -138,7 +138,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             AppUser user = await _userService.GetUser(u => u.Id == id);
             if (user == null)
-                return RedirectToAction("Error", "Home", new { message = "User not found." });
+                throw new KeyNotFoundException($"User with id: {id} not found.");
             if (!user.Roles.Contains("Moderator"))
             {
                 TempData["UsersManagementMsgModal"] = $"Selected user hasn't got the Moderator role.";

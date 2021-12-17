@@ -250,8 +250,6 @@ namespace CourseReviewApp.Web.Controllers
                 {
                     viewModel.DateAdded = JsonSerializer.Deserialize<DateTime>(TempData["PreviousCourseDate"].ToString());
                     TempData["CourseManagementMsgModal"] = "Course has not been edited.";
-                    TempData.Remove("PreviousCourseState");
-                    TempData.Remove("PreviousCourseDate");
 
                     return RedirectToAction("OwnerCoursesManagement");
                 }
@@ -275,8 +273,6 @@ namespace CourseReviewApp.Web.Controllers
 
                 string word = viewModel.Id.HasValue ? "edited" : "added";
                 TempData["CourseManagementMsgModal"] = $"The {viewModel.Name} course has been {word}. It will receive an Active status after positive verification by moderation.";
-                TempData.Remove("PreviousCourseState");
-                TempData.Remove("PreviousCourseDate");
 
                 return RedirectToAction("OwnerCoursesManagement");
             }
@@ -332,7 +328,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             Course course = await _courseService.GetCourse(c => c.Id == id);
             if (course == null)
-                return RedirectToAction("Error", "Home", new { message = "Course not found." });
+                throw new KeyNotFoundException($"Course with id: {id} not found.");
 
             var enumValues = from CourseStatus s in Enum.GetValues(typeof(CourseStatus))
                              select new
@@ -357,7 +353,6 @@ namespace CourseReviewApp.Web.Controllers
                 if(viewModel.Status.ToString() == TempData["PreviousCourseStatus"].ToString())
                 {
                     TempData["CourseManagementMsgModal"] = $"The status of the course {viewModel.Name} has not been changed.";
-                    TempData.Remove("PreviousCourseStatus");
                     return RedirectToAction("CourseManagement");
                 }
                 await _courseService.ChangeCourseStatus(viewModel.Id, viewModel.Status);
@@ -367,8 +362,6 @@ namespace CourseReviewApp.Web.Controllers
                     await _emailSenderService.SendDefaultMessageEmailAsync(viewModel.OwnerEmail, "Course status",
                         $"The status of your course: {viewModel.Name} has been changed to {viewModel.Status} by moderation.");
                 }
-
-                TempData.Remove("PreviousCourseStatus");
                 TempData["CourseManagementMsgModal"] = $"The status of the {viewModel.Name} course has been changed to {viewModel.Status}";
 
                 return RedirectToAction("CourseManagement");

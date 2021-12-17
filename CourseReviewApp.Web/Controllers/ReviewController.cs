@@ -10,6 +10,7 @@ using CourseReviewApp.Web.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace CourseReviewApp.Web.Controllers
 {
@@ -36,7 +37,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             Course course = await _courseService.GetCourse(c => c.Id == courseId);
             if (course == null)
-                return RedirectToAction("Error", "Home", new { message = "Course not found." });
+                throw new KeyNotFoundException($"Course with id: {courseId} not found.");
 
             AddOrEditReviewVm viewModel = null;
             ViewBag.CourseName = course.Name;
@@ -46,9 +47,9 @@ namespace CourseReviewApp.Web.Controllers
             {
                 Review review = await _reviewService.GetReview(r => r.Id == reviewId);
                 if (review == null)
-                    return RedirectToAction("Error", "Home", new { message = "Review not found." });
+                    throw new KeyNotFoundException($"Review with id: {reviewId} not found.");
                 if (review.AuthorId != userId)
-                    return RedirectToAction("Error", "Home", new { message = "You dont't have access to this resource." });
+                    throw new UnauthorizedAccessException("No access to a resource.");
 
                 viewModel = Mapper.Map<AddOrEditReviewVm>(review);
                 TempData["PreviousReviewContents"] = viewModel.Contents;
@@ -57,7 +58,7 @@ namespace CourseReviewApp.Web.Controllers
                 return View(viewModel);
             }
 
-            viewModel = new AddOrEditReviewVm()
+            viewModel = new()
             {
                 CourseId = courseId,
                 AuthorId = userId
@@ -77,14 +78,10 @@ namespace CourseReviewApp.Web.Controllers
                     viewModel.RatingValue.ToString() == TempData["PreviousReviewRating"].ToString())
                 {
                     TempData["CourseDetailsMsgModal"] = "No changes made. Review has not been edited.";
-                    TempData.Remove("PreviousReviewContents");
-                    TempData.Remove("PreviousReviewRating");
                     return RedirectToAction("Details", "Course", new { id = viewModel.CourseId });
                 }
 
                 await _reviewService.AddOrEditReview(Mapper.Map<Review>(viewModel));
-                TempData.Remove("PreviousReviewContents");
-                TempData.Remove("PreviousReviewRating");
                 TempData["CourseDetailsMsgModal"] = viewModel.Id.HasValue ? "Your review has been edited."
                     : "Your review has been added.";
 
@@ -100,11 +97,11 @@ namespace CourseReviewApp.Web.Controllers
         {
             Review review = await _reviewService.GetReview(r => r.Id == id);
             if (review == null)
-                return RedirectToAction("Error", "Home", new { message = "Review not found." });
+                throw new KeyNotFoundException($"Review with id: {id} not found.");
             if (User.IsInRole("Course_client"))
             {
                 if (review.AuthorId != int.Parse(UserManager.GetUserId(User)))
-                    return RedirectToAction("Error", "Home", new { message = "You dont't have access to this resource." });
+                    throw new UnauthorizedAccessException("No access to a resource.");
             }
 
             return View(Mapper.Map<ReviewVm>(review));
@@ -140,13 +137,13 @@ namespace CourseReviewApp.Web.Controllers
         {
             Review review = await _reviewService.GetReview(r => r.Id == reviewId);
             if (review == null)
-                return RedirectToAction("Error", "Home", new { message = "Review not found." });
+                throw new KeyNotFoundException($"Review with id: {reviewId} not found.");
 
             int userId = int.Parse(UserManager.GetUserId(User));
             if(review.Course.OwnerId != userId)
-                return RedirectToAction("Error", "Home", new { message = "You dont't have access to this resource." });
+                throw new UnauthorizedAccessException("No access to a resource.");
 
-            AddOrEditOwnerCommentVm viewModel = new AddOrEditOwnerCommentVm()
+            AddOrEditOwnerCommentVm viewModel = new()
             {
                 CourseId = review.CourseId,
                 Review = Mapper.Map<ReviewVm>(review),
@@ -175,12 +172,10 @@ namespace CourseReviewApp.Web.Controllers
                 if (viewModel.Id.HasValue && viewModel.Contents == TempData["PreviousCommentContents"].ToString())
                 {
                     TempData["CourseDetailsMsgModal"] = "No changes made. Comment has not been edited.";
-                    TempData.Remove("PreviousCommentContents");
                     return RedirectToAction("Details", "Course", new { id = viewModel.CourseId });
                 }
 
                 await _reviewService.AddOrEditOwnerComment(Mapper.Map<OwnerComment>(viewModel));
-                TempData.Remove("PreviousCommentContents");
                 TempData["CourseDetailsMsgModal"] = viewModel.Id.HasValue ? "Your comment has been edited."
                     : "Your comment has been added.";
 
@@ -196,7 +191,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             Review review = await _reviewService.GetReview(r => r.Id == id);
             if (review == null)
-                return RedirectToAction("Error", "Home", new { message = "Review not found." });
+                throw new KeyNotFoundException($"Review with id: {id} not found.");
 
             return View(Mapper.Map<ReviewVm>(review));
         }
@@ -311,9 +306,9 @@ namespace CourseReviewApp.Web.Controllers
         {
             OwnerComment ownerComment = await _reviewService.GetOwnerComment(ow => ow.Id == id);
             if (ownerComment == null)
-                return RedirectToAction("Error", "Home", new { message = "Owner's comment not found." });
+                throw new KeyNotFoundException($"Owner's comment with id: {id} not found.");
             if (User.IsInRole("Course_owner") && ownerComment.AuthorId != int.Parse(UserManager.GetUserId(User)))
-                return RedirectToAction("Error", "Home", new { message = "You dont't have access to this resource." });
+                throw new UnauthorizedAccessException("No access to a resource.");
 
             return View(Mapper.Map<OwnerCommentVm>(ownerComment));
         }

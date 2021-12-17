@@ -40,9 +40,9 @@ namespace CourseReviewApp.Web.Controllers
         {
             Review review = await _reviewService.GetReview(r => r.Id == id);
             if (review == null)
-                return RedirectToAction("Error", "Home", new { message = "Review not found." });
+                throw new KeyNotFoundException($"Review with id: {id} not found.");
 
-            ReportReviewVm viewModel = new ReportReviewVm()
+            ReportReviewVm viewModel = new()
             {
                 ReviewId = id,
                 ReportingUserId = int.Parse(UserManager.GetUserId(User)),
@@ -67,7 +67,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _reportService.ReportReview(Mapper.Map<ReviewReport>(viewModel));
+                await _reportService.AddReviewReport(Mapper.Map<ReviewReport>(viewModel));
                 TempData["CourseDetailsMsgModal"] = "Review has been reported.";
 
                 return RedirectToAction("Details", "Course", new { id = TempData["CourseId"].ToString() });
@@ -82,7 +82,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             ReviewReport reviewReport = await _reportService.GetReviewReport(rr => rr.Id == id);
             if (reviewReport == null)
-                return RedirectToAction("Error", "Home", new { message = "Review report not found." });
+                throw new KeyNotFoundException($"Review with id: {id} not found.");
 
             return View(Mapper.Map<ReviewReportVm>(reviewReport));
         }
@@ -109,7 +109,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             ReviewReport reviewReport = await _reportService.GetReviewReport(rr => rr.Id == id);
             if (reviewReport == null)
-                return RedirectToAction("Error", "Home", new { message = "Review report not found." });
+                throw new KeyNotFoundException($"Review with id: {id} not found.");
 
             return View(Mapper.Map<ReviewReportVm>(reviewReport));
         }

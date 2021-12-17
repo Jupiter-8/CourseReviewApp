@@ -1,9 +1,7 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using CourseReviewApp.DAL.EntityFramework;
+﻿using CourseReviewApp.DAL.EntityFramework;
 using CourseReviewApp.Model.DataModels;
 using CourseReviewApp.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +12,7 @@ namespace CourseReviewApp.Services.Classes
 {
     public class CategoryService : BaseService, ICategoryService
     {
-        public CategoryService(AppDbContext dbContext, ILogger logger, IMapper mapper)
-            : base(dbContext, logger, mapper)
+        public CategoryService(AppDbContext dbContext) : base(dbContext)
         {
         }
 
