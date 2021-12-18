@@ -216,3 +216,13 @@ body {
 #star-select select {
     -webkit-appearance: none;
 }
+
+.register-form-field-input {
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
+}
+
+.register-form-field-icon {
+    border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
+}

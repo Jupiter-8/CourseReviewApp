@@ -11,100 +11,107 @@
                 <h1 class="text-secondary"><i class="fas fa-user-plus"></i> @ViewData["Title"]</h1>
             </div>
             <form method="post">
-                <div class="form-group">
-                    <label asp-for="Input.Username"></label>
+                <div class="form-group my-4">
                     <div class="d-flex">
-                        <input asp-for="Input.Username" class="form-control shadow-none col-12" autocomplete="off" />
+                        <span class="input-group-text rounded-left register-form-field-icon border-right-0"><i class="fas fa-user"></i></span>
+                        <input placeholder="Username" asp-for="Input.Username" class="form-control shadow-none register-form-field-input col-11" />
                         <button class="btn btn-transparent btn-pos btn-clear" type="button">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
                     <span asp-validation-for="Input.Username" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Input.Email"></label>
+                <div class="form-group my-4">
                     <div class="d-flex">
-                        <input asp-for="Input.Email" class="form-control shadow-none col-12" autocomplete="off" />
+                        <span class="input-group-text rounded-left register-form-field-icon border-right-0"><i class="fas fa-at"></i></span>
+                        <input placeholder="Email" asp-for="Input.Email" class="form-control shadow-none register-form-field-input col-11" />
                         <button class="btn btn-transparent btn-pos btn-clear" type="button">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Input.Password"></label>
+                <div class="form-group my-4">
                     <div class="d-flex">
-                        <input asp-for="Input.Password" class="form-control shadow-none col-12" autocomplete="off" />
+                        <span class="input-group-text rounded-left register-form-field-icon border-right-0"><i class="fas fa-key"></i></span>
+                        <input placeholder="Password" asp-for="Input.Password" class="form-control shadow-none register-form-field-input col-11" autocomplete="off" />
                         <button class="btn btn-transparent btn-pos btn-clear" type="button">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Input.ConfirmPassword"></label>
+                <div class="form-group my-4">
                     <div class="d-flex">
-                        <input asp-for="Input.ConfirmPassword" class="form-control shadow-none col-12" autocomplete="off" />
+                        <span class="input-group-text rounded-left register-form-field-icon border-right-0"><i class="fas fa-key"></i></span>
+                        <input placeholder="Confirm password" asp-for="Input.ConfirmPassword" class="form-control register-form-field-input col-11" autocomplete="off" />
                         <button class="btn btn-transparent btn-pos btn-clear" type="button">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
                     <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Input.Firstname"></label>
+                <div class="form-group my-4">
                     <div class="d-flex">
-                        <input asp-for="Input.Firstname" class="form-control shadow-none col-12" autocomplete="off" />
+                        <span class="input-group-text rounded-left register-form-field-icon border-right-0"><i class="fas fa-address-card"></i></span>
+                        <input placeholder="Firstname" asp-for="Input.Firstname" class="form-control shadow-none register-form-field-input col-11" />
                         <button class="btn btn-transparent btn-pos btn-clear" type="button">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
                     <span asp-validation-for="Input.Firstname" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Input.Lastname"></label>
+                <div class="form-group my-4">
                     <div class="d-flex">
-                        <input asp-for="Input.Lastname" class="form-control shadow-none col-12" autocomplete="off" />
+                        <span class="input-group-text rounded-left register-form-field-icon border-right-0"><i class="fas fa-address-card"></i></span>
+                        <input placeholder="Lastname" asp-for="Input.Lastname" class="form-control shadow-none register-form-field-input col-11" />
                         <button class="btn btn-transparent btn-pos btn-clear" type="button">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
                     <span asp-validation-for="Input.Lastname" class="text-danger"></span>
                 </div>
+                <div id="course-owner-fields" hidden>
+                    <div class="form-group my-4">
+                        <div class="d-flex">
+                            <span class="input-group-text rounded-left register-form-field-icon border-right-0"><i class="fas fa-globe"></i></span>
+                            <input placeholder="Website URL" id="register-websiteurl-input" asp-for="Input.WebsiteUrl" class="form-control shadow-none register-form-field-input col-11" />
+                            <button class="btn btn-transparent btn-pos btn-clear" type="button">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group my-4">
+                        <div class="d-flex">
+                            <span class="input-group-text rounded-left register-form-field-icon border-right-0"><i class="far fa-copyright"></i></span>
+                            <input placeholder="Brandname" id="register-brandname-input" asp-for="Input.Brandname" class="form-control shadow-none register-form-field-input col-11" />
+                            <button class="btn btn-transparent btn-pos btn-clear" type="button">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label asp-for="Input.UserType"></label>
-                    <select asp-for="Input.UserType" class="form-control shadow-none"
-                            onchange="displayHiddenRegisterFields(this.options[this.selectedIndex].text)">
-                        <option value=""></option>
-                        <option value="2">Course client</option>
-                        <option value="1">Course owner</option>
-                    </select>
+                    <input asp-for="Input.UserType" id="user-type-input" style="visibility:hidden" type="text" value="" />
+                    <div class="custom-control custom-radio mb-2">
+                        <input class="custom-control-input" type="radio" name="user-type-radio-btn" id="rd-1" value="2">
+                        <label class="custom-control-label" for="rd-1">
+                            Course client
+                        </label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input class="custom-control-input" type="radio" name="user-type-radio-btn" id="rd-2" value="1">
+                        <label class="custom-control-label" for="rd-2">
+                            Course owner
+                        </label>
+                    </div>
                     <span asp-validation-for="Input.UserType" class="text-danger"></span>
                 </div>
-                <div id="course-owner-fields" hidden>
-                    <div class="form-group">
-                        <label asp-for="Input.WebsiteUrl"></label>
-                        <div class="d-flex">
-                            <input id="register-websiteurl-input" asp-for="Input.WebsiteUrl" class="form-control shadow-none col-12" autocomplete="off" />
-                            <button class="btn btn-transparent btn-pos btn-clear" type="button">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Input.Brandname"></label>
-                        <div class="d-flex">
-                            <input id="register-brandname-input" asp-for="Input.Brandname" class="form-control shadow-none col-12" autocomplete="off" />
-                            <button class="btn btn-transparent btn-pos btn-clear" type="button">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
                 <div class="form-group">
-                    <p>
+                    <div>
                         <input style="visibility:hidden" type="text" value="0" asp-for="Input.TermsAccepted" id="terms-accept-input" />
-                    </p>
+                    </div>
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="terms-accept-checkbox">
                         <label class="custom-control-label" for="terms-accept-checkbox">

@@ -12,7 +12,13 @@
             <p class="mb-3">We will sent you a message with a email confirmation link.</p>
             <form method="post">
                 <div class="form-group">
-                    <input asp-for="Input.Email" class="form-control shadow-none" placeholder="Enter your email" />
+                    <div class="d-flex">
+                        <span class="input-group-text rounded-left register-form-field-icon border-right-0"><i class="fas fa-at"></i></span>
+                        <input placeholder="Enter your email" asp-for="Input.Email" class="form-control shadow-none register-form-field-input col-11" />
+                        <button class="btn btn-transparent btn-pos btn-clear" type="button">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="form-group row d-flex justify-content-center mt-5">
                     <button class="btn btn-success mr-3"><i class="fas fa-check mr-2"></i><span>Confirm</span></button>
