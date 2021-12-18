@@ -1,4 +1,5 @@
 using CourseReviewApp.Model.DataModels;
+using CourseReviewApp.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +16,12 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
     public class ResetPasswordModel : PageModel
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly IEmailSenderService _emailSenderService;
 
-        public ResetPasswordModel(UserManager<AppUser> userManager)
+        public ResetPasswordModel(UserManager<AppUser> userManager, IEmailSenderService emailSenderService)
         {
             _userManager = userManager;
+            _emailSenderService = emailSenderService;
         }
 
         [BindProperty]
@@ -74,8 +77,11 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
             var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
             if (result.Succeeded)
             {
+                user.LockoutMessageSent = false;
+                await _userManager.UpdateAsync(user);
                 TempData["LoginModalMsg"] = "Your password has been reset. You can log in.";
                 await _userManager.SetLockoutEndDateAsync(user, new DateTime(2000, 1, 1));
+                await _emailSenderService.SendDefaultMessageEmailAsync(user.Email, "Password reset", "Your password has been reset.");
 
                 return LocalRedirect("~/Identity/Account/Login");
             }

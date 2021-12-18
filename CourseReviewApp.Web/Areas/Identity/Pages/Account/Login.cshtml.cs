@@ -1,5 +1,6 @@
 using CourseReviewApp.Model.DataModels;
 using CourseReviewApp.Services.Interfaces;
+using CourseReviewApp.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -17,15 +18,19 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly IUserService _userService;
+        private readonly IEmailSenderService _emailSenderService;
 
         public LoginModel(SignInManager<AppUser> signInManager,
-            ILogger<LoginModel> logger, IUserService userService)
+            ILogger<LoginModel> logger, IUserService userService, IEmailSenderService emailSenderService, UserManager<AppUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
             _userService = userService;
+            _emailSenderService = emailSenderService;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -92,6 +97,11 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
+                    if(user.LockoutMessageSent && user.LockoutEnd <= System.DateTimeOffset.UtcNow)
+                    {
+                        user.LockoutMessageSent = false;
+                        await _userManager.UpdateAsync(user);
+                    }
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
@@ -101,6 +111,14 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
                 }
                 if (result.IsLockedOut)
                 {
+                    if(!user.LockoutMessageSent)
+                    {
+                        await _emailSenderService.SendDefaultMessageEmailAsync(user.Email, "Account lockout",
+                            "Your account has been locked out due to too many failed login attempts.");
+                        user.LockoutMessageSent = true;
+                        await _userManager.UpdateAsync(user);
+                    }
+
                     _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
                 }

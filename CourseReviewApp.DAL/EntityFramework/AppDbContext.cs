@@ -46,6 +46,11 @@ namespace CourseReviewApp.DAL.EntityFramework
             modelBuilder.Entity<AppUser>()
                 .Ignore(au => au.Roles);
 
+            modelBuilder.Entity<AppUser>()
+                .Property(co => co.LockoutMessageSent)
+                .IsRequired()
+                .HasDefaultValue(false);
+
             modelBuilder.Entity<CourseOwner>()
                 .Property(co => co.CourseInfoEmailsEnabled)
                 .IsRequired()

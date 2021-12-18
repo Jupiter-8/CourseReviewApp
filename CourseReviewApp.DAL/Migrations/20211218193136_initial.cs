@@ -34,6 +34,7 @@ namespace CourseReviewApp.DAL.Migrations
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     AvatarPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LockoutMessageSent = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     UserType = table.Column<int>(type: "int", nullable: false),
                     ReviewInfoEmailsEnabled = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
                     BrandName = table.Column<string>(type: "nvarchar(max)", nullable: true),

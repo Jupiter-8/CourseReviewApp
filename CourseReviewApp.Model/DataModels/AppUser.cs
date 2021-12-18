@@ -11,6 +11,7 @@ namespace CourseReviewApp.Model.DataModels
         public DateTime RegistrationDate { get; set; }
         public bool IsActive { get; set; }
         public string AvatarPath { get; set; }
+        public bool LockoutMessageSent { get; set; } 
         public IList<string> Roles { get; set; }
 
         public virtual IList<ReviewReport> ReviewReports { get; set; }
