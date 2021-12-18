@@ -41,7 +41,7 @@ namespace CourseReviewApp.Web
                 options.SignIn.RequireConfirmedAccount = true;
                 options.User.RequireUniqueEmail = true;
                 options.Lockout.AllowedForNewUsers = true;
-                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.MaxFailedAccessAttempts = 2;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(60);
             })
                 .AddRoles<Role>()
