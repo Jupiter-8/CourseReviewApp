@@ -15,6 +15,7 @@ using CourseReviewApp.Web.Services.Interfaces;
 using System.Net;
 using System.Net.Mail;
 using Microsoft.AspNetCore.Diagnostics;
+using System;
 
 namespace CourseReviewApp.Web
 {
@@ -39,6 +40,9 @@ namespace CourseReviewApp.Web
             {
                 options.SignIn.RequireConfirmedAccount = true;
                 options.User.RequireUniqueEmail = true;
+                options.Lockout.AllowedForNewUsers = true;
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(60);
             })
                 .AddRoles<Role>()
                 .AddRoleManager<RoleManager<Role>>()

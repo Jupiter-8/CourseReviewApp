@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CourseReviewApp.Model.DataModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using CourseReviewApp.Model.DataModels;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
 {
@@ -58,7 +55,7 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
             //}
 
             //await _signInManager.RefreshSignInAsync(user);
-            
+
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Thank you for confirming your email change.";
             return Page();
