@@ -41,8 +41,8 @@ namespace CourseReviewApp.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string sortOrder, string searchString, bool isMainCategory, int? page = 1,
-            int? categoryId = null, int? ownerId = null)
+        public async Task<IActionResult> Index(string sortOrder, string searchString, bool isMainCategory, bool notAssignedToCategory,
+            int? page = 1, int? categoryId = null, int? ownerId = null)
         {
             if ((await _courseService.GetCoursesCount()) == 0)
                 return View();
@@ -51,8 +51,14 @@ namespace CourseReviewApp.Web.Controllers
             Category category = null;
             ViewBag.Action = "Index";
             ViewBag.Controller = "Course";
+            ViewBag.NotAssignedToCategoryCount = await _courseService.GetCoursesCount(c => c.CategoryId == null);
 
-            if (ownerId.HasValue)
+            if(notAssignedToCategory)
+            {
+                courses = _courseService.GetCourses(c => c.CategoryId == null);
+                ViewBag.NotAssignedToCategory = true;
+            }
+            else if (ownerId.HasValue)
             {
                 courses = _courseService.GetCourses(c => c.OwnerId == ownerId && c.Status == CourseStatus.Active);
                 Course course = courses.FirstOrDefault();

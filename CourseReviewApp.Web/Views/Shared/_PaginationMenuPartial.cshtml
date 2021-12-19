@@ -6,7 +6,8 @@
             <ul class="pagination">
                 <li class="@(Model.IsFirstPage ? "page-item disabled" : "page-item")">
                     <a class="page-link text-info" aria-label="Previous" asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller asp-route-categoryId="@ViewBag.CategoryId"
-                       asp-route-searchString=@ViewBag.SearchString asp-route-page="@(Model.PageNumber - 1)" asp-route-ownerId="@ViewBag.OwnerId" asp-route-isMainCategory="@ViewBag.IsMainCategory">
+                       asp-route-searchString=@ViewBag.SearchString asp-route-page="@(Model.PageNumber - 1)" asp-route-ownerId="@ViewBag.OwnerId" asp-route-isMainCategory="@ViewBag.IsMainCategory"
+                       asp-route-notAssignedToCategory="@ViewBag.NotAssignedToCategory">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
@@ -16,12 +17,14 @@
                     var aClass = (i == Model.PageNumber ? "page-link text-white" : "page-link text-info");
                     <li class='@liClass'>
                         <a class="@aClass" asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller asp-route-ownerId="@ViewBag.OwnerId" asp-route-categoryId="@ViewBag.CategoryId"
-                           asp-route-sortOrder=@ViewBag.SortOrder asp-route-searchString=@ViewBag.SearchString asp-route-page="@i" asp-route-isMainCategory="@ViewBag.IsMainCategory">@i</a>
+                           asp-route-sortOrder=@ViewBag.SortOrder asp-route-searchString=@ViewBag.SearchString asp-route-page="@i" asp-route-isMainCategory="@ViewBag.IsMainCategory"
+                           asp-route-notAssignedToCategory="@ViewBag.NotAssignedToCategory">@i</a>
                     </li>
                 }
                 <li class="@(Model.IsLastPage ? "page-item disabled" : "page-item")">
                     <a class="page-link text-info" aria-label="Next" asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller asp-route-ownerId="@ViewBag.OwnerId" asp-route-categoryId="@ViewBag.CategoryId"
-                       asp-route-sortOrder=@ViewBag.SortOrder asp-route-searchString=@ViewBag.SearchString asp-route-page="@(Model.PageNumber + 1)" asp-route-isMainCategory="@ViewBag.IsMainCategory">
+                       asp-route-sortOrder=@ViewBag.SortOrder asp-route-searchString=@ViewBag.SearchString asp-route-page="@(Model.PageNumber + 1)" asp-route-isMainCategory="@ViewBag.IsMainCategory"
+                       asp-route-notAssignedToCategory="@ViewBag.NotAssignedToCategory">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>

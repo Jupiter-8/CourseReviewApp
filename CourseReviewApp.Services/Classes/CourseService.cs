@@ -34,8 +34,13 @@ namespace CourseReviewApp.Services.Classes
             return courses;
         }
 
-        public async Task<int> GetCoursesCount()
-            => await DbContext.Courses.CountAsync();
+        public async Task<int> GetCoursesCount(Expression<Func<Course, bool>> filter = null)
+        {
+            int coursesCount = filter == null ? await DbContext.Courses.CountAsync() 
+                : await DbContext.Courses.CountAsync(filter);
+
+            return coursesCount;
+        }
 
         public async Task AddOrEditCourse(Course course)
         {

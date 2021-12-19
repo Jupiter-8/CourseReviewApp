@@ -10,7 +10,7 @@ namespace CourseReviewApp.Services.Interfaces
     {
         Task<Course> GetCourse(Expression<Func<Course, bool>> filter);
         IEnumerable<Course> GetCourses(Expression<Func<Course, bool>> filter = null);
-        Task<int> GetCoursesCount();
+        Task<int> GetCoursesCount(Expression<Func<Course, bool>> filter = null);
         Task AddOrEditCourse(Course course);
         Task ChangeCourseStatus(int id, CourseStatus status);
         Task DeleteCourse(int id);
