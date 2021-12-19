@@ -117,8 +117,9 @@ namespace CourseReviewApp.Web.Controllers
                 await _reviewService.DeleteReview(viewModel.Id);
                 if ((User.IsInRole("Admin") || User.IsInRole("Moderator")) && viewModel.Author.ReviewInfoEmailsEnabled)
                 {
-                    await _emailSenderService.SendDefaultMessageEmailAsync(viewModel.Author.Email, "Review deletion",
-                            $"Your review for course: {viewModel.CourseName} has been deleted by moderation due to violation of the rules.");
+                    await _emailSenderService.SendDefaultMessageEmailAsync("Review deletion",
+                            $"Your review for course: {viewModel.CourseName} has been deleted by moderation due to violation of the rules.",
+                            viewModel.Author.Email);
                     TempData["ReportManagementMsgModal"] = "Review has been deleted.";
 
                     return RedirectToAction("ReportManagement", "Report");

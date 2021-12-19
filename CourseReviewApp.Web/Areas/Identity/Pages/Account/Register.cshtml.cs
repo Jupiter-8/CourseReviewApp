@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -63,7 +64,7 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
                     body = body.Replace("{username}", $"{Input.Firstname} {Input.Lastname}");
                     body = body.Replace("{href}", callbackUrl);
 
-                    await _emailSenderService.SendEmailAsync(Input.Email, "Confirm your email", body);
+                    await _emailSenderService.SendEmailAsync("Confirm your email", body, Input.Email);
                     await _userManager.AddToRoleAsync(user.Item1, user.Item2.Name);
                     TempData["LoginModalMsg"] = "Your account has been created. If you want to log in, you must first confirm your email. " +
                         "A message with a confirmation link has been sent to your email adress.";

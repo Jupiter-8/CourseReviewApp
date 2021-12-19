@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CourseReviewApp.Model.DataModels;
 using CourseReviewApp.Services.Interfaces;
+using CourseReviewApp.Web.Services.Interfaces;
 using CourseReviewApp.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,11 +20,13 @@ namespace CourseReviewApp.Web.Controllers
     public class CategoryController : BaseController
     {
         private readonly ICategoryService _categoryService;
+        private readonly IEmailSenderService _emailSenderService;
 
-        public CategoryController(ILogger logger, IMapper mapper, ICategoryService categoryService, UserManager<AppUser> userManager)
+        public CategoryController(ILogger logger, IMapper mapper, ICategoryService categoryService, UserManager<AppUser> userManager, IEmailSenderService emailSenderService)
             : base(logger, mapper, userManager)
         {
             _categoryService = categoryService;
+            _emailSenderService = emailSenderService;
         }
 
         [HttpGet]
@@ -94,7 +97,21 @@ namespace CourseReviewApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                Category category = await _categoryService.GetCategory(c => c.Id == viewModel.Id);
+                if (category == null)
+                    throw new InvalidOperationException($"Category with id: {viewModel.Id} not found.");
+
+                List<Course> courses = category.ParentCategoryId.HasValue ? category.Courses.ToList()
+                    : category.SubCategories.SelectMany(sc => sc.Courses).ToList();
+                List<string> recipients = courses.Select(c => c.Owner.Email).Distinct().ToList();
+
                 await _categoryService.DeleteCategory(viewModel.Id);
+                if (recipients.Any())
+                {
+                    await _emailSenderService.SendDefaultMessageEmailAsync("Deleted category",
+                        $"Category: {viewModel.Name} has been deleted. Now your courses which were assigned to it are available in category:" +
+                        $"Not assigned to category. Please log in to your account and choose a new category for your courses.", null, recipients);
+                }
                 TempData["CategoryManagementMsgModal"] = $"The {viewModel.Name} category has been deleted.";
 
                 return RedirectToAction("CategoryManagement");

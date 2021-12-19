@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,7 +67,7 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
             body = body.Replace("{username}", Input.Email);
             body = body.Replace("{href}", callbackUrl);
 
-            await _emailSenderService.SendEmailAsync(Input.Email, "Confirm your email", body);
+            await _emailSenderService.SendEmailAsync("Confirm your email", body, Input.Email);
             TempData["LoginModalMsg"] = "A message with a confirmation link has been sent to your email adress.";
 
             return LocalRedirect("~/Identity/Account/Login");

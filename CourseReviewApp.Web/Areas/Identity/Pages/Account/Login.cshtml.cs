@@ -113,8 +113,8 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
                 {
                     if(!user.LockoutMessageSent)
                     {
-                        await _emailSenderService.SendDefaultMessageEmailAsync(user.Email, "Account lockout",
-                            "Your account has been locked out due to too many failed login attempts.");
+                        await _emailSenderService.SendDefaultMessageEmailAsync("Account lockout",
+                            "Your account has been locked out due to too many failed login attempts.", user.Email);
                         user.LockoutMessageSent = true;
                         await _userManager.UpdateAsync(user);
                     }

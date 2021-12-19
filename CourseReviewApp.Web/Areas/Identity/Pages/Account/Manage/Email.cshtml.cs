@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace CourseReviewApp.Web.Areas.Identity.Pages.Account.Manage
 {
@@ -102,7 +103,7 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account.Manage
                 body = body.Replace("{newEmail}", Input.NewEmail);
                 body = body.Replace("{href}", callbackUrl);
 
-                await _emailSenderService.SendEmailAsync(Input.NewEmail, "Confirm your email", body);
+                await _emailSenderService.SendEmailAsync("Confirm your email", body, Input.NewEmail);
                 StatusMessage = "Confirmation link to change email sent. Please check your email.";
 
                 return RedirectToPage();
@@ -135,10 +136,8 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account.Manage
                 pageHandler: null,
                 values: new { area = "Identity", userId = userId, code = code },
                 protocol: Request.Scheme);
-            await _emailSenderService.SendEmailAsync(
-                email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+            await _emailSenderService.SendEmailAsync("Confirm your email",
+                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.", email);
 
             StatusMessage = "Verification email sent. Please check your email.";
             return RedirectToPage();

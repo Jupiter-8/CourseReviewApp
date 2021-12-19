@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Threading.Tasks;
@@ -81,7 +82,7 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
                 await _userManager.UpdateAsync(user);
                 TempData["LoginModalMsg"] = "Your password has been reset. You can log in.";
                 await _userManager.SetLockoutEndDateAsync(user, new DateTime(2000, 1, 1));
-                await _emailSenderService.SendDefaultMessageEmailAsync(user.Email, "Password reset", "Your password has been reset.");
+                await _emailSenderService.SendDefaultMessageEmailAsync("Password reset", "Your password has been reset.", user.Email);
 
                 return LocalRedirect("~/Identity/Account/Login");
             }

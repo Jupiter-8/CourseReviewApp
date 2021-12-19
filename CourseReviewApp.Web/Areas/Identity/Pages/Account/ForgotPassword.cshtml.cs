@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,7 +58,7 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
                 string body = await _fileService.LoadMessageHtml("reset_password.html");
                 body = body.Replace("{href}", callbackUrl);
 
-                await _emailSenderService.SendEmailAsync(Input.Email, "Reset Password", body);
+                await _emailSenderService.SendEmailAsync("Password reset", body, Input.Email);
                 TempData["LoginModalMsg"] = "A message with a password reset link has been sent to your email adress.";
 
                 return LocalRedirect("~/Identity/Account/Login");

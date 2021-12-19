@@ -8,6 +8,7 @@ using CourseReviewApp.Web.Services.Interfaces;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace CourseReviewApp.Web.Areas.Identity.Pages.Account.Manage
 {
@@ -83,7 +84,8 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account.Manage
                 throw new InvalidOperationException($"Unexpected error occurred deleting user with ID '{userId}'.");
             }
 
-            await _emailSenderService.SendDefaultMessageEmailAsync(user.Email, "Information message", "Your account has been deleted by you.");
+            await _emailSenderService.SendDefaultMessageEmailAsync("Information message", "Your account has been deleted by you.",
+                user.Email);
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);
             TempData["LoginModalMsg"] = "Your account has been deleted";

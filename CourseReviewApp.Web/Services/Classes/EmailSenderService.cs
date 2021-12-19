@@ -2,6 +2,8 @@
 using CourseReviewApp.Web.Services.Interfaces;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System;
 
 namespace CourseReviewApp.Web.Services.Classes
 {
@@ -18,12 +20,20 @@ namespace CourseReviewApp.Web.Services.Classes
             _fileService = fileTool;
         }
 
-        public async Task SendEmailAsync(string recipient, string subject, string body)
+        public async Task SendEmailAsync(string subject, string body, string recipient = null, IList<string> bccs = null)
         {
             MailMessage message = new();
+
+            if (string.IsNullOrEmpty(recipient) && bccs == null)
+                throw new ArgumentNullException("Email recipient or bccs not provided.");
+            if (!string.IsNullOrEmpty(recipient))
+                message.To.Add(recipient);
+            if (bccs != null)
+                foreach (var adress in bccs)
+                    message.Bcc.Add(adress);
+
             string host = _config.GetValue<string>("Email:Smtp:Username");
             message.From = new MailAddress(host);
-            message.To.Add(recipient);
             message.Subject = subject;
             message.Body = body;
             message.IsBodyHtml = true;
@@ -31,13 +41,12 @@ namespace CourseReviewApp.Web.Services.Classes
             await _smtpClient.SendMailAsync(message);
         }
 
-        public async Task SendDefaultMessageEmailAsync(string recipient, string subject, string message)
+        public async Task SendDefaultMessageEmailAsync(string subject, string message, string recipient = null, IList<string> bccs = null)
         {
             string body = await _fileService.LoadMessageHtml("default_message.html");
-            body = body.Replace("{username}", recipient);
             body = body.Replace("{message}", message);
 
-            await SendEmailAsync(recipient, subject, body);
+            await SendEmailAsync(subject, body, recipient, bccs);
         }
     }
 }

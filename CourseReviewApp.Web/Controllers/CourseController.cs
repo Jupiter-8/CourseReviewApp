@@ -311,8 +311,8 @@ namespace CourseReviewApp.Web.Controllers
 
             if (User.IsInRole("Admin") || viewModel.OwnerHasCourseInfoEmailsEnabled)
             {
-                await _emailSenderService.SendDefaultMessageEmailAsync(viewModel.OwnerEmail, "Course deletion",
-                        $"Your course: {viewModel.Name} has been deleted by Admin.");
+                await _emailSenderService.SendDefaultMessageEmailAsync("Course deletion",
+                        $"Your course: {viewModel.Name} has been deleted by Admin.", viewModel.OwnerEmail);
             }
 
             TempData["CourseManagementMsgModal"] = $"The {viewModel.Name} course has been deleted";
@@ -359,8 +359,8 @@ namespace CourseReviewApp.Web.Controllers
 
                 if (viewModel.OwnerHasCourseInfoEmailsEnabled)
                 {
-                    await _emailSenderService.SendDefaultMessageEmailAsync(viewModel.OwnerEmail, "Course status",
-                        $"The status of your course: {viewModel.Name} has been changed to {viewModel.Status} by moderation.");
+                    await _emailSenderService.SendDefaultMessageEmailAsync("Course status",
+                        $"The status of your course: {viewModel.Name} has been changed to {viewModel.Status} by moderation.", viewModel.OwnerEmail);
                 }
                 TempData["CourseManagementMsgModal"] = $"The status of the {viewModel.Name} course has been changed to {viewModel.Status}";
 
