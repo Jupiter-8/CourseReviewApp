@@ -18,7 +18,7 @@
                             @Html.DisplayNameFor(model => model.Email)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.RegistrationDate)
+                            @Html.DisplayNameFor(model => model.IsLockedOut)
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.IsActive)
@@ -39,8 +39,8 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Email)
                             </td>
-                            <td data-order="@item.RegistrationDate.ToString("yyyyMMdd HH:mm")">
-                                @item.RegistrationDate.ToString("dd.MM.yyyy HH:mm")
+                            <td >
+                                @(item.IsLockedOut ? "Yes" : "No")
                             </td>
                             <td>
                                 @(item.IsActive ? "Active" : "Blocked")
@@ -66,6 +66,10 @@
                                         else
                                         {
                                             <a class="dropdown-item" asp-action="UnassignModeratorRole" asp-route-id="@item.Id">Unassign moderator role</a>
+                                        }
+                                        @if (item.IsLockedOut)
+                                        {
+                                            <a class="dropdown-item" asp-action="DisableUserLockout" asp-route-id="@item.Id">Disable lockout</a>
                                         }
                                         <a class="dropdown-item" asp-action="DeleteUser" asp-route-id="@item.Id">Delete</a>
                                     </div>

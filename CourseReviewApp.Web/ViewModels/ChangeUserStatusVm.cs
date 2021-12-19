@@ -25,6 +25,12 @@ namespace CourseReviewApp.Web.ViewModels
         [Display(Name = "Registration date")]
         public DateTime RegistrationDate { get; set; }
 
+        [Display(Name = "Lockout end")]
+        public DateTimeOffset? LockoutEnd { get; set; }
+
+        [Display(Name = "Lockout")]
+        public bool IsLockedOut => LockoutEnd.HasValue && LockoutEnd.Value >= DateTime.UtcNow;
+
         public IList<string> Roles { get; set; }
     }
 }

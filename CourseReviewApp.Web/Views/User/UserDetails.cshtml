@@ -48,6 +48,18 @@
                     @(Model.IsActive ? "Active" : "Blocked")
                 </dd>
                 <dt class="col-5 col-sm-5">
+                    @Html.DisplayNameFor(model => model.IsLockedOut)
+                </dt>
+                <dd class="col-7 col-sm-7">
+                    @(Model.IsLockedOut ? "Yes" : "No")
+                </dd>
+                <dt class="col-5 col-sm-5">
+                    @Html.DisplayNameFor(model => model.LockoutEnd)
+                </dt>
+                <dd class="col-7 col-sm-7">
+                    @(Model.LockoutEnd.HasValue ? Model.LockoutEnd.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm:ss"): string.Empty)
+                </dd>
+                <dt class="col-5 col-sm-5">
                     @Html.DisplayNameFor(model => model.PhoneNumber)
                 </dt>
                 <dd class="col-7 col-sm-7">

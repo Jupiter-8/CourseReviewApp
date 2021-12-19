@@ -105,24 +105,33 @@ namespace CourseReviewApp.Services.Classes
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task AssignModeratorRole(int id)
+        public async Task AssignModeratorRoleToUser(int id)
         {
             AppUser user = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
-            bool userExists = await DbContext.Users.AnyAsync(u => u.Id == id);
-            if (!userExists)
+            if (user == null)
                 throw new KeyNotFoundException($"User with id: {id} not found.");
 
             await _userManager.AddToRoleAsync(user, "Moderator");
         }
 
-        public async Task UnassignModeratorRole(int id)
+        public async Task UnassignModeratorRoleFromUser(int id)
         {
             AppUser user = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
-            bool userExists = await DbContext.Users.AnyAsync(u => u.Id == id);
-            if (!userExists)
+            if (user == null)
                 throw new KeyNotFoundException($"User with id: {id} not found.");
 
             await _userManager.RemoveFromRoleAsync(user, "Moderator");
+        }
+
+        public async Task DisableUserLockout(int id)
+        {
+            AppUser user = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null)
+                throw new KeyNotFoundException($"User with id: {id} not found.");
+            user.LockoutEnd = new DateTime(2000, 1, 1);
+            user.LockoutMessageSent = false;
+
+            await DbContext.SaveChangesAsync();
         }
     }
 }

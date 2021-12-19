@@ -27,7 +27,7 @@ namespace CourseReviewApp.Web.Controllers
             _userService = userService;
             _emailSenderService = emailSenderService;
         }
-
+        
         [HttpGet]
         public async Task<IActionResult> UserManagement()
         {
@@ -41,6 +41,8 @@ namespace CourseReviewApp.Web.Controllers
             AppUser user = await _userService.GetUser(u => u.Id == id);
             if (user == null)
                 throw new InvalidOperationException($"User with id: {id} not found.");
+            ViewBag.Title = user.IsActive ? "Block user account" : "Unblock user account";
+            ViewBag.Action = "ChangeUserStatus";
 
             return View(Mapper.Map<ChangeUserStatusVm>(user));
         }
@@ -123,7 +125,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _userService.AssignModeratorRole(viewModel.Id);
+                await _userService.AssignModeratorRoleToUser(viewModel.Id);
                 await _emailSenderService.SendDefaultMessageEmailAsync("User information message",
                     "A moderator role has been assigned to your account.", viewModel.Email);
                 TempData["UsersManagementMsgModal"] = $"The moderator role has been assigned to the user {viewModel.FullName}";
@@ -155,10 +157,43 @@ namespace CourseReviewApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _userService.UnassignModeratorRole(viewModel.Id);
+                await _userService.UnassignModeratorRoleFromUser(viewModel.Id);
                 await _emailSenderService.SendDefaultMessageEmailAsync("User information message",
                     "Your account has lost its moderator role.", viewModel.Email);
                 TempData["UsersManagementMsgModal"] = $"The moderator role has been unassigned from the user {viewModel.FullName}";
+
+                return RedirectToAction("UserManagement");
+            }
+
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DisableUserLockout(int id)
+        {
+            AppUser user = await _userService.GetUser(u => u.Id == id);
+            if (user == null)
+                throw new InvalidOperationException($"User with id: {id} not found.");
+            if (user.LockoutEnd.Value <= DateTime.UtcNow)
+            {
+                TempData["UsersManagementMsgModal"] = $"Selected user account is not locked out.";
+                return RedirectToAction("UserManagement");
+            }
+            ViewBag.Title = "Disable user lockout";
+            ViewBag.Action = "DisableUserLockout";
+
+            return View("ChangeUserStatus", Mapper.Map<ChangeUserStatusVm>(user));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DisableUserLockout(ChangeUserStatusVm viewModel) 
+        {
+            if (ModelState.IsValid)
+            {
+                await _userService.DisableUserLockout(viewModel.Id);
+                await _emailSenderService.SendDefaultMessageEmailAsync("User information message",
+                    "Your account lockout has been removed by Admin.", viewModel.Email);
+                TempData["UsersManagementMsgModal"] = $"The lockout has been removed from the user {viewModel.FullName}";
 
                 return RedirectToAction("UserManagement");
             }

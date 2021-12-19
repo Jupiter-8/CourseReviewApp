@@ -13,7 +13,8 @@ namespace CourseReviewApp.Services.Interfaces
         Task<Role> GetRole(Expression<Func<Role, bool>> filter);
         Task ChangeUserStatus(int id, bool status);
         Task DeleteUser(int id, IList<string> userRoles);
-        Task AssignModeratorRole(int id);
-        Task UnassignModeratorRole(int id);
+        Task AssignModeratorRoleToUser(int id);
+        Task UnassignModeratorRoleFromUser(int id);
+        Task DisableUserLockout(int id);
     }
 }

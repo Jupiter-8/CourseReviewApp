@@ -11,7 +11,11 @@ namespace CourseReviewApp.Web.ViewModels
         public string Email { get; set; }
         public bool CourseInfoEmailsEnabled { get; set; }
         public bool ReviewInfoEmailsEnabled { get; set; }
+        public DateTimeOffset? LockoutEnd { get; set; }
         public IList<string> Roles { get; set; }
+
+        [Display(Name = "Lockout")]
+        public bool IsLockedOut => LockoutEnd.HasValue && LockoutEnd.Value >= DateTime.UtcNow;
 
         [Display(Name = "Brand name")]
         public string BrandName { get; set; }
