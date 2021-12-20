@@ -3,7 +3,7 @@
 <div class="container">
     <div class="row d-flex justify-content-center">
         <nav>
-            <ul class="pagination">
+            <ul class="pagination shadow">
                 <li class="@(Model.IsFirstPage ? "page-item disabled" : "page-item")">
                     <a class="page-link text-info" aria-label="Previous" asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller asp-route-categoryId="@ViewBag.CategoryId"
                        asp-route-searchString=@ViewBag.SearchString asp-route-page="@(Model.PageNumber - 1)" asp-route-ownerId="@ViewBag.OwnerId" asp-route-isMainCategory="@ViewBag.IsMainCategory"

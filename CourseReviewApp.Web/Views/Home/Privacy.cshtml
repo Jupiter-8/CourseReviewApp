@@ -3,7 +3,7 @@
 }
 
 <div class="container">
-    <div class="row d-flex justify-content-center mt-4">
+    <div class="row d-flex justify-content-center my-4">
         <div class="col-12 col-sm-12 col-md-10 col-lg-10 col-xl-10 card p-3 bg-light min-vh-100">
             <h1 class="font-weight-light text-center">@ViewData["Title"]</h1>
             <hr />
@@ -18,12 +18,12 @@
             @if (User.IsInRole("Admin"))
             {
                 <div class="row ml-0 mt-3">
-                    <a class="btn btn-sm btn-info" asp-action="AddOrEditPrivacyFile">
+                    <a class="btn btn-sm btn-info shadow" asp-action="AddOrEditPrivacyFile">
                         <i class="fas fa-edit mr-2"></i><span>Change privacy file</span>
                     </a>
                     @if (ViewBag.FileExists)
                     {
-                        <a class="btn btn-labeled btn-sm btn-danger ml-3" asp-action="DeletePrivacyFile">
+                        <a class="btn btn-labeled btn-sm btn-danger shadow ml-3" asp-action="DeletePrivacyFile">
                             <i class="fas fa-edit mr-2"></i><span>Delete privacy file</span>
                         </a>
                     }

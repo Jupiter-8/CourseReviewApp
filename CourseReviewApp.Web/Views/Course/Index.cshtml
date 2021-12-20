@@ -6,7 +6,7 @@
 <div class="container mt-4 p-0">
     <div class="row">
         <div class="col-12">
-            <nav aria-label="breadcrumb">
+            <nav aria-label="breadcrumb" class="shadow">
                 <ol class="breadcrumb font-weight-bold">
                     <li class="breadcrumb-item active">Courses</li>
                     @if (string.IsNullOrEmpty(ViewBag.OwnerName))
@@ -54,7 +54,7 @@
             <div class="d-flex">
                 <div><partial name="_SearchMenuPartial" /></div>
                 <div class="dropdown ml-3">
-                    <a class="btn btn-info" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="btn btn-info shadow" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-sort"></i>
                         <span class="mx-2">
                             @(!string.IsNullOrEmpty(ViewBag.SortOrder) ? ViewBag.SortOrder : "Sort")
@@ -87,7 +87,7 @@
                 {
                     @foreach (var item in Model)
                     {
-                        <div class="containter mb-3 w-100 bg-light rounded small-course-card border">
+                        <div class="containter mb-3 w-100 bg-light rounded small-course-card shadow">
                             <div class="row no-gutters py-3 pl-3">
                                 <div class="col-4 col-md-4">
                                     <div class="row d-flex justify-content-center">
@@ -124,7 +124,9 @@
                             </div>
                         </div>
                     }
-                    <partial name="_PaginationMenuPartial" />
+                    <div class="my-3">
+                        <partial name="_PaginationMenuPartial" />
+                    </div>
                 }
                 <h5 class="text-danger col-12 text-center" @ViewBag.ResultsExist>No results</h5>
             </div>

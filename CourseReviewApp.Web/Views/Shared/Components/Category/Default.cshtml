@@ -12,7 +12,7 @@
                 {
                     var idStr = item.Id.ToString();
                     var isExpanded = TempData["ExpandedCategoryId"] == null ? false : idStr == TempData["ExpandedCategoryId"].ToString();
-                    <div class="card border-0">
+                    <div class="card border-0 shadow">
                         <div class="card category-menu-parent rounded-0" id=@($"heading-{idStr}")>
                             <div class="d-flex">
                                 <btn class="btn col-10 mr-auto text-left rounded-0" type="button" data-toggle="collapse" data-target=@($"#colapse-{idStr}") aria-expanded="true" aria-controls=@($"colapse-{idStr}")>
