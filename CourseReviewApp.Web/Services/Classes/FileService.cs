@@ -65,7 +65,7 @@ namespace CourseReviewApp.Web.Services.Classes
             return fileName;
         }
 
-        public async Task SavePrivacyFile(AddOrEditPrivacyFileVm viewModel, string destFolder, string fileName)
+        public async Task SaveTermsAndConditionsFile(AddOrEditTermsAndConditionsFileVm viewModel, string destFolder, string fileName)
         {
             destFolder = Path.Combine(_hostingEnv.WebRootPath, destFolder);
             string filePath = Path.Combine(destFolder, fileName);

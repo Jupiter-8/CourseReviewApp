@@ -28,38 +28,33 @@ namespace CourseReviewApp.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Privacy()
+        public IActionResult TermsAndConditions()
         {
-            string filePath = "Privacy\\privacy_file.pdf";
-            bool fileExists = _fileService.FileExists(filePath);
-            ViewBag.FileExists = fileExists;
-            if (fileExists)
-                ViewBag.FileName = Path.GetFileName(filePath);
-
+            ViewBag.FileExists = _fileService.FileExists("Documents\\terms_and_conditions_file.pdf");
             return View();
         }
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public IActionResult AddOrEditPrivacyFile()
+        public IActionResult AddOrEditTermsAndConditionsFile()
         {
-            bool fileExists = !_fileService.FileExists("Privacy\\privacy_file.pdf");
-            return View(new AddOrEditPrivacyFileVm() { IsNew = fileExists });
+            bool fileExists = !_fileService.FileExists("Documents\\terms_and_conditions_file.pdf");
+            return View(new AddOrEditTermsAndConditionsFileVm() { IsNew = fileExists });
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEditPrivacyFile(AddOrEditPrivacyFileVm viewModel)
+        public async Task<IActionResult> AddOrEditTermsAndConditionsFile(AddOrEditTermsAndConditionsFileVm viewModel)
         {
             if (ModelState.IsValid)
             {
                 if (viewModel.File != null)
                 {
-                    await _fileService.SavePrivacyFile(viewModel, "Privacy", "privacy_file.pdf");
-                    TempData["PrivacyMsgModal"] = "The privacy file has been updated.";
+                    await _fileService.SaveTermsAndConditionsFile(viewModel, "Documents", "terms_and_conditions_file.pdf");
+                    TempData["TermsAndConditionsMsgModal"] = "Terms and conditions file has been updated.";
 
-                    return RedirectToAction("Privacy");
+                    return RedirectToAction("TermsAndConditions");
                 }
             }
 
@@ -68,21 +63,21 @@ namespace CourseReviewApp.Web.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public IActionResult DeletePrivacyFile()
+        public IActionResult DeleteTermsAndConditionsFile()
         {
             return View();
         }
 
         [HttpPost]
-        [ActionName("DeletePrivacyFile")]
+        [ActionName("DeleteTermsAndConditionsFile")]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeletePrivacyFileConfirm()
+        public IActionResult DeleteTermsAndConditionsFileConfirm()
         {
-            _fileService.DeleteFile("Privacy\\privacy_file.pdf");
-            TempData["PrivacyMsgModal"] = "The privacy file has been deleted.";
+            _fileService.DeleteFile("Documents\\terms_and_conditions_file.pdf");
+            TempData["TermsAndConditionsMsgModal"] = "Terms and conditions file has been deleted.";
 
-            return RedirectToAction("Privacy");
+            return RedirectToAction("TermsAndConditions");
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Privacy";
+    ViewData["Title"] = "Terms and conditions";
 }
 
 <div class="container">
@@ -8,23 +8,20 @@
             <h1 class="font-weight-light text-center">@ViewData["Title"]</h1>
             <hr />
             <h4 class="font-weight-light mb-5">Before you start actively using our application you should read our terms and conditions.</h4>
-            <h5 class="font-weight-light">Bellow is a link to the document file where you can find our privacy, regulations, FAQ and review writing rules.</h5>
-            @if (ViewBag.FileExists)
-            {
-                <a class="card-link my-3 text-info" asp-append-version="true" href="~/Privacy/@ViewBag.FileName" target="_blank">
-                    <i class="fas fa-link"></i> Privacy PDF
-                </a>
-            }
+            <h5 class="font-weight-light">Bellow is a link to the terms and conditions file where you can find informations about our privacy, regulations, FAQ and review writing rules.</h5>
+            <a class="card-link my-3 text-info" href="~/Documents/terms_and_conditions_file.pdf" target="_blank">
+                <i class="fas fa-link"></i> Terms and conditions
+            </a>
             @if (User.IsInRole("Admin"))
             {
                 <div class="row ml-0 mt-3">
-                    <a class="btn btn-sm btn-info shadow" asp-action="AddOrEditPrivacyFile">
-                        <i class="fas fa-edit mr-2"></i><span>Change privacy file</span>
+                    <a class="btn btn-sm btn-info shadow" asp-action="AddOrEditTermsAndConditionsFile">
+                        <i class="fas fa-edit mr-2"></i><span>Change terms and conditions file</span>
                     </a>
                     @if (ViewBag.FileExists)
                     {
-                        <a class="btn btn-labeled btn-sm btn-danger shadow ml-3" asp-action="DeletePrivacyFile">
-                            <i class="fas fa-edit mr-2"></i><span>Delete privacy file</span>
+                        <a class="btn btn-labeled btn-sm btn-danger shadow ml-3" asp-action="DeleteTermsAndConditionsFile">
+                            <i class="fas fa-edit mr-2"></i><span>Delete terms and conditions file</span>
                         </a>
                     }
                 </div>
@@ -37,7 +34,7 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            var msg = '@TempData["PrivacyMsgModal"]';
+            var msg = '@TempData["TermsAndConditionsMsgModal"]';
             if (msg != '') {
                 $("#msg-modal-body").html(msg);
                 $("#msg-modal").modal("show");

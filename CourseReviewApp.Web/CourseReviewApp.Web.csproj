@@ -34,7 +34,7 @@
 
   <ItemGroup>
     <Folder Include="Logs\" />
-    <Folder Include="wwwroot\Privacy\" />
+    <Folder Include="wwwroot\Documents\" />
   </ItemGroup>
 
 </Project>

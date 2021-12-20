@@ -1,6 +1,6 @@
-﻿@model CourseReviewApp.Web.ViewModels.AddOrEditPrivacyFileVm
+﻿@model CourseReviewApp.Web.ViewModels.AddOrEditTermsAndConditionsFileVm
 @{
-    ViewData["Title"] = "Change privacy file";
+    ViewData["Title"] = "Change terms and conditions file";
 }
 
 <div class="container">
@@ -8,7 +8,7 @@
         <div class="card bg-light p-3 col-12 col-sm-11 col-md-10 col-lg-8 col-xl-7">
             <h1 class="font-weight-light text-center">@ViewData["Title"]</h1>
             <hr />
-            <form enctype="multipart/form-data" asp-action="AddOrEditPrivacyFile">
+            <form enctype="multipart/form-data" asp-action="AddOrEditTermsAndConditionsFile">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group form-check">
                     <input type="hidden" asp-for="IsNew" />
@@ -37,5 +37,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/Views/Home/add-or-edit-privacy-file.js"></script>
+    <script src="~/js/Views/Home/add-or-edit-terms-and-conditions-file.js"></script>
 }
