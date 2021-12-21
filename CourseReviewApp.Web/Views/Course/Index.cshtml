@@ -1,4 +1,7 @@
 ﻿@model IEnumerable<CourseVm>
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
 @{
     ViewData["Title"] = "Courses";
 }
@@ -39,7 +42,7 @@
     <div class="row">
         <div class="col-lg-4 col-md-12 col-sm-12 mb-2">
             @await Component.InvokeAsync("Category")
-            @if(ViewBag.NotAssignedToCategoryCount != 0)
+            @if (ViewBag.NotAssignedToCategoryCount != 0)
             {
                 <div class="d-flex justify-content-center mt-3">
                     <a asp-action="Index" asp-route-notAssignedToCategory="true" asp-route-ownerId="@ViewBag.OwnerId" asp-route-isMainCategory="@ViewBag.IsMainCategory"
@@ -68,7 +71,7 @@
                            asp-route-sortOrder="Name descending" asp-route-searchString=@ViewBag.SearchString asp-route-categoryId="@ViewBag.CategoryId"
                            asp-route-notAssignedToCategory="@ViewBag.NotAssignedToCategory" class="dropdown-item">Name descending</a>
                         <a asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller asp-route-ownerId="@ViewBag.OwnerId" asp-route-isMainCategory="@ViewBag.IsMainCategory"
-                           asp-route-sortOrder="Oldest" asp-route-searchString=@ViewBag.SearchString asp-route-categoryId="@ViewBag.CategoryId" 
+                           asp-route-sortOrder="Oldest" asp-route-searchString=@ViewBag.SearchString asp-route-categoryId="@ViewBag.CategoryId"
                            asp-route-notAssignedToCategory="@ViewBag.NotAssignedToCategory" class="dropdown-item">Oldest</a>
                         <a asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller asp-route-ownerId="@ViewBag.OwnerId" asp-route-isMainCategory="@ViewBag.IsMainCategory"
                            asp-route-sortOrder="Newest" asp-route-searchString=@ViewBag.SearchString asp-route-categoryId="@ViewBag.CategoryId"
@@ -124,8 +127,28 @@
                             </div>
                         </div>
                     }
-                    <div class="my-3">
-                        <partial name="_PaginationMenuPartial" />
+                    <div class="mt-3">
+                        @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", "Course",
+                                   new 
+                                   {
+                                       sortOrder = ViewBag.SortOrder,
+                                       searchString = ViewBag.SearchString,
+                                       isMainCategory = ViewBag.IsMainCategory,
+                                       notAssignedToCategory = ViewBag.NotAssignedToCategory,
+                                       page = page,
+                                       categoryId = ViewBag.CategoryId,
+                                       ownerId = ViewBag.OwnerId,
+                                   }),
+                                   new X.PagedList.Web.Common.PagedListRenderOptions
+                                   {
+                                       ContainerDivClasses = new[] { "navigation", "shadow-sm" },
+                                       LiElementClasses = new[] { "page-item" },
+                                       PageClasses = new[] { "page-link" },
+                                       DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+                                       DisplayLinkToNextPage = PagedListDisplayMode.Always,
+                                       DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                                       DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                                   })
                     </div>
                 }
                 <h5 class="text-danger col-12 text-center" @ViewBag.ResultsExist>No results</h5>
