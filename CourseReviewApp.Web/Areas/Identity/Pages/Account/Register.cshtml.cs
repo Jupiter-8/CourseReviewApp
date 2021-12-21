@@ -46,26 +46,31 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
             string returnUrl = "~/Identity/Account/Login";
             if (ModelState.IsValid)
             {
-                var user = await CreateUser(Input);
-                var result = await _userManager.CreateAsync(user.Item1, Input.Password);
+                var userTuple = await CreateUser(Input);
+                var result = await _userManager.CreateAsync(userTuple.Item1, Input.Password);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(userTuple.Item1, userTuple.Item2.Name);
+                    AppUser user = await _userManager.FindByEmailAsync(userTuple.Item1.Email);
+                    if(user != null)
+                    {
+                        user.RegistrationDate = DateTimeOffset.Now;
+                        await _userManager.UpdateAsync(user);
+                    }
                     _logger.LogInformation("User created a new account with password.");
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user.Item1);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(userTuple.Item1);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
-                        values: new { area = "Identity", userId = user.Item1.Id, code = code, returnUrl = returnUrl },
+                        values: new { area = "Identity", userId = userTuple.Item1.Id, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
                     string body = await _fileService.LoadMessageHtml("account_confirmation.html");
                     body = body.Replace("{username}", $"{Input.Firstname} {Input.Lastname}");
                     body = body.Replace("{href}", callbackUrl);
-
                     await _emailSenderService.SendEmailAsync("Confirm your email", body, Input.Email);
-                    await _userManager.AddToRoleAsync(user.Item1, user.Item2.Name);
                     TempData["LoginModalMsg"] = "Your account has been created. If you want to log in, you must first confirm your email. " +
                         "A message with a confirmation link has been sent to your email adress.";
 

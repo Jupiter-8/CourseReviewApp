@@ -12,16 +12,19 @@
                 <thead>
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.FullName)
+                            @Html.DisplayNameFor(model => model.Username)
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.Email)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.IsLockedOut)
+                            @Html.DisplayNameFor(model => model.RegistrationDate)
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.IsActive)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.IsLockedOut)
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.Roles)
@@ -34,16 +37,19 @@
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.FullName)
+                                @Html.DisplayFor(modelItem => item.Username)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Email)
                             </td>
-                            <td >
-                                @(item.IsLockedOut ? "Yes" : "No")
+                            <td data-order="@item.RegistrationDate.ToString("yyyyMMdd HH:mm:ss")">
+                                @item.RegistrationDate.ToString("dd.MM.yyyy HH:mm:ss")
                             </td>
                             <td>
-                                @(item.IsActive ? "Active" : "Blocked")
+                                @(item.IsActive ? "Yes" : "No")
+                            </td>
+                            <td >
+                                @(item.IsLockedOut ? "Yes" : "No")
                             </td>
                             <td>
                                 @foreach (var role in item.Roles)
@@ -58,7 +64,7 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" asp-action="UserDetails" asp-route-id="@item.Id">Details</a>
-                                        <a class="dropdown-item" asp-action="ChangeUserStatus" asp-route-id="@item.Id">Change status</a>
+                                        <a class="dropdown-item" asp-action="ChangeUserStatus" asp-route-id="@item.Id">@(item.IsActive ? "Block user" : "Unblock user")</a>
                                         @if (!item.Roles.Contains("Moderator"))
                                         {
                                             <a class="dropdown-item" asp-action="AssignModeratorRole" asp-route-id="@item.Id">Assign moderator role</a>

@@ -44,12 +44,12 @@ namespace CourseReviewApp.Web.Controllers
             ViewBag.Title = user.IsActive ? "Block user account" : "Unblock user account";
             ViewBag.Action = "ChangeUserStatus";
 
-            return View(Mapper.Map<ChangeUserStatusVm>(user));
+            return View("EditUser", Mapper.Map<EditUserVm>(user));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangeUserStatus(ChangeUserStatusVm viewModel)
+        public async Task<IActionResult> ChangeUserStatus(EditUserVm viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -57,9 +57,8 @@ namespace CourseReviewApp.Web.Controllers
                 string word = viewModel.IsActive ? "active" : "blocked";
                 await _userService.ChangeUserStatus(viewModel.Id, viewModel.IsActive);
                 await _emailSenderService.SendDefaultMessageEmailAsync("User information message",
-                    $"The status of your account has been changed to {word} by admin.");
-                TempData["UsersManagementMsgModal"] = viewModel.IsActive ? $"The status of the {viewModel.UserName} user has been changed to Active"
-                    : $"The status of the {viewModel.UserName} user has been changed to Blocked";
+                    $"The status of your account has been changed to {word} by admin.", viewModel.Email);
+                TempData["UsersManagementMsgModal"] = $"The status of the {viewModel.UserName} user has been changed to {word}.";
 
                 return RedirectToAction("UserManagement");
             }
@@ -115,20 +114,21 @@ namespace CourseReviewApp.Web.Controllers
                 TempData["UsersManagementMsgModal"] = $"Selected user already has the Moderator role.";
                 return RedirectToAction("UserManagement");
             }
-            ViewBag.ActionName = "AssignModeratorRole";
+            ViewBag.Title = "Assign moderator role to user";
+            ViewBag.Action = "AssignModeratorRole";
 
-            return View(Mapper.Map<AssignModeratorRoleVm>(user));
+            return View("EditUser", Mapper.Map<EditUserVm>(user));
         }
 
         [HttpPost]
-        public async Task<IActionResult> AssignModeratorRole(AssignModeratorRoleVm viewModel)
+        public async Task<IActionResult> AssignModeratorRole(EditUserVm viewModel)
         {
             if (ModelState.IsValid)
             {
                 await _userService.AssignModeratorRoleToUser(viewModel.Id);
                 await _emailSenderService.SendDefaultMessageEmailAsync("User information message",
                     "A moderator role has been assigned to your account.", viewModel.Email);
-                TempData["UsersManagementMsgModal"] = $"The moderator role has been assigned to the user {viewModel.FullName}";
+                TempData["UsersManagementMsgModal"] = $"The moderator role has been assigned to the user {viewModel.UserName}";
 
                 return RedirectToAction("UserManagement");
             }
@@ -147,20 +147,21 @@ namespace CourseReviewApp.Web.Controllers
                 TempData["UsersManagementMsgModal"] = $"Selected user hasn't got the Moderator role.";
                 return RedirectToAction("UserManagement");
             }
-            ViewBag.ActionName = "UnassignModeratorRole";
+            ViewBag.Title = "Unassign moderator role from user";
+            ViewBag.Action = "UnassignModeratorRole";
 
-            return View("AssignModeratorRole", Mapper.Map<AssignModeratorRoleVm>(user));
+            return View("EditUser", Mapper.Map<EditUserVm>(user));
         }
 
         [HttpPost]
-        public async Task<IActionResult> UnassignModeratorRole(AssignModeratorRoleVm viewModel)
+        public async Task<IActionResult> UnassignModeratorRole(EditUserVm viewModel)
         {
             if (ModelState.IsValid)
             {
                 await _userService.UnassignModeratorRoleFromUser(viewModel.Id);
                 await _emailSenderService.SendDefaultMessageEmailAsync("User information message",
                     "Your account has lost its moderator role.", viewModel.Email);
-                TempData["UsersManagementMsgModal"] = $"The moderator role has been unassigned from the user {viewModel.FullName}";
+                TempData["UsersManagementMsgModal"] = $"The moderator role has been unassigned from the user {viewModel.UserName}";
 
                 return RedirectToAction("UserManagement");
             }
@@ -182,18 +183,18 @@ namespace CourseReviewApp.Web.Controllers
             ViewBag.Title = "Disable user lockout";
             ViewBag.Action = "DisableUserLockout";
 
-            return View("ChangeUserStatus", Mapper.Map<ChangeUserStatusVm>(user));
+            return View("EditUser", Mapper.Map<EditUserVm>(user));
         }
 
         [HttpPost]
-        public async Task<IActionResult> DisableUserLockout(ChangeUserStatusVm viewModel) 
+        public async Task<IActionResult> DisableUserLockout(EditUserVm viewModel) 
         {
             if (ModelState.IsValid)
             {
                 await _userService.DisableUserLockout(viewModel.Id);
                 await _emailSenderService.SendDefaultMessageEmailAsync("User information message",
                     "Your account lockout has been removed by Admin.", viewModel.Email);
-                TempData["UsersManagementMsgModal"] = $"The lockout has been removed from the user {viewModel.FullName}";
+                TempData["UsersManagementMsgModal"] = $"The lockout has been removed from the user {viewModel.UserName}";
 
                 return RedirectToAction("UserManagement");
             }

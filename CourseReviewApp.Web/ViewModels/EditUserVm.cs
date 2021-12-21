@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CourseReviewApp.Web.ViewModels
 {
-    public class ChangeUserStatusVm
+    public class EditUserVm
     {
         [Required]
         public int Id { get; set; }
@@ -19,17 +19,17 @@ namespace CourseReviewApp.Web.ViewModels
         public string UserName { get; set; }
 
         [Required]
-        [Display(Name = "Status")]
+        [Display(Name = "Is active")]
         public bool IsActive { get; set; }
 
         [Display(Name = "Registration date")]
-        public DateTime RegistrationDate { get; set; }
+        public DateTimeOffset RegistrationDate { get; set; }
 
-        [Display(Name = "Lockout end")]
+        [Display(Name = "Fail login attempts lockout end")]
         public DateTimeOffset? LockoutEnd { get; set; }
 
-        [Display(Name = "Lockout")]
-        public bool IsLockedOut => LockoutEnd.HasValue && LockoutEnd.Value >= DateTime.UtcNow;
+        [Display(Name = "Last login date")]
+        public DateTimeOffset? LastLoginDate { get; set; }
 
         public IList<string> Roles { get; set; }
     }

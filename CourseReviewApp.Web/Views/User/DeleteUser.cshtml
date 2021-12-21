@@ -33,13 +33,19 @@
                     @Html.DisplayNameFor(model => model.RegistrationDate)
                 </dt>
                 <dd class="col-7 col-sm-7">
-                    @Model.RegistrationDate.ToString("dd/MM/yyyy HH:mm")
+                    @Model.RegistrationDate.ToString("dd/MM/yyyy HH:mm:ss")
+                </dd>
+                <dt class="col-5 col-sm-5">
+                    @Html.DisplayNameFor(model => model.LastLoginDate)
+                </dt>
+                <dd class="col-7 col-sm-7">
+                    @(Model.LastLoginDate.HasValue ? Model.LastLoginDate.Value.ToString("dd.MM.yyyy HH:mm:ss") : "Never logged in")
                 </dd>
                 <dt class="col-5 col-sm-5">
                     @Html.DisplayNameFor(model => model.IsActive)
                 </dt>
                 <dd class="col-7 col-sm-7">
-                    @(Model.IsActive ? "Active" : "Blocked")
+                    @(Model.IsActive ? "Yes" : "No")
                 </dd>
                 <dt class="col-5 col-sm-5">
                     @Html.DisplayNameFor(model => model.PhoneNumber)
@@ -55,6 +61,12 @@
                     {
                         <span>@role.Replace('_', ' '),</span>
                     }
+                </dd>
+                <dt class="col-5 col-sm-5">
+                    User avatar:
+                </dt>
+                <dd class="col-4 col-sm-4 col-md-3 col-lg-2 mt-3">
+                    <img class="user-details-img" src="~/Images/Avatars/@Model.AvatarPath" />
                 </dd>
             </dl>
             <form asp-action="DeleteUser">

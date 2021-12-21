@@ -9,12 +9,12 @@ namespace CourseReviewApp.Web.ViewModels
         public int Id { get; set; }
         public string AvatarPath { get; set; }
         public string Email { get; set; }
+        public string Username { get; set; }
         public bool CourseInfoEmailsEnabled { get; set; }
         public bool ReviewInfoEmailsEnabled { get; set; }
-        public DateTimeOffset? LockoutEnd { get; set; }
         public IList<string> Roles { get; set; }
 
-        [Display(Name = "Lockout")]
+        [Display(Name = "Fail login attempts lockout")]
         public bool IsLockedOut => LockoutEnd.HasValue && LockoutEnd.Value >= DateTime.UtcNow;
 
         [Display(Name = "Brand name")]
@@ -32,13 +32,16 @@ namespace CourseReviewApp.Web.ViewModels
         [Display(Name = "Full name")]
         public string FullName { get; set; }
 
-        [Display(Name = "User name")]
-        public string Username { get; set; }
-
         [Display(Name = "Registration date")]
-        public DateTime RegistrationDate { get; set; }
+        public DateTimeOffset RegistrationDate { get; set; }
 
-        [Display(Name = "Status")]
+        [Display(Name = "Last login date")]
+        public DateTimeOffset? LastLoginDate { get; set; }
+
+        [Display(Name = "Fail login attempts lockout end")]
+        public DateTimeOffset? LockoutEnd { get; set; }
+
+        [Display(Name = "Is active")]
         public bool IsActive { get; set; }
 
         [Display(Name = "Phone number")]
@@ -58,5 +61,8 @@ namespace CourseReviewApp.Web.ViewModels
 
         [Display(Name = "Courses reviews count")]
         public int CoursesReviewsCount { get; set; }
+
+        [Display(Name = "Is email confirmed")]
+        public virtual bool EmailConfirmed { get; set; }
     }
 }

@@ -36,34 +36,41 @@
                     @Html.DisplayFor(model => model.Email)
                 </dd>
                 <dt class="col-5 col-sm-5">
+                    @Html.DisplayNameFor(model => model.EmailConfirmed)
+                </dt>
+                <dd class="col-7 col-sm-7">
+                    @(Model.EmailConfirmed ? "Yes" : "No")
+                </dd>
+                <dt class="col-5 col-sm-5">
                     @Html.DisplayNameFor(model => model.RegistrationDate)
                 </dt>
                 <dd class="col-7 col-sm-7">
-                    @Model.RegistrationDate.ToString("dd.MM.yyyy HH:mm")
+                    @Model.RegistrationDate.ToString("dd.MM.yyyy HH:mm:ss")
+                </dd>
+                <dt class="col-5 col-sm-5">
+                    @Html.DisplayNameFor(model => model.LastLoginDate)
+                </dt>
+                <dd class="col-7 col-sm-7">
+                    @(Model.LastLoginDate.HasValue ? Model.LastLoginDate.Value.ToString("dd.MM.yyyy HH:mm:ss") : "Never logged in")
                 </dd>
                 <dt class="col-5 col-sm-5">
                     @Html.DisplayNameFor(model => model.IsActive)
                 </dt>
                 <dd class="col-7 col-sm-7">
-                    @(Model.IsActive ? "Active" : "Blocked")
-                </dd>
-                <dt class="col-5 col-sm-5">
-                    @Html.DisplayNameFor(model => model.IsLockedOut)
-                </dt>
-                <dd class="col-7 col-sm-7">
-                    @(Model.IsLockedOut ? "Yes" : "No")
+                    @(Model.IsActive ? "Yes" : "No")
                 </dd>
                 <dt class="col-5 col-sm-5">
                     @Html.DisplayNameFor(model => model.LockoutEnd)
                 </dt>
                 <dd class="col-7 col-sm-7">
-                    @(Model.LockoutEnd.HasValue ? Model.LockoutEnd.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm:ss"): string.Empty)
+                    @(Model.LockoutEnd.HasValue && Model.LockoutEnd.Value >= DateTimeOffset.Now
+                        ? Model.LockoutEnd.Value.ToString("dd.MM.yyyy HH:mm:ss"): "Not locked out")
                 </dd>
                 <dt class="col-5 col-sm-5">
                     @Html.DisplayNameFor(model => model.PhoneNumber)
                 </dt>
                 <dd class="col-7 col-sm-7">
-                    @Html.DisplayFor(model => model.PhoneNumber)
+                    @(!string.IsNullOrEmpty(Model.PhoneNumber) ? Model.PhoneNumber : "Not provided")
                 </dd>
                 <dt class="col-5 col-sm-5">
                     @Html.DisplayNameFor(model => model.Roles)
@@ -107,7 +114,7 @@
                 <dt class="col-5 col-sm-5">
                     User avatar:
                 </dt>
-                <dd class="col-4 col-sm-4 col-md-3 col-lg-2">
+                <dd class="col-4 col-sm-4 col-md-3 col-lg-2 mt-3">
                     <img class="user-details-img" src="~/Images/Avatars/@Model.AvatarPath" />
                 </dd>
             </dl>

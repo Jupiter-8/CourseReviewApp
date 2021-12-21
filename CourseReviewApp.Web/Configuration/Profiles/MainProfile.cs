@@ -10,11 +10,14 @@ namespace CourseReviewApp.Web.Configuration.Profiles
     {
         public MainProfile()
         {
+            //--- Course
             CreateMap<Course, CourseVm>()
                 .ForMember(dest => dest.CategoryName, x => x.MapFrom(src => src.Category.Name));
 
             CreateMap<AddOrEditCourseVm, Course>();
             CreateMap<Course, AddOrEditCourseVm>();
+            CreateMap<LearningSkill, LearningSkillVm>();
+            CreateMap<LearningSkillVm, LearningSkill>();
 
             CreateMap<Course, ChangeCourseStatusVm>()
                 .ForMember(dest => dest.OwnerId, x => x.MapFrom(src => src.Owner.Id))
@@ -27,7 +30,9 @@ namespace CourseReviewApp.Web.Configuration.Profiles
                 .ForMember(dest => dest.OwnerId, x => x.MapFrom(src => src.Owner.Id))
                 .ForMember(dest => dest.CategoryName, x => x.MapFrom(src => src.Category.Name))
                 .ForMember(dest => dest.OwnerHasCourseInfoEmailsEnabled, x => x.MapFrom(src => src.Owner.CourseInfoEmailsEnabled));
+            //--- Course
 
+            //--- Category
             CreateMap<Category, CategoryVm>()
                 .ForMember(dest => dest.ParentCategoryName, x => x.MapFrom(src => src.ParentCategory.Name))
                 .ForMember(dest => dest.CoursesCount, x => x.MapFrom(
@@ -38,28 +43,33 @@ namespace CourseReviewApp.Web.Configuration.Profiles
 
             CreateMap<Category, AddOrEditCategoryVm>();
             CreateMap<AddOrEditCategoryVm, Category>();
+            //--- Category
 
+            //--- Review and report
             CreateMap<Review, AddOrEditReviewVm>();
             CreateMap<AddOrEditReviewVm, Review>();
             CreateMap<ReviewVm, Review>();
+            CreateMap<ReportReviewVm, ReviewReport>();
+            CreateMap<OwnerComment, AddOrEditOwnerCommentVm>();
+            CreateMap<AddOrEditOwnerCommentVm, OwnerComment>();
+            CreateMap<HelpfullReview, HelpfullReviewVm>();
+
             CreateMap<Review, ReviewVm>()
                 .ForMember(dest => dest.WasHelpfullCount, x => x.MapFrom(src => src.HelpfullReviews.Count))
                 .ForMember(dest => dest.CourseOwnerId, x => x.MapFrom(src => src.Course.OwnerId))
                 .ForMember(dest => dest.CourseName, x => x.MapFrom(src => src.Course.Name));
 
-            CreateMap<ReportReviewVm, ReviewReport>();
-
-            CreateMap<OwnerComment, AddOrEditOwnerCommentVm>();
-            CreateMap<AddOrEditOwnerCommentVm, OwnerComment>();
-            CreateMap<OwnerComment, OwnerCommentVm>()
-                .ForMember(dest => dest.AuthorName, x => x.MapFrom(src => $"{src.Author.FirstName} {src.Author.LastName}"));
-
             CreateMap<ReviewReport, ReviewReportVm>()
                 .ForMember(dest => dest.ReportingUserName, x => x.MapFrom(src => $"{src.ReportingUser.FirstName} {src.ReportingUser.LastName}"));
+
+            CreateMap<OwnerComment, OwnerCommentVm>()
+                .ForMember(dest => dest.AuthorName, x => x.MapFrom(src => $"{src.Author.FirstName} {src.Author.LastName}"));
+            //--- Review and report
 
             CreateMap<AppUser, UserVm>()
                 .ForMember(dest => dest.FullName, x => x.MapFrom(src => $"{src.FirstName} {src.LastName}"));
 
+            //--- User
             CreateMap<CourseOwner, UserVm>()
                 .ForMember(dest => dest.AvgCoursesRating, x => x.MapFrom(src => Math.Round(src.Courses.Average(c => c.AvgRating), 2)))
                 .ForMember(dest => dest.CoursesReviewsCount, x => x.MapFrom(src => src.Courses.Sum(c => c.Reviews.Count)))
@@ -70,15 +80,9 @@ namespace CourseReviewApp.Web.Configuration.Profiles
                 .ForMember(dest => dest.ReviewsCount, x => x.MapFrom(src => src.Reviews.Count))
                 .ForMember(dest => dest.UserWasHelpfullCount, x => x.MapFrom(src => src.Reviews.Where(r => r.HelpfullReviews.Count != 0).Count()));
 
-            CreateMap<AppUser, ChangeUserStatusVm>()
+            CreateMap<AppUser, EditUserVm>()
                 .ForMember(dest => dest.FullName, x => x.MapFrom(src => $"{src.FirstName} {src.LastName}"));
-
-            CreateMap<AppUser, AssignModeratorRoleVm>()
-                .ForMember(dest => dest.FullName, x => x.MapFrom(src => $"{src.FirstName} {src.LastName}"));
-
-            CreateMap<HelpfullReview, HelpfullReviewVm>();
-            CreateMap<LearningSkill, LearningSkillVm>();
-            CreateMap<LearningSkillVm, LearningSkill>();
+            //--- User
         }
     }
 }

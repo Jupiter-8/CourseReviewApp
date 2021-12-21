@@ -98,11 +98,10 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
-                    if(user.LockoutMessageSent && user.LockoutEnd.Value <= DateTime.UtcNow)
-                    {
+                    if (user.LockoutMessageSent && user?.LockoutEnd.Value <= DateTimeOffset.Now)
                         user.LockoutMessageSent = false;
-                        await _userManager.UpdateAsync(user);
-                    }
+                    user.LastLoginDate = DateTimeOffset.Now;
+                    await _userManager.UpdateAsync(user);
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
