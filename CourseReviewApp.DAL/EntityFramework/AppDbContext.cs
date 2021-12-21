@@ -35,7 +35,7 @@ namespace CourseReviewApp.DAL.EntityFramework
         {
             base.OnModelCreating(modelBuilder);
 
-            //---------------------------------------------- AppUser
+            //---------------------------------------------- AppUser, CourseOwner, CourseClient
             modelBuilder.Entity<AppUser>()
             .ToTable("AspNetUsers")
             .HasDiscriminator<int>("UserType")
@@ -47,20 +47,44 @@ namespace CourseReviewApp.DAL.EntityFramework
                 .Ignore(au => au.Roles);
 
             modelBuilder.Entity<AppUser>()
-                .Property(co => co.LockoutMessageSent)
+                .Property(au => au.LockoutMessageSent)
                 .IsRequired()
                 .HasDefaultValue(false);
+
+            modelBuilder.Entity<AppUser>()
+                .Property(au => au.UserName)
+                .HasMaxLength(30);
+
+            modelBuilder.Entity<AppUser>()
+                .Property(au => au.NormalizedUserName)
+                .HasMaxLength(30);
+
+            modelBuilder.Entity<AppUser>()
+                .Property(au => au.FirstName)
+                .HasColumnType("nvarchar(35)");
+
+            modelBuilder.Entity<AppUser>()
+                .Property(au => au.LastName)
+                .HasColumnType("nvarchar(35)");
+
+            modelBuilder.Entity<AppUser>()
+                .Property(au => au.PhoneNumber)
+                .HasColumnType("nvarchar(16)");
 
             modelBuilder.Entity<CourseOwner>()
                 .Property(co => co.CourseInfoEmailsEnabled)
                 .IsRequired()
                 .HasDefaultValue(true);
 
+            modelBuilder.Entity<CourseOwner>()
+                .Property(co => co.BrandName)
+                .HasColumnType("nvarchar(100)");
+
             modelBuilder.Entity<CourseClient>()
                 .Property(cc => cc.ReviewInfoEmailsEnabled)
                 .IsRequired()
                 .HasDefaultValue(true);
-            //*---------------------------------------------- AppUser
+            //*---------------------------------------------- AppUser, CourseOwner, CourseClient
 
             //---------------------------------------------- Course
             modelBuilder.Entity<Course>()
@@ -85,20 +109,43 @@ namespace CourseReviewApp.DAL.EntityFramework
                 .OnDelete(DeleteBehavior.ClientCascade);
 
             modelBuilder.Entity<Course>()
-                .HasMany(co => co.LearningSkills)
+                .HasMany(c => c.LearningSkills)
                 .WithOne(ls => ls.Course)
                 .HasForeignKey(c => c.CourseId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Course>()
-                .Property(r => r.DateEdited)
+                .Property(c => c.DateEdited)
                 .IsRequired(false);
 
             modelBuilder.Entity<Course>()
-                .Ignore(s => s.AvgRating);
+                .Property(c => c.Name)
+                .HasColumnType("nvarchar(70)");
+
+            modelBuilder.Entity<Course>()
+                .Property(c => c.ShortDescription)
+                .HasColumnType("nvarchar(100)");
+
+            modelBuilder.Entity<Course>()
+                .Property(c => c.LongDescription)
+                .HasColumnType("nvarchar(4000)");
+
+            modelBuilder.Entity<Course>()
+                .Property(c => c.CourseWebsiteUrl)
+                .HasColumnType("nvarchar(2048)");
+
+            modelBuilder.Entity<Course>()
+                .Property(c => c.Language)
+                .HasColumnType("nvarchar(50)");
+
+            modelBuilder.Entity<Course>()
+                .Ignore(c => c.AvgRating);
             //*---------------------------------------------- Course
 
             //----------------------------------------------- Review
+            modelBuilder.Entity<Review>()
+                .ToTable("Reviews");
+
             modelBuilder.Entity<Review>()
                 .HasKey(r => r.Id);
 
@@ -117,11 +164,24 @@ namespace CourseReviewApp.DAL.EntityFramework
             modelBuilder.Entity<Review>()
                 .Property(r => r.DateEdited)
                 .IsRequired(false);
+
+            modelBuilder.Entity<Review>()
+                .Property(r => r.Contents)
+                .HasColumnType("nvarchar(1000)");
             //*----------------------------------------------- Review
 
+            //----------------------------------------------- OwnerComment
             modelBuilder.Entity<OwnerComment>()
-                .Property(r => r.DateEdited)
+                .ToTable("OwnerComments");
+
+            modelBuilder.Entity<OwnerComment>()
+                .Property(oc => oc.DateEdited)
                 .IsRequired(false);
+
+            modelBuilder.Entity<OwnerComment>()
+                .Property(oc => oc.Contents)
+                .HasColumnType("nvarchar(500)");
+            //*----------------------------------------------- OwnerComment
 
             //---------------------------------------------- Review Report
             modelBuilder.Entity<ReviewReport>()
@@ -138,6 +198,10 @@ namespace CourseReviewApp.DAL.EntityFramework
                 .WithMany(ru => ru.ReviewReports)
                 .HasForeignKey(rr => rr.ReportingUserId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<ReviewReport>()
+                .Property(rr => rr.ReportContents)
+                .HasColumnType("nvarchar(200)");
             //*--------------------------------------------- Review Report
 
             //---------------------------------------------- Course Owner
@@ -154,6 +218,10 @@ namespace CourseReviewApp.DAL.EntityFramework
                 .WithMany(p => p.SubCategories)
                 .HasForeignKey(c => c.ParentCategoryId)
                 .OnDelete(DeleteBehavior.ClientCascade);
+
+            modelBuilder.Entity<Category>()
+                .Property(c => c.Name)
+                .HasColumnType("nvarchar(50)");
             //*---------------------------------------------- Category
 
             //---------------------------------------------- Helpfull Review
@@ -173,13 +241,11 @@ namespace CourseReviewApp.DAL.EntityFramework
                 .OnDelete(DeleteBehavior.Cascade);
             //*---------------------------------------------- Helpfull Review
 
-            //---------------------------------------------- TPT
-            modelBuilder.Entity<Review>()
-                .ToTable("Reviews");
-
-            modelBuilder.Entity<OwnerComment>()
-                .ToTable("OwnerComments");
-            //*---------------------------------------------- TPT
+            //---------------------------------------------- LearningSkill
+            modelBuilder.Entity<LearningSkill>()
+                .Property(ls => ls.Name)
+                .HasColumnType("nvarchar(50)");
+            //*---------------------------------------------- LearningSkill
         }
     }
 }

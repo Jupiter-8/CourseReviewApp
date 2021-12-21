@@ -7,7 +7,7 @@ namespace CourseReviewApp.Web.ViewModels
         public int Id { get; set; }
         public int CourseId { get; set; }
 
-        [StringLength(40, ErrorMessage = "{0} must be between {2} and {1} characters long", MinimumLength = 5)]
+        [StringLength(50, ErrorMessage = "{0} must be between {2} and {1} characters long", MinimumLength = 3)]
         public string Name { get; set; }
     }
 }

@@ -31,13 +31,14 @@ namespace CourseReviewApp.Web.ViewModels
 
         [Required]
         [Display(Name = "Course website URL")]
+        [StringLength(2048, ErrorMessage = "Course website URL must be between {2} and {1} characters long", MinimumLength = 1)]
         public string CourseWebsiteUrl { get; set; }
 
         [Required]
         public int Duration { get; set; }
 
         [Required]
-        [StringLength(30, ErrorMessage = "{0} must be between {2} and {1} characters long", MinimumLength = 3)]
+        [StringLength(50, ErrorMessage = "{0} must be between {2} and {1} characters long", MinimumLength = 3)]
         public string Language { get; set; }
 
         [Required]

@@ -29,8 +29,8 @@ namespace CourseReviewApp.DAL.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(35)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(35)", nullable: true),
                     RegistrationDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     LastLoginDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
@@ -38,18 +38,18 @@ namespace CourseReviewApp.DAL.Migrations
                     LockoutMessageSent = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     UserType = table.Column<int>(type: "int", nullable: false),
                     ReviewInfoEmailsEnabled = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
-                    BrandName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BrandName = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     WebsiteUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CourseInfoEmailsEnabled = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(16)", nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
@@ -67,7 +67,7 @@ namespace CourseReviewApp.DAL.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     ParentCategoryId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -193,15 +193,15 @@ namespace CourseReviewApp.DAL.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ShortDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LongDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(70)", nullable: true),
+                    ShortDescription = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    LongDescription = table.Column<string>(type: "nvarchar(4000)", nullable: true),
                     DateAdded = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     DateEdited = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    CourseWebsiteUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CourseWebsiteUrl = table.Column<string>(type: "nvarchar(2048)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Duration = table.Column<int>(type: "int", nullable: false),
-                    Language = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Language = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CategoryId = table.Column<int>(type: "int", nullable: true),
                     OwnerId = table.Column<int>(type: "int", nullable: false)
@@ -229,7 +229,7 @@ namespace CourseReviewApp.DAL.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     CourseId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -251,7 +251,7 @@ namespace CourseReviewApp.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CourseId = table.Column<int>(type: "int", nullable: false),
                     RatingValue = table.Column<int>(type: "int", nullable: false),
-                    Contents = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Contents = table.Column<string>(type: "nvarchar(1000)", nullable: true),
                     DateAdded = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     DateEdited = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     AuthorId = table.Column<int>(type: "int", nullable: false)
@@ -304,7 +304,7 @@ namespace CourseReviewApp.DAL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ReviewId = table.Column<int>(type: "int", nullable: false),
-                    Contents = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Contents = table.Column<string>(type: "nvarchar(500)", nullable: true),
                     DateAdded = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     DateEdited = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     AuthorId = table.Column<int>(type: "int", nullable: false)
@@ -332,7 +332,7 @@ namespace CourseReviewApp.DAL.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ReportContents = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReportContents = table.Column<string>(type: "nvarchar(200)", nullable: true),
                     DateAdded = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ReportReason = table.Column<int>(type: "int", nullable: false),
                     ReviewId = table.Column<int>(type: "int", nullable: false),

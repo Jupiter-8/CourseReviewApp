@@ -37,19 +37,20 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account.Manage
         public class InputModel
         {
             [Display(Name = "Username (used to login)")]
-            [StringLength(20, ErrorMessage = "Username must be between {2} and {1} characters long", MinimumLength = 5)]
+            [StringLength(20, ErrorMessage = "{0} must be between {2} and {1} characters long", MinimumLength = 5)]
             public string Username { get; set; }
 
             [Phone]
             [Display(Name = "Phone number")]
+            [StringLength(16, ErrorMessage = "Phone number must be between {2} and {1} characters long", MinimumLength = 1)]
             public string PhoneNumber { get; set; }
 
             [Display(Name = "Firstname")]
-            [StringLength(20, ErrorMessage = "Firstname must be between {2} and {1} characters long", MinimumLength = 1)]
+            [StringLength(35, ErrorMessage = "Firstname must be between {2} and {1} characters long", MinimumLength = 1)]
             public string FirstName { get; set; }
 
             [Display(Name = "Lastname")]
-            [StringLength(40, ErrorMessage = "Lastname must be between {2} and {1} characters long", MinimumLength = 1)]
+            [StringLength(35, ErrorMessage = "Lastname must be between {2} and {1} characters long", MinimumLength = 1)]
             public string LastName { get; set; }
         }
         

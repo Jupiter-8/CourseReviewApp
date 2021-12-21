@@ -44,7 +44,7 @@ namespace CourseReviewApp.DAL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(35)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -53,7 +53,7 @@ namespace CourseReviewApp.DAL.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(35)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -71,14 +71,14 @@ namespace CourseReviewApp.DAL.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
@@ -93,8 +93,8 @@ namespace CourseReviewApp.DAL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<int>("UserType")
                         .HasColumnType("int");
@@ -122,7 +122,7 @@ namespace CourseReviewApp.DAL.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int?>("ParentCategoryId")
                         .HasColumnType("int");
@@ -145,7 +145,7 @@ namespace CourseReviewApp.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CourseWebsiteUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<DateTimeOffset>("DateAdded")
                         .HasColumnType("datetimeoffset");
@@ -160,19 +160,19 @@ namespace CourseReviewApp.DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Language")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LongDescription")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(4000)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(70)");
 
                     b.Property<int>("OwnerId")
                         .HasColumnType("int");
 
                     b.Property<string>("ShortDescription")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -212,7 +212,7 @@ namespace CourseReviewApp.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -232,7 +232,7 @@ namespace CourseReviewApp.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Contents")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTimeOffset>("DateAdded")
                         .HasColumnType("datetimeoffset");
@@ -264,7 +264,7 @@ namespace CourseReviewApp.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Contents")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
@@ -298,7 +298,7 @@ namespace CourseReviewApp.DAL.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("ReportContents")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<int>("ReportReason")
                         .HasColumnType("int");
@@ -472,7 +472,7 @@ namespace CourseReviewApp.DAL.Migrations
                     b.HasBaseType("CourseReviewApp.Model.DataModels.AppUser");
 
                     b.Property<string>("BrandName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("CourseInfoEmailsEnabled")
                         .ValueGeneratedOnAdd()
