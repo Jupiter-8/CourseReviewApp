@@ -22,13 +22,13 @@
                     @Html.DisplayNameFor(model => model.DateAdded)
                 </dt>
                 <dd class="col-sm-9">
-                    @Model.DateAdded.ToString("dd.MM.yyyy HH:mm")
+                    @Model.DateAdded.ToString("dd.MM.yyyy HH:mm:ss")
                 </dd>
                 <dt class="col-sm-3">
                     @Html.DisplayNameFor(model => model.DateEdited)
                 </dt>
                 <dd class="col-sm-9">
-                    @(Model.DateEdited != null ? Model.DateEdited.Value.ToString("dd.MM.yyyy mm:ss") : "Was not edited")
+                    @(Model.DateEdited != null ? Model.DateEdited.Value.ToString("dd.MM.yyyy HH:mm:ss") : "Was not edited")
                 </dd>
                 <dt class="col-sm-3">
                     @Html.DisplayNameFor(model => model.Duration)

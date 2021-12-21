@@ -175,7 +175,7 @@ namespace CourseReviewApp.Web.Controllers
             AppUser user = await _userService.GetUser(u => u.Id == id);
             if (user == null)
                 throw new InvalidOperationException($"User with id: {id} not found.");
-            if (user.LockoutEnd.Value <= DateTime.UtcNow)
+            if (user.LockoutEnd.Value <= DateTimeOffset.Now)
             {
                 TempData["UsersManagementMsgModal"] = $"Selected user account is not locked out.";
                 return RedirectToAction("UserManagement");

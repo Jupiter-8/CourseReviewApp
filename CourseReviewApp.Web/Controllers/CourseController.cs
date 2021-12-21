@@ -254,7 +254,7 @@ namespace CourseReviewApp.Web.Controllers
             {
                 if (viewModel.Id.HasValue && JsonSerializer.Serialize(viewModel) == TempData["PreviousCourseState"].ToString())
                 {
-                    viewModel.DateAdded = JsonSerializer.Deserialize<DateTime>(TempData["PreviousCourseDate"].ToString());
+                    viewModel.DateAdded = JsonSerializer.Deserialize<DateTimeOffset>(TempData["PreviousCourseDate"].ToString());
                     TempData["CourseManagementMsgModal"] = "Course has not been edited.";
 
                     return RedirectToAction("OwnerCoursesManagement");

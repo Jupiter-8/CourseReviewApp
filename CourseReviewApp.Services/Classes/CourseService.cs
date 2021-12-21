@@ -67,12 +67,12 @@ namespace CourseReviewApp.Services.Classes
             course.Status = CourseStatus.Pending;
             if (course.Id == 0)
             {
-                course.DateAdded = DateTime.Now;
+                course.DateAdded = DateTimeOffset.Now;
                 await DbContext.Courses.AddAsync(course);
             }
             else
             {
-                course.DateEdited = DateTime.Now;
+                course.DateEdited = DateTimeOffset.Now;
                 List<LearningSkill> learningSkills = course.LearningSkills.Where(ls => ls.Name == null).ToList();
                 DbContext.LearningSkills.RemoveRange(learningSkills);
                 DbContext.Courses.Update(course);

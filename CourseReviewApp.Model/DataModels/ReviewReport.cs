@@ -6,7 +6,7 @@ namespace CourseReviewApp.Model.DataModels
     {
         public int Id { get; set; }
         public string ReportContents { get; set; }
-        public DateTime DateAdded { get; set; }
+        public DateTimeOffset DateAdded { get; set; }
         public ReportReason ReportReason { get; set; }
 
         public int ReviewId { get; set; }

@@ -44,7 +44,7 @@ namespace CourseReviewApp.Services.Classes
                && rr.ReviewId == reviewReport.ReviewId))
                 throw new ArgumentException("User's report for this review already exists");
 
-            reviewReport.DateAdded = DateTime.Now;
+            reviewReport.DateAdded = DateTimeOffset.Now;
             await DbContext.ReviewReports.AddAsync(reviewReport);
             await DbContext.SaveChangesAsync();
         }

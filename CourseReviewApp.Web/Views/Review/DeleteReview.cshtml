@@ -29,7 +29,7 @@
                     @Html.DisplayNameFor(model => model.DateEdited)
                 </dt>
                 <dd class="col-sm-9">
-                    @(Model.DateEdited != null ? Model.DateEdited.Value.ToString("dd.MM.yyyy HH:mm") : "Was not edited")
+                    @(Model.DateEdited != null ? Model.DateEdited.Value.ToString("dd.MM.yyyy HH:mm:ss") : "Was not edited")
                 </dd>
                 <dt class="col-sm-3 mt-2">
                     @Html.DisplayNameFor(model => model.RatingValue)

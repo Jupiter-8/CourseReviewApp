@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -52,11 +51,6 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
                 {
                     await _userManager.AddToRoleAsync(userTuple.Item1, userTuple.Item2.Name);
                     AppUser user = await _userManager.FindByEmailAsync(userTuple.Item1.Email);
-                    if(user != null)
-                    {
-                        user.RegistrationDate = DateTimeOffset.Now;
-                        await _userManager.UpdateAsync(user);
-                    }
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(userTuple.Item1);

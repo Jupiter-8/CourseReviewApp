@@ -6,8 +6,8 @@ namespace CourseReviewApp.Model.DataModels
     {
         public int Id { get; set; }
         public string Contents { get; set; }
-        public DateTime DateAdded { get; set; }
-        public DateTime? DateEdited { get; set; } 
+        public DateTimeOffset DateAdded { get; set; }
+        public DateTimeOffset? DateEdited { get; set; } 
         public int AuthorId { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace CourseReviewApp.Web.ViewModels
         public string ReportContents { get; set; }
 
         [Display(Name = "Date added")]
-        public DateTime DateAdded { get; set; }
+        public DateTimeOffset DateAdded { get; set; }
 
         [Display(Name = "Reporting user")]
         public string ReportingUserName { get; set; }

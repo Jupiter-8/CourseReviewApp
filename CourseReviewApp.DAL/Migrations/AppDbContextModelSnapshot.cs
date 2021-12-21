@@ -147,11 +147,11 @@ namespace CourseReviewApp.DAL.Migrations
                     b.Property<string>("CourseWebsiteUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DateAdded")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("DateAdded")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTime?>("DateEdited")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("DateEdited")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("Duration")
                         .HasColumnType("int");
@@ -234,11 +234,11 @@ namespace CourseReviewApp.DAL.Migrations
                     b.Property<string>("Contents")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DateAdded")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("DateAdded")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTime?>("DateEdited")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("DateEdited")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("ReviewId")
                         .HasColumnType("int");
@@ -269,11 +269,11 @@ namespace CourseReviewApp.DAL.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DateAdded")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("DateAdded")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTime?>("DateEdited")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("DateEdited")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("RatingValue")
                         .HasColumnType("int");
@@ -294,8 +294,8 @@ namespace CourseReviewApp.DAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("DateAdded")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("DateAdded")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("ReportContents")
                         .HasColumnType("nvarchar(max)");

@@ -49,7 +49,7 @@ namespace CourseReviewApp.Services.Classes
                 if (!await DbContext.Reviews.AnyAsync(r =>
                     r.CourseId == review.CourseId && r.AuthorId == review.AuthorId))
                 {
-                    review.DateAdded = DateTime.Now;
+                    review.DateAdded = DateTimeOffset.Now;
                     await DbContext.Reviews.AddAsync(review);
                 }
                 else
@@ -57,7 +57,7 @@ namespace CourseReviewApp.Services.Classes
             }
             else
             {
-                review.DateEdited = DateTime.Now;
+                review.DateEdited = DateTimeOffset.Now;
                 DbContext.Reviews.Update(review);
             }
 
@@ -125,7 +125,7 @@ namespace CourseReviewApp.Services.Classes
                 if (!await DbContext.OwnerComments.AnyAsync(or =>
                     or.ReviewId == ownerComment.ReviewId && or.AuthorId == ownerComment.AuthorId))
                 {
-                    ownerComment.DateAdded = DateTime.Now;
+                    ownerComment.DateAdded = DateTimeOffset.Now;
                     await DbContext.OwnerComments.AddAsync(ownerComment);
                 }
                 else
@@ -133,7 +133,7 @@ namespace CourseReviewApp.Services.Classes
             }
             else
             {
-                ownerComment.DateEdited = DateTime.Now;
+                ownerComment.DateEdited = DateTimeOffset.Now;
                 DbContext.OwnerComments.Update(ownerComment);
             }
 

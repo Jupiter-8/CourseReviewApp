@@ -15,6 +15,12 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
+                            @if (!User.IsInRole("Course_owner") && !User.IsInRole("Moderator"))
+                            {
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Owner)
+                                </th>
+                            }
                             <th>
                                 @Html.DisplayNameFor(model => model.CategoryName)
                             </th>
@@ -40,11 +46,17 @@
                                 <td>
                                     <a class="card-link text-info" asp-action="Details" asp-controller="Course" asp-route-id="@item.Id">@item.Name</a>
                                 </td>
+                                @if (!User.IsInRole("Course_owner") && !User.IsInRole("Moderator"))
+                                 {
+                                    <td>
+                                        @Html.DisplayFor(model => item.Owner.Username)
+                                    </td>
+                                 }
                                 <td>
                                     @Html.DisplayFor(modelItem => item.CategoryName)
                                 </td>
                                 <td data-order="@item.DateAdded.ToString("yyyyMMdd HH:mm")">
-                                    @item.DateAdded.ToString("dd.MM.yyyy HH:mm")
+                                    @item.DateAdded.ToString("dd.MM.yyyy HH:mm:ss")
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Status)

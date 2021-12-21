@@ -64,7 +64,7 @@
                 </dt>
                 <dd class="col-7 col-sm-7">
                     @(Model.LockoutEnd.HasValue && Model.LockoutEnd.Value >= DateTimeOffset.Now
-                        ? Model.LockoutEnd.Value.ToString("dd.MM.yyyy HH:mm:ss"): "Not locked out")
+                        ? Model.LockoutEnd.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm:ss"): "Not locked out")
                 </dd>
                 <dt class="col-5 col-sm-5">
                     @Html.DisplayNameFor(model => model.PhoneNumber)

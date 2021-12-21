@@ -25,9 +25,9 @@ namespace CourseReviewApp.Web.ViewModels
         public RatingValue RatingValue { get; set; }
 
         [Display(Name = "Date added")]
-        public DateTime DateAdded { get; set; }
+        public DateTimeOffset DateAdded { get; set; }
 
         [Display(Name = "Date edited")]
-        public DateTime? DateEdited { get; set; } 
+        public DateTimeOffset? DateEdited { get; set; } 
     }
 }

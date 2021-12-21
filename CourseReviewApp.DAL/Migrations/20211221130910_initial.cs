@@ -196,8 +196,8 @@ namespace CourseReviewApp.DAL.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ShortDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LongDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateEdited = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DateAdded = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    DateEdited = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     CourseWebsiteUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Duration = table.Column<int>(type: "int", nullable: false),
@@ -252,8 +252,8 @@ namespace CourseReviewApp.DAL.Migrations
                     CourseId = table.Column<int>(type: "int", nullable: false),
                     RatingValue = table.Column<int>(type: "int", nullable: false),
                     Contents = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateEdited = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DateAdded = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    DateEdited = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     AuthorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -305,8 +305,8 @@ namespace CourseReviewApp.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ReviewId = table.Column<int>(type: "int", nullable: false),
                     Contents = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateEdited = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DateAdded = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    DateEdited = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     AuthorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -333,7 +333,7 @@ namespace CourseReviewApp.DAL.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ReportContents = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateAdded = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ReportReason = table.Column<int>(type: "int", nullable: false),
                     ReviewId = table.Column<int>(type: "int", nullable: false),
                     ReportingUserId = table.Column<int>(type: "int", nullable: true)

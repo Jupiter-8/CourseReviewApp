@@ -103,16 +103,16 @@
                         <div class="col-12 col-sm-12 col-md-12 col-lg-4 mt-2">
                             <h5 class="mt-2">About course</h5>
                             <div>
-                                <span class="d-block mt-2 text-secondary"><i class="fas fa-calendar-plus"></i> Added: @Model.DateAdded.ToString("dd.MM.yyyy")</span>
+                                <span class="d-block mt-2 text-secondary"><i class="fas fa-calendar-alt"></i> Added: @Model.DateAdded.ToString("dd.MM.yyyy")</span>
                                 @if (Model.DateEdited != null)
                                 {
                                     <span class="d-block mt-1 text-secondary">
-                                        <i class="far fa-calendar-plus"></i> Edited:
+                                        <i class="fas fa-calendar-alt"></i> Edited:
                                         <span>@Model.DateEdited.Value.ToString("dd.MM.yyyy")</span>
                                     </span>
                                 }
                                 <span class="d-block mt-1 text-secondary"><i class="fas fa-clock"></i> Duration: @Model.Duration h</span>
-                                <span class="d-block mt-1 text-secondary"><i class="fas fa-globe"></i> Language: @Model.Language</span>
+                                <span class="d-block mt-1 text-secondary"><i class="fas fa-language"></i> Language: @Model.Language</span>
                                 <span class="d-block mt-1 text-secondary">
                                     <i class="fas fa-external-link-alt"></i><a class="card-link text-info"
                                                                                href="@(string.IsNullOrEmpty(Model.CourseWebsiteUrl) ? "#" : $"https://{Model.CourseWebsiteUrl}")"> Course website</a>
@@ -124,10 +124,10 @@
                             <div class="row d-flex mb-4 ml-0">
                                 <div>
                                     <span class="d-block font-weight-bold text-secondary"><i class="fas fa-user-tie"></i> @Model.Owner.FullName</span>
-                                    <span class="d-block mt-2 text-secondary"><i class="fas fa-bookmark"></i> Courses: @Model.Owner.CoursesCount</span>
-                                    <span class="d-block mt-1 text-secondary"><i class="fas fa-calendar-plus"></i> Joined: @Model.Owner.RegistrationDate.ToString("dd.MM.yyyy")</span>
+                                    <span class="d-block mt-2 text-secondary"><i class="fas fa-book"></i> Courses: @Model.Owner.CoursesCount</span>
+                                    <span class="d-block mt-1 text-secondary"><i class="fas fa-calendar-alt"></i> Joined: @Model.Owner.RegistrationDate.ToString("dd.MM.yyyy")</span>
                                     <span class="d-block mt-1 text-secondary"><i class="fas fa-star-half-alt"></i> Avg course rating: @Model.Owner.AvgCoursesRating</span>
-                                    <span class="d-block mt-1 text-secondary"><i class="fas fa-star"></i> Reviews: @Model.Owner.CoursesReviewsCount</span>
+                                    <span class="d-block mt-1 text-secondary"><i class="fas fa-comment-alt"></i> Earned reviews: @Model.Owner.CoursesReviewsCount</span>
                                     @if (!string.IsNullOrEmpty(Model.Owner.BrandName))
                                     {
                                         <span class="d-block mt-1 text-secondary"><i class="fas fa-building"></i> Brand name: @Model.Owner.BrandName</span>

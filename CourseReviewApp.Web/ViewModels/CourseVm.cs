@@ -25,10 +25,10 @@ namespace CourseReviewApp.Web.ViewModels
         public string ShortDescription { get; set; }
 
         [Display(Name = "Date added")]
-        public DateTime DateAdded { get; set; }
+        public DateTimeOffset DateAdded { get; set; }
 
         [Display(Name = "Last edited")]
-        public DateTime? DateEdited { get; set; }
+        public DateTimeOffset? DateEdited { get; set; }
 
         [Display(Name = "Course website")]
         public string CourseWebsiteUrl { get; set; }

@@ -7,7 +7,8 @@ namespace CourseReviewApp.Web.ViewModels
     {
         public int? Id { get; set; }
         public int CourseId { get; set; }
-        public DateTime DateAdded { get; set; }
+        public DateTimeOffset DateAdded { get; set; }
+        public DateTimeOffset? DateEdited { get; set; }
         public ReviewVm Review { get; set; }
 
         [Required]

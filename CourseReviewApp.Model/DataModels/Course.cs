@@ -10,8 +10,8 @@ namespace CourseReviewApp.Model.DataModels
         public string Name { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; } 
-        public DateTime DateAdded { get; set; }
-        public DateTime? DateEdited { get; set; }
+        public DateTimeOffset DateAdded { get; set; }
+        public DateTimeOffset? DateEdited { get; set; }
         public string CourseWebsiteUrl { get; set; }
         public CourseStatus Status { get; set; }
         public int Duration { get; set; }

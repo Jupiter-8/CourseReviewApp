@@ -6,7 +6,7 @@
 <div class="container">
     <div class="d-flex row justify-content-center mt-4">
         <div class="card bg-light p-3 col-12 col-sm-11 col-md-10 col-lg-8 col-xl-7">
-            <h1 class="font-weight-light text-center">Course deletion confirmation</h1>
+            <h1 class="font-weight-light text-center">Confirm course deletion</h1>
             <hr />
             <h3 class="font-weight-light mb-3">@(User.IsInRole("Admin") ? "Course" : "Your course")</h3>
             <dl class="row">
@@ -35,13 +35,13 @@
                     @Html.DisplayNameFor(model => model.DateAdded)
                 </dt>
                 <dd class="col-sm-9">
-                    @Model.DateAdded.ToString("dd.MM.yyyy HH:mm")
+                    @Model.DateAdded.ToString("dd.MM.yyyy HH:mm:ss")
                 </dd>
                 <dt class="col-sm-3">
                     @Html.DisplayNameFor(model => model.DateEdited)
                 </dt>
                 <dd class="col-sm-9">
-                    @(Model.DateEdited != null ? Model.DateEdited.Value.ToString("dd.MM.yyyy mm:ss") : "Was not edited")
+                    @(Model.DateEdited != null ? Model.DateEdited.Value.ToString("dd.MM.yyyy HH:mm:ss") : "Was not edited")
                 </dd>
                 <dt class="col-sm-3">
                     @Html.DisplayNameFor(model => model.CourseWebsiteUrl)
