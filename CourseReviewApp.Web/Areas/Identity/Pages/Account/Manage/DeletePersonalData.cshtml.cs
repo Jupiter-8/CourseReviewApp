@@ -8,7 +8,6 @@ using CourseReviewApp.Web.Services.Interfaces;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace CourseReviewApp.Web.Areas.Identity.Pages.Account.Manage
 {

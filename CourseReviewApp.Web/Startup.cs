@@ -1,3 +1,9 @@
+using CourseReviewApp.DAL.EntityFramework;
+using CourseReviewApp.Model.DataModels;
+using CourseReviewApp.Services.Classes;
+using CourseReviewApp.Services.Interfaces;
+using CourseReviewApp.Web.Services.Classes;
+using CourseReviewApp.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -6,16 +12,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using CourseReviewApp.DAL.EntityFramework;
-using CourseReviewApp.Model.DataModels;
-using CourseReviewApp.Services.Interfaces;
-using CourseReviewApp.Services.Classes;
-using CourseReviewApp.Web.Services.Classes;
-using CourseReviewApp.Web.Services.Interfaces;
+using System;
 using System.Net;
 using System.Net.Mail;
-using Microsoft.AspNetCore.Diagnostics;
-using System;
 
 namespace CourseReviewApp.Web
 {
@@ -36,12 +35,12 @@ namespace CourseReviewApp.Web
             );
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<AppUser>(options => 
+            services.AddDefaultIdentity<AppUser>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = true;
                 options.User.RequireUniqueEmail = true;
                 options.Lockout.AllowedForNewUsers = true;
-                options.Lockout.MaxFailedAccessAttempts = 2;
+                options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(60);
             })
                 .AddRoles<Role>()

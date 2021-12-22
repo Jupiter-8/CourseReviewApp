@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using CourseReviewApp.Model.DataModels;
 using CourseReviewApp.Services.Interfaces;
 using CourseReviewApp.Web.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

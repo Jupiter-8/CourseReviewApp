@@ -114,9 +114,14 @@ div:last-child > .category-menu-parent {
     color: #17a2b8;
 }
 
+.nav-pill-non-active:hover {
+    color: rgba(23, 162, 184, 0.75);
+}
+
 .nav-pill-active {
     background: #17a2b8;
     color: white;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 7px 15px 0px !important;
 }
 
 .nav-pill-active:hover {
