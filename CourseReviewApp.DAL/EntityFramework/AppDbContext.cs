@@ -53,11 +53,11 @@ namespace CourseReviewApp.DAL.EntityFramework
 
             modelBuilder.Entity<AppUser>()
                 .Property(au => au.UserName)
-                .HasMaxLength(30);
+                .HasMaxLength(20);
 
             modelBuilder.Entity<AppUser>()
                 .Property(au => au.NormalizedUserName)
-                .HasMaxLength(30);
+                .HasMaxLength(20);
 
             modelBuilder.Entity<AppUser>()
                 .Property(au => au.FirstName)

@@ -6,7 +6,8 @@ namespace CourseReviewApp.Web.ViewModels
     public class RegisterUserVm
     {
         [Required]
-        [StringLength(30, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [RegularExpression("[A-Za-z][A-Za-z0-9_]{5,19}", 
+            ErrorMessage = "The username must be at least 6 and at max 20 characters, it must starts with a letter. Digits and the _ symbol are allowed.")]
         public string Username { get; set; }
 
         [Required]

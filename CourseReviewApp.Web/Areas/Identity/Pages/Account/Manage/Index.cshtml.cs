@@ -37,7 +37,8 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account.Manage
         public class InputModel
         {
             [Display(Name = "Username (used to login)")]
-            [StringLength(20, ErrorMessage = "{0} must be between {2} and {1} characters long", MinimumLength = 5)]
+            [RegularExpression("[A-Za-z][A-Za-z0-9_]{5,19}",
+            ErrorMessage = "The username must be at least 6 and at max 20 characters, it must starts with a letter. Digits and the _ symbol are allowed.")]
             public string Username { get; set; }
 
             [Phone]
