@@ -5,11 +5,9 @@ namespace CourseReviewApp.Web.ViewModels
 {
     public class ReportReviewVm
     {
-        [Required]
         public int ReviewId { get; set; }
-
-        [Required]
         public int ReportingUserId { get; set; }
+        public ReviewVm Review { get; set; }
 
         [Required]
         [Display(Name = "Contents")]
@@ -19,6 +17,5 @@ namespace CourseReviewApp.Web.ViewModels
         [Required]
         [Display(Name = "Reason")]
         public ReportReason ReportReason { get; set; }
-        public ReviewVm Review { get; set; }
     }
 }

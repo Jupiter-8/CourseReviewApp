@@ -1,26 +1,18 @@
-﻿using CourseReviewApp.Model.DataModels;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace CourseReviewApp.Web.ViewModels
 {
     public class DeleteCourseVm
     {
-        [Required]
         public int Id { get; set; }
-
-        [Required]
         public int OwnerId { get; set; }
-
-        [Required]
+        public string Language { get; set; }
+        public bool OwnerHasCourseInfoEmailsEnabled { get; set; }
         public string Name { get; set; }
-
-        [Required]
         public string OwnerEmail { get; set; }
-
-        [Required]
         public string ImagePath { get; set; }
-        
+
         [Display(Name = "Category")]
         public string CategoryName { get; set; }
 
@@ -41,8 +33,5 @@ namespace CourseReviewApp.Web.ViewModels
 
         [Display(Name = "Owner name")]
         public string OwnerName { get; set; }
-
-        public string Language { get; set; }
-        public bool OwnerHasCourseInfoEmailsEnabled { get; set; }
     }
 }

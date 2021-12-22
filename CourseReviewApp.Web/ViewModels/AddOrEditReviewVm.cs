@@ -7,15 +7,10 @@ namespace CourseReviewApp.Web.ViewModels
     public class AddOrEditReviewVm
     {
         public int? Id { get; set; }
+        public int AuthorId { get; set; }
+        public int CourseId { get; set; }
         public DateTimeOffset DateAdded { get; set; }
         public DateTimeOffset? DateEdited { get; set; } 
-        public int WasHelpfullCount { get; set; }
-
-        [Required]
-        public int AuthorId { get; set; }
-
-        [Required]
-        public int CourseId { get; set; }
 
         [Required]
         [StringLength(1000, ErrorMessage = "{0} review must be between {2} and {1} characters long", MinimumLength = 10)]

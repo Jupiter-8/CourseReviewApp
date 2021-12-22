@@ -13,6 +13,8 @@ namespace CourseReviewApp.Web.ViewModels
         public IFormFile Image { get; set; }
         public string ImagePath { get; set; }
         public bool ImgToDelete { get; set; }
+        public int OwnerId { get; set; }
+        public int Duration { get; set; }
         public IList<LearningSkillVm> LearningSkills { get; set; }
 
         [Required]
@@ -35,9 +37,6 @@ namespace CourseReviewApp.Web.ViewModels
         public string CourseWebsiteUrl { get; set; }
 
         [Required]
-        public int Duration { get; set; }
-
-        [Required]
         [StringLength(50, ErrorMessage = "{0} must be between {2} and {1} characters long", MinimumLength = 3)]
         public string Language { get; set; }
 
@@ -48,8 +47,5 @@ namespace CourseReviewApp.Web.ViewModels
         [Required]
         [Display(Name = "Category")]
         public int? ParentCategoryId { get; set; }
-
-        [Required]
-        public int OwnerId { get; set; }
     }
 }
