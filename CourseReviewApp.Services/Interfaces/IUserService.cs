@@ -11,10 +11,10 @@ namespace CourseReviewApp.Services.Interfaces
         Task<AppUser> GetUser(Expression<Func<AppUser, bool>> filter);
         Task<IEnumerable<AppUser>> GetUsers(Expression<Func<AppUser, bool>> filter = null);
         Task<Role> GetRole(Expression<Func<Role, bool>> filter);
-        Task ChangeUserStatus(int id, bool status);
-        Task DeleteUser(int id, IList<string> userRoles);
-        Task AssignModeratorRoleToUser(int id);
-        Task UnassignModeratorRoleFromUser(int id);
-        Task DisableUserLockout(int id);
+        Task ChangeUserStatus(int userId, bool status);
+        Task DeleteUser(int userId, IList<string> userRoles);
+        Task AssignModeratorRoleToUser(int userId);
+        Task UnassignModeratorRoleFromUser(int userId);
+        Task DisableUserLockout(int userId);
     }
 }

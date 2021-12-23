@@ -103,9 +103,13 @@
                                 </div>
                                 <div class="col-8 col-md-8">
                                     <div class="px-3 h-100">
-                                        <h5 class="card-title">
-                                            <a class="card-link text-info" asp-controller="Course" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
-                                        </h5>
+                                        <div class="card-title d-flex text-info">
+                                            <a class="text-decoration-none text-info mr-auto" asp-controller="Course" asp-action="Details" asp-route-id="@item.Id"><h5>@item.Name</h5></a>
+                                            @if (User.IsInRole("Course_client") && item.ObservingUsers.Any(ou => ou.UserId == int.Parse(userManager.GetUserId(User))))
+                                            {
+                                                <i class="fas fa-bookmark"></i>
+                                            }
+                                        </div>
                                         <p class="card-text mb-2 h-50">@item.ShortDescription</p>
                                     </div>
                                 </div>

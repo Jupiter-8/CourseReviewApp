@@ -47,9 +47,9 @@ namespace CourseReviewApp.Services.Classes
             if (course == null)
                 throw new ArgumentNullException("Model is null.");
             if (!await DbContext.Categories.AnyAsync(c => c.Id == course.CategoryId))
-                throw new KeyNotFoundException($"Category with id: {course.CategoryId} not found.");
+                throw new InvalidOperationException($"Category with id: {course.CategoryId} not found.");
             if (!await DbContext.Users.AnyAsync(u => u.Id == course.OwnerId))
-                throw new KeyNotFoundException($"User with id: {course.OwnerId} not found.");
+                throw new InvalidOperationException($"User with id: {course.OwnerId} not found.");
 
             for (int i = course.LearningSkills.Count - 1; i >= 0; i--)
             {
@@ -81,30 +81,72 @@ namespace CourseReviewApp.Services.Classes
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task ChangeCourseStatus(int id, CourseStatus status)
+        public async Task ChangeCourseStatus(int courseId, CourseStatus status)
         {
-            Course course = await DbContext.Courses.FirstOrDefaultAsync(c => c.Id == id);
+            Course course = await DbContext.Courses.FirstOrDefaultAsync(c => c.Id == courseId);
             if (course == null)
-                throw new KeyNotFoundException($"Course with id {id} not found.");
+                throw new InvalidOperationException($"Course with id {courseId} not found.");
             course.Status = status;
 
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteCourse(int id)
+        public async Task DeleteCourse(int courseId)
         {
             Course course = DbContext.Courses
                     .Include(c => c.Reviews)
                         .ThenInclude(r => r.OwnerComment)
                     .Include(c => c.Reviews)
                         .ThenInclude(r => r.ReviewReports)
-                    .FirstOrDefault(c => c.Id == id);
+                    .FirstOrDefault(c => c.Id == courseId);
 
             if (course == null)
-                throw new KeyNotFoundException($"Course with id: {id} not found.");
+                throw new InvalidOperationException($"Course with id: {courseId} not found.");
             DbContext.Courses.Remove(course);
 
             await DbContext.SaveChangesAsync();
+        }
+
+        public async Task AddCourseToObservedList(int userId, int courseId)
+        {
+            if (await DbContext.ObservedCourses.AnyAsync(oc => oc.UserId == userId && oc.CourseId == courseId))
+                throw new InvalidOperationException($"User with id: {userId} is already observing the course with id: {courseId}.");
+            if (!await DbContext.Users.AnyAsync(u => u.Id == userId))
+                throw new InvalidOperationException($"User with id: {userId} not found.");
+            if (!await DbContext.Courses.AnyAsync(c => c.Id == courseId))
+                throw new InvalidOperationException($"Course with id: {courseId} not found.");
+
+            ObservedCourse observedCourse = new()
+            {
+                UserId = userId,
+                CourseId = courseId
+            };
+
+            await DbContext.ObservedCourses.AddAsync(observedCourse);
+            await DbContext.SaveChangesAsync();
+        }
+
+        public async Task RemoveCourseFromObservedList(int userId, int courseId)
+        {
+            ObservedCourse observedCourse = await DbContext.ObservedCourses
+                    .FirstOrDefaultAsync(oc => oc.UserId == userId && oc.CourseId == courseId);
+            if (observedCourse == null)
+                throw new InvalidOperationException($"User with id: {userId} is not observing the course with id: {courseId}.");
+
+            DbContext.ObservedCourses.Remove(observedCourse);
+            await DbContext.SaveChangesAsync();
+        }
+
+        public IEnumerable<ObservedCourse> GetObservedCourses(int userId)
+            => DbContext.ObservedCourses.Where(oc => oc.UserId == userId).AsEnumerable();
+
+        public async Task<IEnumerable<string>> GetObservingUsersEmails(int courseId, int currentUserId)
+        {
+            Course course = await DbContext.Courses.FirstOrDefaultAsync(c => c.Id == courseId);
+            if (course == null)
+                throw new InvalidOperationException($"Course with id {courseId} not found.");
+
+            return course.ObservingUsers.Where(oc => oc.UserId != currentUserId).Select(oc => oc.User.Email);
         }
     }
 }

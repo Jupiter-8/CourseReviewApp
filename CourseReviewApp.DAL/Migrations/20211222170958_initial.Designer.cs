@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseReviewApp.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20211222094346_initial")]
+    [Migration("20211222170958_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -221,6 +221,21 @@ namespace CourseReviewApp.DAL.Migrations
                     b.HasIndex("CourseId");
 
                     b.ToTable("LearningSkills");
+                });
+
+            modelBuilder.Entity("CourseReviewApp.Model.DataModels.ObservedCourse", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "CourseId");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("ObservedCourses");
                 });
 
             modelBuilder.Entity("CourseReviewApp.Model.DataModels.OwnerComment", b =>
@@ -545,6 +560,25 @@ namespace CourseReviewApp.DAL.Migrations
                     b.Navigation("Course");
                 });
 
+            modelBuilder.Entity("CourseReviewApp.Model.DataModels.ObservedCourse", b =>
+                {
+                    b.HasOne("CourseReviewApp.Model.DataModels.Course", "Course")
+                        .WithMany("ObservingUsers")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CourseReviewApp.Model.DataModels.CourseClient", "User")
+                        .WithMany("ObservedCourses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("CourseReviewApp.Model.DataModels.OwnerComment", b =>
                 {
                     b.HasOne("CourseReviewApp.Model.DataModels.CourseOwner", "Author")
@@ -668,6 +702,8 @@ namespace CourseReviewApp.DAL.Migrations
                 {
                     b.Navigation("LearningSkills");
 
+                    b.Navigation("ObservingUsers");
+
                     b.Navigation("Reviews");
                 });
 
@@ -683,6 +719,8 @@ namespace CourseReviewApp.DAL.Migrations
             modelBuilder.Entity("CourseReviewApp.Model.DataModels.CourseClient", b =>
                 {
                     b.Navigation("HelpfullReviews");
+
+                    b.Navigation("ObservedCourses");
 
                     b.Navigation("Reviews");
                 });

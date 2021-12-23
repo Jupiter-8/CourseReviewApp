@@ -54,18 +54,18 @@ namespace CourseReviewApp.Services.Classes
             return role;
         }
 
-        public async Task ChangeUserStatus(int id, bool status)
+        public async Task ChangeUserStatus(int userId, bool status)
         {
-            AppUser user = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
-            bool userExists = await DbContext.Users.AnyAsync(u => u.Id == id);
+            AppUser user = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            bool userExists = await DbContext.Users.AnyAsync(u => u.Id == userId);
             if (!userExists)
-                throw new KeyNotFoundException($"User with id: {id} not found.");
+                throw new InvalidOperationException($"User with id: {userId} not found.");
             user.IsActive = status;
 
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteUser(int id, IList<string> userRoles)
+        public async Task DeleteUser(int userId, IList<string> userRoles)
         {
             if (userRoles.Contains("Course_owner"))
             {
@@ -79,10 +79,10 @@ namespace CourseReviewApp.Services.Classes
                     .Include(co => co.Courses)
                         .ThenInclude(c => c.Reviews)
                             .ThenInclude(c => c.OwnerComment)
-                    .FirstOrDefaultAsync(u => u.Id == id);
+                    .FirstOrDefaultAsync(u => u.Id == userId);
 
                 if (owner == null)
-                    throw new KeyNotFoundException($"User with id: {id} not found.");
+                    throw new InvalidOperationException($"User with id: {userId} not found.");
                 DbContext.Users.Remove(owner);
             }
             else if (userRoles.Contains("Course_client"))
@@ -93,10 +93,11 @@ namespace CourseReviewApp.Services.Classes
                     .Include(cc => cc.Reviews)
                         .ThenInclude(r => r.OwnerComment)
                     .Include(cc => cc.HelpfullReviews)
-                    .FirstOrDefaultAsync(u => u.Id == id);
+                    .Include(cc => cc.ObservedCourses)
+                    .FirstOrDefaultAsync(u => u.Id == userId);
 
                 if (client == null)
-                    throw new KeyNotFoundException($"User with id: {id} not found.");
+                    throw new InvalidOperationException($"User with id: {userId} not found.");
                 DbContext.Users.Remove(client);
             }
             else
@@ -105,29 +106,29 @@ namespace CourseReviewApp.Services.Classes
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task AssignModeratorRoleToUser(int id)
+        public async Task AssignModeratorRoleToUser(int userId)
         {
-            AppUser user = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+            AppUser user = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
-                throw new KeyNotFoundException($"User with id: {id} not found.");
+                throw new InvalidOperationException($"User with id: {userId} not found.");
 
             await _userManager.AddToRoleAsync(user, "Moderator");
         }
 
-        public async Task UnassignModeratorRoleFromUser(int id)
+        public async Task UnassignModeratorRoleFromUser(int userId)
         {
-            AppUser user = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+            AppUser user = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
-                throw new KeyNotFoundException($"User with id: {id} not found.");
+                throw new InvalidOperationException($"User with id: {userId} not found.");
 
             await _userManager.RemoveFromRoleAsync(user, "Moderator");
         }
 
-        public async Task DisableUserLockout(int id)
+        public async Task DisableUserLockout(int userId)
         {
-            AppUser user = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+            AppUser user = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
-                throw new KeyNotFoundException($"User with id: {id} not found.");
+                throw new InvalidOperationException($"User with id: {userId} not found.");
             user.LockoutEnd = new DateTime(2000, 1, 1);
             user.LockoutMessageSent = false;
 

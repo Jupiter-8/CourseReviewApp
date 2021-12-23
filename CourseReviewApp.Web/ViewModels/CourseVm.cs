@@ -17,6 +17,7 @@ namespace CourseReviewApp.Web.ViewModels
         public UserVm Owner { get; set; }
         public IList<ReviewVm> Reviews { get; set; }
         public IList<LearningSkillVm> LearningSkills { get; set; }
+        public IList<ObservedCourseVm> ObservingUsers { get; set; }
 
         [Display(Name = "Category")]
         public string CategoryName { get; set; }

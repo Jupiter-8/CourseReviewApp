@@ -24,6 +24,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-white font-weight-bold mx-1" asp-area="" asp-controller="Course" asp-action="Index"><i class="fas fa-bars"></i> Courses</a>
                         </li>
+                        @if (User.IsInRole("Course_client"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white font-weight-bold mx-1" asp-area="" asp-controller="Course" asp-action="ObservedCoursesList"><i class="fas fa-bookmark"></i> Observed courses</a>
+                            </li>
+                        }
                         @if (User.IsInRole("Course_owner"))
                         {
                             <li class="nav-item">

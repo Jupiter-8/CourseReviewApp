@@ -1,0 +1,51 @@
+﻿@model IEnumerable<CourseReviewApp.Web.ViewModels.ObservedCourseVm>
+@{
+    ViewData["Title"] = "Observed courses";
+}
+
+<div class="container">
+    <div class="row my-4">
+        <div class="card bg-light col-12 p-3 min-vh-100">
+            <h1 class="font-weight-light text-center text-secondary"><i class="fas fa-bookmark"></i> @ViewData["Title"]</h1>
+            <hr />
+            <div>
+                <table class="table table-responsive-lg" id="observed-courses-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CourseName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CourseCategoryName)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr id="@item.CourseId">
+                                <td>
+                                    <a class="card-link text-info" asp-action="Details" asp-controller="Course" asp-route-id="@item.CourseId">@item.CourseName</a>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CourseCategoryName)
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-danger shadow mr-2" onclick="removeCourseFromObservedList(@item.CourseId, '@item.CourseName', this)">
+                                        <i class="fas fa-trash-alt mr-2"></i><span>Stop observing</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="_ModalMsgPartial" />
+
+@section Scripts {
+    <script src="~/js/Views/Course/observed-courses-management.js"></script>
+}

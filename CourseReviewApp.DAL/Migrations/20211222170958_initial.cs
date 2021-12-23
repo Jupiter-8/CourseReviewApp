@@ -244,6 +244,30 @@ namespace CourseReviewApp.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ObservedCourses",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    CourseId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ObservedCourses", x => new { x.UserId, x.CourseId });
+                    table.ForeignKey(
+                        name: "FK_ObservedCourses_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ObservedCourses_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Reviews",
                 columns: table => new
                 {
@@ -420,6 +444,11 @@ namespace CourseReviewApp.DAL.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ObservedCourses_CourseId",
+                table: "ObservedCourses",
+                column: "CourseId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OwnerComments_AuthorId",
                 table: "OwnerComments",
                 column: "AuthorId");
@@ -473,6 +502,9 @@ namespace CourseReviewApp.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "LearningSkills");
+
+            migrationBuilder.DropTable(
+                name: "ObservedCourses");
 
             migrationBuilder.DropTable(
                 name: "OwnerComments");

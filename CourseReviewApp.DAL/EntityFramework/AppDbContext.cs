@@ -13,7 +13,8 @@ namespace CourseReviewApp.DAL.EntityFramework
         public DbSet<OwnerComment> OwnerComments { get; set; } 
         public DbSet<ReviewReport> ReviewReports { get; set; }
         public DbSet<HelpfullReview> HelpfullReviews { get; set; }
-        public DbSet<LearningSkill> LearningSkills { get; set; } 
+        public DbSet<LearningSkill> LearningSkills { get; set; }
+        public DbSet<ObservedCourse> ObservedCourses { get; set; } 
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -183,7 +184,7 @@ namespace CourseReviewApp.DAL.EntityFramework
                 .HasColumnType("nvarchar(500)");
             //*----------------------------------------------- OwnerComment
 
-            //---------------------------------------------- Review Report
+            //---------------------------------------------- ReviewReport
             modelBuilder.Entity<ReviewReport>()
                 .HasKey(rr => rr.Id);
 
@@ -202,15 +203,15 @@ namespace CourseReviewApp.DAL.EntityFramework
             modelBuilder.Entity<ReviewReport>()
                 .Property(rr => rr.ReportContents)
                 .HasColumnType("nvarchar(200)");
-            //*--------------------------------------------- Review Report
+            //*--------------------------------------------- ReviewReport
 
-            //---------------------------------------------- Course Owner
+            //---------------------------------------------- CourseOwner
             modelBuilder.Entity<CourseOwner>()
                 .HasMany(co => co.OwnerComments)
                 .WithOne(ow => ow.Author)
                 .HasForeignKey(ow => ow.AuthorId)
                 .OnDelete(DeleteBehavior.Cascade);
-            //*---------------------------------------------- Course Owner
+            //*---------------------------------------------- CourseOwner
 
             //---------------------------------------------- Category
             modelBuilder.Entity<Category>()
@@ -224,7 +225,7 @@ namespace CourseReviewApp.DAL.EntityFramework
                 .HasColumnType("nvarchar(50)");
             //*---------------------------------------------- Category
 
-            //---------------------------------------------- Helpfull Review
+            //---------------------------------------------- HelpfullReview
             modelBuilder.Entity<HelpfullReview>()
                 .HasKey(hr => new { hr.UserId, hr.ReviewId });
 
@@ -239,7 +240,24 @@ namespace CourseReviewApp.DAL.EntityFramework
                 .WithMany(r => r.HelpfullReviews)
                 .HasForeignKey(hr => hr.ReviewId)
                 .OnDelete(DeleteBehavior.Cascade);
-            //*---------------------------------------------- Helpfull Review
+            //*---------------------------------------------- HelpfullReview
+
+            //---------------------------------------------- ObservedCourse
+            modelBuilder.Entity<ObservedCourse>()
+                .HasKey(oc => new { oc.UserId, oc.CourseId });
+
+            modelBuilder.Entity<ObservedCourse>()
+                .HasOne(oc => oc.User)
+                .WithMany(au => au.ObservedCourses)
+                .HasForeignKey(oc => oc.UserId)
+                .OnDelete(DeleteBehavior.ClientCascade);
+
+            modelBuilder.Entity<ObservedCourse>()
+                .HasOne(oc => oc.Course)
+                .WithMany(c => c.ObservingUsers)
+                .HasForeignKey(oc => oc.CourseId)
+                .OnDelete(DeleteBehavior.Cascade);
+            //*---------------------------------------------- ObservedCourse
 
             //---------------------------------------------- LearningSkill
             modelBuilder.Entity<LearningSkill>()

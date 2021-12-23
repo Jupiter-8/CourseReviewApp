@@ -23,7 +23,8 @@ namespace CourseReviewApp.Model.DataModels
         public int OwnerId { get; set; }
         public virtual CourseOwner Owner { get; set; }
         public virtual IList<Review> Reviews { get; set; }
-        public virtual IList<LearningSkill> LearningSkills { get; set; } 
+        public virtual IList<LearningSkill> LearningSkills { get; set; }
+        public virtual IList<ObservedCourse> ObservingUsers { get; set; } 
         public double AvgRating 
             => Reviews == null || Reviews.Count == 0 ? 0.0d : Math.Round(Reviews.Average(r => (int)r.RatingValue), 1);
     }

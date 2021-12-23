@@ -61,7 +61,8 @@ namespace CourseReviewApp.Web.Controllers
             viewModel = new()
             {
                 CourseId = courseId,
-                AuthorId = userId
+                AuthorId = userId,
+                CourseName = course.Name
             };
 
             return View(viewModel);
@@ -82,6 +83,12 @@ namespace CourseReviewApp.Web.Controllers
                 }
 
                 await _reviewService.AddOrEditReview(Mapper.Map<Review>(viewModel));
+                IEnumerable<string> observingUsers = await _courseService.GetObservingUsersEmails(viewModel.CourseId, int.Parse(UserManager.GetUserId(User)));
+                if (observingUsers.Any())
+                {
+                    await _emailSenderService.SendDefaultMessageEmailAsync("New course review",
+                        $"There is a new review for the {viewModel.CourseName} course.", bccs: observingUsers.ToList());
+                }
                 TempData["CourseDetailsMsgModal"] = viewModel.Id.HasValue ? "Your review has been edited."
                     : "Your review has been added.";
 

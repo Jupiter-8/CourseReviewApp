@@ -21,9 +21,8 @@ namespace CourseReviewApp.Services.Classes
         {
             if (filter == null)
                 throw new ArgumentNullException("Filter is null.");
-            Review review = await DbContext.Reviews.FirstOrDefaultAsync(filter);
 
-            return review;
+            return await DbContext.Reviews.FirstOrDefaultAsync(filter);
         }
 
         public IEnumerable<Review> GetReviews(Expression<Func<Review, bool>> filter = null)
@@ -40,9 +39,9 @@ namespace CourseReviewApp.Services.Classes
             if (review == null)
                 throw new ArgumentNullException("Model is null.");
             if (!await DbContext.Courses.AnyAsync(c => c.Id == review.CourseId))
-                throw new KeyNotFoundException($"Course with id: {review.CourseId} not found.");
+                throw new InvalidOperationException($"Course with id: {review.CourseId} not found.");
             if (!await DbContext.Users.AnyAsync(u => u.Id == review.AuthorId))
-                throw new KeyNotFoundException($"User with id: {review.AuthorId} not found.");
+                throw new InvalidOperationException($"User with id: {review.AuthorId} not found.");
 
             if (review.Id == 0)
             {
@@ -64,15 +63,15 @@ namespace CourseReviewApp.Services.Classes
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteReview(int id)
+        public async Task DeleteReview(int reviewId)
         {
             Review review = await DbContext.Reviews
                     .Include(r => r.OwnerComment)
                     .Include(r => r.ReviewReports)
-                    .FirstOrDefaultAsync(r => r.Id == id);
+                    .FirstOrDefaultAsync(r => r.Id == reviewId);
 
             if (review == null)
-                throw new KeyNotFoundException($"Review with id: {id} not found.");
+                throw new InvalidOperationException($"Review with id: {reviewId} not found.");
             DbContext.Reviews.Remove(review);
 
             await DbContext.SaveChangesAsync();
@@ -88,9 +87,9 @@ namespace CourseReviewApp.Services.Classes
                 if (await DbContext.Reviews.AnyAsync(r => r.Id == reviewId && r.AuthorId == userId))
                     throw new ArgumentException("User can't vote for his own review.");
                 if (!await DbContext.Users.AnyAsync(u => u.Id == userId))
-                    throw new KeyNotFoundException($"User with id: {userId} not found.");
+                    throw new InvalidOperationException($"User with id: {userId} not found.");
                 if (!await DbContext.Reviews.AnyAsync(r => r.Id == reviewId))
-                    throw new KeyNotFoundException($"Review with id: {reviewId} not found.");
+                    throw new InvalidOperationException($"Review with id: {reviewId} not found.");
 
                 helpfullReview = new()
                 {
@@ -116,9 +115,9 @@ namespace CourseReviewApp.Services.Classes
             if (ownerComment == null)
                 throw new ArgumentNullException("Model is null.");
             if (!await DbContext.Reviews.AnyAsync(r => r.Id == ownerComment.ReviewId))
-                throw new KeyNotFoundException($"Review with id: {ownerComment.ReviewId} not found.");
+                throw new InvalidOperationException($"Review with id: {ownerComment.ReviewId} not found.");
             if (!await DbContext.Users.AnyAsync(u => u.Id == ownerComment.AuthorId))
-                throw new KeyNotFoundException($"User with id: {ownerComment.AuthorId} not found.");
+                throw new InvalidOperationException($"User with id: {ownerComment.AuthorId} not found.");
 
             if (ownerComment.Id == 0)
             {
@@ -149,11 +148,11 @@ namespace CourseReviewApp.Services.Classes
             return ownerComment;
         }
 
-        public async Task DeleteOwnerComment(int id)
+        public async Task DeleteOwnerComment(int commentId)
         {
-            OwnerComment ownerComment = await DbContext.OwnerComments.FirstOrDefaultAsync(or => or.Id == id);
+            OwnerComment ownerComment = await DbContext.OwnerComments.FirstOrDefaultAsync(or => or.Id == commentId);
             if (ownerComment == null)
-                throw new KeyNotFoundException($"Owner's comment with id: {id} not found.");
+                throw new InvalidOperationException($"Owner's comment with id: {commentId} not found.");
             DbContext.OwnerComments.Remove(ownerComment);
 
             await DbContext.SaveChangesAsync();

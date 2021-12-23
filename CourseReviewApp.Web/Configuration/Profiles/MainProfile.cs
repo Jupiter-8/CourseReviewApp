@@ -30,6 +30,10 @@ namespace CourseReviewApp.Web.Configuration.Profiles
                 .ForMember(dest => dest.OwnerId, x => x.MapFrom(src => src.Owner.Id))
                 .ForMember(dest => dest.CategoryName, x => x.MapFrom(src => src.Category.Name))
                 .ForMember(dest => dest.OwnerHasCourseInfoEmailsEnabled, x => x.MapFrom(src => src.Owner.CourseInfoEmailsEnabled));
+
+            CreateMap<ObservedCourse, ObservedCourseVm>()
+                .ForMember(dest => dest.CourseName, x => x.MapFrom(src => src.Course.Name))
+                .ForMember(dest => dest.CourseCategoryName, x => x.MapFrom(src => src.Course.Category != null ? src.Course.Category.Name : string.Empty));
             //--- Course
 
             //--- Category
@@ -46,13 +50,13 @@ namespace CourseReviewApp.Web.Configuration.Profiles
             //--- Category
 
             //--- Review and report
-            CreateMap<Review, AddOrEditReviewVm>();
             CreateMap<AddOrEditReviewVm, Review>();
             CreateMap<ReviewVm, Review>();
             CreateMap<ReportReviewVm, ReviewReport>();
             CreateMap<OwnerComment, AddOrEditOwnerCommentVm>();
             CreateMap<AddOrEditOwnerCommentVm, OwnerComment>();
             CreateMap<HelpfullReview, HelpfullReviewVm>();
+            CreateMap<Review, AddOrEditReviewVm>();
 
             CreateMap<Review, ReviewVm>()
                 .ForMember(dest => dest.WasHelpfullCount, x => x.MapFrom(src => src.HelpfullReviews.Count))

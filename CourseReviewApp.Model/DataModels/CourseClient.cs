@@ -8,5 +8,6 @@ namespace CourseReviewApp.Model.DataModels
 
         public virtual IList<Review> Reviews { get; set; }
         public virtual IList<HelpfullReview> HelpfullReviews { get; set; }
+        public virtual IList<ObservedCourse> ObservedCourses { get; set; } 
     }
 }

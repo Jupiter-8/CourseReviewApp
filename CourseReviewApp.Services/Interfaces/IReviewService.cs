@@ -11,10 +11,10 @@ namespace CourseReviewApp.Services.Interfaces
         Task<Review> GetReview(Expression<Func<Review, bool>> filter);
         IEnumerable<Review> GetReviews(Expression<Func<Review, bool>> filter = null);
         Task AddOrEditReview(Review review);
-        Task DeleteReview(int id);
+        Task DeleteReview(int reviewId);
         Task<bool> VoteForReviewHelpfullness(int userId, int reviewId);
         Task AddOrEditOwnerComment(OwnerComment ownerComment);
         Task<OwnerComment> GetOwnerComment(Expression<Func<OwnerComment, bool>> filter);
-        Task DeleteOwnerComment(int id);
+        Task DeleteOwnerComment(int commentId);
     }
 }

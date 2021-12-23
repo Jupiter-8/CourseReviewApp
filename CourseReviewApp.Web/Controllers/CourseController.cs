@@ -158,6 +158,9 @@ namespace CourseReviewApp.Web.Controllers
             if (course.Status == CourseStatus.Active || (!string.IsNullOrEmpty(userId) && (User.IsInRole("Admin") || User.IsInRole("Moderator")
                 || course.OwnerId == int.Parse(userId))))
             {
+                if (User.IsInRole("Course_client"))
+                    ViewBag.IsObserved = course.ObservingUsers.Any(o => o.UserId == int.Parse(userId));
+
                 int reviewCount = course.Reviews.Count > 0 ? course.Reviews.Count : 1;
                 double starPercent = 0.00;
 
@@ -398,6 +401,30 @@ namespace CourseReviewApp.Web.Controllers
             ViewBag.CarouselId = "best-rated-courses-carousel";
 
             return PartialView("_CarouselCoursesPartial", Mapper.Map<IEnumerable<CourseVm>>(courses));
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Course_client")]
+        public async Task AddCourseToObservedList(int id) 
+        {
+            string userId = UserManager.GetUserId(User);
+            await _courseService.AddCourseToObservedList(int.Parse(userId), id);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Course_client")]
+        public async Task RemoveCourseFromObservedList(int id)
+        {
+            string userId = UserManager.GetUserId(User);
+            await _courseService.RemoveCourseFromObservedList(int.Parse(userId), id); 
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Course_client")]
+        public IActionResult ObservedCoursesList()
+        {
+            IEnumerable<ObservedCourse> observedCourses = _courseService.GetObservedCourses(int.Parse(UserManager.GetUserId(User)));
+            return View(Mapper.Map<IEnumerable<ObservedCourseVm>>(observedCourses));
         }
     }
 }

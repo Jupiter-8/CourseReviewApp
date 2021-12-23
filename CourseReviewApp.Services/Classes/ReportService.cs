@@ -20,9 +20,8 @@ namespace CourseReviewApp.Services.Classes
         {
             if (filter == null)
                 throw new ArgumentNullException("Filter is null.");
-            ReviewReport reviewReport = await DbContext.ReviewReports.FirstOrDefaultAsync(filter);
 
-            return reviewReport;
+            return await DbContext.ReviewReports.FirstOrDefaultAsync(filter);
         }
 
         public IEnumerable<ReviewReport> GetReviewReports(Expression<Func<ReviewReport, bool>> filter = null)
@@ -37,9 +36,9 @@ namespace CourseReviewApp.Services.Classes
         public async Task AddReviewReport(ReviewReport reviewReport)
         {
             if (!await DbContext.Reviews.AnyAsync(r => r.Id == reviewReport.ReviewId))
-                throw new KeyNotFoundException($"Review with id: {reviewReport.ReviewId} not found.");
+                throw new InvalidOperationException($"Review with id: {reviewReport.ReviewId} not found.");
             if (!await DbContext.Users.AnyAsync(u => u.Id == reviewReport.ReportingUserId))
-                throw new KeyNotFoundException($"User with id: {reviewReport.ReportingUserId} not found.");
+                throw new InvalidOperationException($"User with id: {reviewReport.ReportingUserId} not found.");
             if (await DbContext.ReviewReports.AnyAsync(rr => rr.ReportingUserId == reviewReport.ReportingUserId
                && rr.ReviewId == reviewReport.ReviewId))
                 throw new ArgumentException("User's report for this review already exists");
@@ -49,11 +48,11 @@ namespace CourseReviewApp.Services.Classes
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteReviewReport(int id)
+        public async Task DeleteReviewReport(int reportId)
         {
-            ReviewReport reviewReport = await DbContext.ReviewReports.FirstOrDefaultAsync(rr => rr.Id == id);
+            ReviewReport reviewReport = await DbContext.ReviewReports.FirstOrDefaultAsync(rr => rr.Id == reportId);
             if (reviewReport == null)
-                throw new KeyNotFoundException($"Review report with id: {id} not found.");
+                throw new InvalidOperationException($"Review report with id: {reportId} not found.");
             DbContext.ReviewReports.Remove(reviewReport);
 
             await DbContext.SaveChangesAsync();

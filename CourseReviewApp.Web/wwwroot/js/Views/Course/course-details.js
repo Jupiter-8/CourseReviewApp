@@ -1,4 +1,5 @@
-﻿
+﻿var isCourseObservedByUser = null;
+
 //--- Load reviews partial view
 function loadReviews(courseId, sortOrder, filterValue, loadMore, numberOfReviews) {
     $(document).ready(function () {
@@ -56,4 +57,54 @@ function readMore() {
             moreSpan.css("display", "inline");
         }
     });
+};
+
+function observeCourseButton(courseId, isObserved, button) {
+    $(document).ready(function () {
+        if (isCourseObservedByUser === null) {
+            isCourseObservedByUser = isObserved;
+        }
+        if (isCourseObservedByUser === 'True') {
+            removeCourseFromObservedList(courseId, button);
+            isCourseObservedByUser = 'False';
+        }
+        else {
+            addCourseToObservedList(courseId, button);
+            isCourseObservedByUser = 'True';
+        }
+    });
+}
+
+function removeCourseFromObservedList(courseId, button) {
+    $.ajax({
+        type: "POST",
+        url: "/Course/RemoveCourseFromObservedList",
+        data: { "id": courseId }
+    })
+        .done(function () {
+            $(button).find("span").text(" Observe this course");
+            $(button).removeClass("btn-info text-white shadow").addClass("btn-outline-info text-info");
+        })
+        .fail(function () {
+            $("#msg-modal-body").html("Error while adding course to the observed courses list.");
+            $("#msg-modal").modal("show");
+        });
+};
+
+function addCourseToObservedList(courseId, button) {
+    $.ajax({
+        type: "POST",
+        url: "/Course/AddCourseToObservedList",
+        data: { "id": courseId }
+    })
+        .done(function () {
+            $(button).removeClass("btn-outline-info text-info").addClass("btn-info text-white shadow");
+            $(button).find("span").text(" Stop observing this course");
+            $("#msg-modal-body").html("Thanks for observing this course. When there is a new review for this course you will receive an email notification.");
+            $("#msg-modal").modal("show");
+        })
+        .fail(function () {
+            $("#msg-modal-body").html("Error while removing course from the observed courses list.");
+            $("#msg-modal").modal("show");
+        });
 };
