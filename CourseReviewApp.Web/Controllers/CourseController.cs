@@ -55,12 +55,12 @@ namespace CourseReviewApp.Web.Controllers
 
             if(notAssignedToCategory)
             {
-                courses = _courseService.GetCourses(c => c.CategoryId == null);
+                courses = await _courseService.GetCourses(c => c.CategoryId == null);
                 ViewBag.NotAssignedToCategory = true;
             }
             else if (ownerId.HasValue)
             {
-                courses = _courseService.GetCourses(c => c.OwnerId == ownerId && c.Status == CourseStatus.Active);
+                courses = await _courseService.GetCourses(c => c.OwnerId == ownerId && c.Status == CourseStatus.Active);
                 Course course = courses.FirstOrDefault();
                 ViewBag.OwnerName = course != null ? $"{course.Owner.FirstName} {course.Owner.LastName}" : string.Empty;
                 ViewBag.OwnerId = ownerId;
@@ -69,7 +69,7 @@ namespace CourseReviewApp.Web.Controllers
             {
                 if (!categoryId.HasValue)
                 {
-                    IEnumerable<Category> categories = _categoryService.GetCategories();
+                    IEnumerable<Category> categories = await _categoryService.GetCategories();
                     category = categories.FirstOrDefault();
                     isMainCategory = true;
                 }
@@ -79,9 +79,9 @@ namespace CourseReviewApp.Web.Controllers
                 if (category == null)
                     return View();
                 else if (isMainCategory)
-                    courses = _courseService.GetCourses(c => c.Category.ParentCategoryId == category.Id && c.Status == CourseStatus.Active);
+                    courses = await _courseService.GetCourses(c => c.Category.ParentCategoryId == category.Id && c.Status == CourseStatus.Active);
                 else
-                    courses = _courseService.GetCourses(c => c.CategoryId == category.Id && c.Status == CourseStatus.Active);
+                    courses = await _courseService.GetCourses(c => c.CategoryId == category.Id && c.Status == CourseStatus.Active);
 
                 ViewBag.IsMainCategory = isMainCategory;
                 ViewBag.CategoryName = category.Name;
@@ -128,9 +128,9 @@ namespace CourseReviewApp.Web.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Moderator, Admin")]
-        public IActionResult CourseManagement()
+        public async Task<IActionResult> CourseManagement()
         {
-            IEnumerable<Course> courses = _courseService.GetCourses();
+            IEnumerable<Course> courses = await _courseService.GetCourses();
             ViewBag.ModeratingActions = true;
 
             return View(Mapper.Map<IEnumerable<CourseVm>>(courses));
@@ -138,10 +138,10 @@ namespace CourseReviewApp.Web.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Course_owner")]
-        public IActionResult OwnerCoursesManagement()
+        public async Task<IActionResult> OwnerCoursesManagement()
         {
             string userId = UserManager.GetUserId(User);
-            IEnumerable<Course> courses = _courseService.GetCourses(c => c.OwnerId == int.Parse(userId));
+            IEnumerable<Course> courses = await _courseService.GetCourses(c => c.OwnerId == int.Parse(userId));
             ViewBag.ModeratingActions = false;
 
             return View("CourseManagement", Mapper.Map<IEnumerable<CourseVm>>(courses));
@@ -210,7 +210,7 @@ namespace CourseReviewApp.Web.Controllers
         public async Task<IActionResult> AddOrEditCourse(int? id = null)
         {
             AddOrEditCourseVm viewModel = null;
-            IEnumerable<Category> categories = _categoryService.GetCategories(c => !c.ParentCategoryId.HasValue);
+            IEnumerable<Category> categories = await _categoryService.GetCategories(c => !c.ParentCategoryId.HasValue);
             List<SelectListItem> categoriesSelectList = categories
                 .Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name }).ToList();
             ViewBag.Categories = categoriesSelectList;
@@ -380,9 +380,9 @@ namespace CourseReviewApp.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult LastAddedCourses()
+        public async Task<IActionResult> LastAddedCourses()
         {
-            IEnumerable<Course> courses = _courseService.GetCourses(c => c.Status == CourseStatus.Active)
+            IEnumerable<Course> courses = (await _courseService.GetCourses(c => c.Status == CourseStatus.Active))
                                                         .OrderByDescending(c => c.DateAdded).Take(5);
             if (!courses.Any())
                 return StatusCode(204);
@@ -392,9 +392,9 @@ namespace CourseReviewApp.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult BestRatedCourses()
+        public async Task<IActionResult> BestRatedCourses()
         {
-            IEnumerable<Course> courses = _courseService.GetCourses(c => c.Status == CourseStatus.Active)
+            IEnumerable<Course> courses = (await _courseService.GetCourses(c => c.Status == CourseStatus.Active))
                                                         .OrderByDescending(c => c.AvgRating).Take(5);
             if (!courses.Any())
                 return StatusCode(204);
@@ -421,9 +421,9 @@ namespace CourseReviewApp.Web.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Course_client")]
-        public IActionResult ObservedCoursesList()
+        public async Task<IActionResult> ObservedCoursesList()
         {
-            IEnumerable<ObservedCourse> observedCourses = _courseService.GetObservedCourses(int.Parse(UserManager.GetUserId(User)));
+            IEnumerable<ObservedCourse> observedCourses = await _courseService.GetObservedCourses(int.Parse(UserManager.GetUserId(User)));
             return View(Mapper.Map<IEnumerable<ObservedCourseVm>>(observedCourses));
         }
     }

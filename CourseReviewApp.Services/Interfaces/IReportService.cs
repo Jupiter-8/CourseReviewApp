@@ -9,7 +9,7 @@ namespace CourseReviewApp.Services.Interfaces
     public interface IReportService
     {
         Task<ReviewReport> GetReviewReport(Expression<Func<ReviewReport, bool>> filter);
-        IEnumerable<ReviewReport> GetReviewReports(Expression<Func<ReviewReport, bool>> filter = null);
+        Task<IEnumerable<ReviewReport>> GetReviewReports(Expression<Func<ReviewReport, bool>> filter = null);
         Task AddReviewReport(ReviewReport reviewReport);
         Task DeleteReviewReport(int reportId);
     }

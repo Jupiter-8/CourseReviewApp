@@ -38,9 +38,7 @@ namespace CourseReviewApp.Services.Classes
                 users = users.Where(filter);
 
             foreach (var user in users)
-            {
                 user.Roles = await _userManager.GetRolesAsync(user);
-            }
 
             return users;
         }
@@ -49,9 +47,8 @@ namespace CourseReviewApp.Services.Classes
         {
             if (filter == null)
                 throw new ArgumentNullException("Filter expression is null.");
-            Role role = await DbContext.Roles.FirstOrDefaultAsync(filter);
 
-            return role;
+            return await DbContext.Roles.FirstOrDefaultAsync(filter);
         }
 
         public async Task ChangeUserStatus(int userId, bool status)
@@ -101,7 +98,7 @@ namespace CourseReviewApp.Services.Classes
                 DbContext.Users.Remove(client);
             }
             else
-                throw new ArgumentException("User for deletion must be in the Course_owner or the Course_client role.");
+                throw new InvalidOperationException("User for deletion must be in the Course_owner or the Course_client role.");
 
             await DbContext.SaveChangesAsync();
         }

@@ -28,9 +28,9 @@ namespace CourseReviewApp.Web.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin, Moderator")]
-        public IActionResult ReportManagement()
+        public async Task<IActionResult> ReportManagement()
         {
-            IEnumerable<ReviewReportVm> reviewReportVms = Mapper.Map<IEnumerable<ReviewReportVm>>(_reportService.GetReviewReports());
+            IEnumerable<ReviewReportVm> reviewReportVms = Mapper.Map<IEnumerable<ReviewReportVm>>(await _reportService.GetReviewReports());
             return View(reviewReportVms);
         }
 

@@ -30,16 +30,16 @@ namespace CourseReviewApp.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult CategoryManagement()
+        public async Task<IActionResult> CategoryManagement()
         {
-            IEnumerable<CategoryVm> categoryVms = Mapper.Map<IEnumerable<CategoryVm>>(_categoryService.GetCategories());
+            IEnumerable<CategoryVm> categoryVms = Mapper.Map<IEnumerable<CategoryVm>>(await _categoryService.GetCategories());
             return View(categoryVms);
         }
 
         [HttpGet]
         public async Task<IActionResult> AddOrEditCategory(int? id = null)
         {
-            IEnumerable<Category> parentCategories = _categoryService.GetCategories(c => !c.ParentCategoryId.HasValue);
+            IEnumerable<Category> parentCategories = await _categoryService.GetCategories(c => !c.ParentCategoryId.HasValue);
             List<SelectListItem> categoriesSelect = parentCategories
                 .Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name }).ToList();
             ViewBag.ParentCategories = categoriesSelect;
@@ -122,9 +122,9 @@ namespace CourseReviewApp.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult GetSubCategories(int id)
+        public async Task<IActionResult> GetSubCategories(int id)
         {
-            IEnumerable<Category> categories = _categoryService.GetCategories(c => c.ParentCategoryId == id);
+            IEnumerable<Category> categories = await _categoryService.GetCategories(c => c.ParentCategoryId == id);
             var subCategories = categories.Select(c => new { id = c.Id, name = c.Name }).ToList();
 
             return Json(subCategories);

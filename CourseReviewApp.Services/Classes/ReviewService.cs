@@ -25,13 +25,13 @@ namespace CourseReviewApp.Services.Classes
             return await DbContext.Reviews.FirstOrDefaultAsync(filter);
         }
 
-        public IEnumerable<Review> GetReviews(Expression<Func<Review, bool>> filter = null)
+        public async Task<IEnumerable<Review>> GetReviews(Expression<Func<Review, bool>> filter = null)
         {
             IQueryable<Review> reviews = DbContext.Reviews.AsQueryable();
             if (filter != null)
                 reviews = reviews.Where(filter);
 
-            return reviews;
+            return await reviews.ToListAsync();
         }
 
         public async Task AddOrEditReview(Review review)
@@ -52,7 +52,7 @@ namespace CourseReviewApp.Services.Classes
                     await DbContext.Reviews.AddAsync(review);
                 }
                 else
-                    throw new ArgumentException("User's review for this course already exists.");
+                    throw new InvalidOperationException("User's review for this course already exists.");
             }
             else
             {
@@ -85,7 +85,7 @@ namespace CourseReviewApp.Services.Classes
             if (helpfullReview == null)
             {
                 if (await DbContext.Reviews.AnyAsync(r => r.Id == reviewId && r.AuthorId == userId))
-                    throw new ArgumentException("User can't vote for his own review.");
+                    throw new InvalidOperationException("User can't vote for his own review.");
                 if (!await DbContext.Users.AnyAsync(u => u.Id == userId))
                     throw new InvalidOperationException($"User with id: {userId} not found.");
                 if (!await DbContext.Reviews.AnyAsync(r => r.Id == reviewId))
@@ -128,7 +128,7 @@ namespace CourseReviewApp.Services.Classes
                     await DbContext.OwnerComments.AddAsync(ownerComment);
                 }
                 else
-                    throw new ArgumentException("Owner's comment for this review already exists.");
+                    throw new InvalidOperationException("Owner's comment for this review already exists.");
             }
             else
             {
@@ -143,9 +143,8 @@ namespace CourseReviewApp.Services.Classes
         {
             if (filter == null)
                 throw new ArgumentNullException("Filter is null.");
-            OwnerComment ownerComment = await DbContext.OwnerComments.FirstOrDefaultAsync(filter);
 
-            return ownerComment;
+            return await DbContext.OwnerComments.FirstOrDefaultAsync(filter);
         }
 
         public async Task DeleteOwnerComment(int commentId)

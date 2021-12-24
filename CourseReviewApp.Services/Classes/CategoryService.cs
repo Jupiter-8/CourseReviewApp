@@ -24,13 +24,13 @@ namespace CourseReviewApp.Services.Classes
             return await DbContext.Categories.FirstOrDefaultAsync(filter);
         }
 
-        public IEnumerable<Category> GetCategories(Expression<Func<Category, bool>> filter = null)
+        public async Task<IEnumerable<Category>> GetCategories(Expression<Func<Category, bool>> filter = null)
         {
             IQueryable<Category> categories = DbContext.Categories.AsQueryable();
             if (filter != null)
                 categories = categories.Where(filter);
 
-            return categories;
+            return await categories.ToListAsync();
         }
 
         public async Task AddOrEditCategory(Category category)

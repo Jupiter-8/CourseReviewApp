@@ -20,18 +20,17 @@ namespace CourseReviewApp.Services.Classes
         {
             if (filter == null)
                 throw new ArgumentNullException("Filter is null.");
-            Course course = await DbContext.Courses.FirstOrDefaultAsync(filter);
 
-            return course;
+            return await DbContext.Courses.FirstOrDefaultAsync(filter);
         }
 
-        public IEnumerable<Course> GetCourses(Expression<Func<Course, bool>> filter = null)
+        public async Task<IEnumerable<Course>> GetCourses(Expression<Func<Course, bool>> filter = null)
         {
             IQueryable<Course> courses = DbContext.Courses.AsQueryable();
             if (filter != null)
                 courses = courses.Where(filter);
 
-            return courses;
+            return await courses.ToListAsync();
         }
 
         public async Task<int> GetCoursesCount(Expression<Func<Course, bool>> filter = null)
@@ -137,8 +136,8 @@ namespace CourseReviewApp.Services.Classes
             await DbContext.SaveChangesAsync();
         }
 
-        public IEnumerable<ObservedCourse> GetObservedCourses(int userId)
-            => DbContext.ObservedCourses.Where(oc => oc.UserId == userId).AsEnumerable();
+        public async Task<IEnumerable<ObservedCourse>> GetObservedCourses(int userId)
+            => await DbContext.ObservedCourses.Where(oc => oc.UserId == userId).ToListAsync();
 
         public async Task<IEnumerable<string>> GetObservingUsersEmails(int courseId, int currentUserId)
         {

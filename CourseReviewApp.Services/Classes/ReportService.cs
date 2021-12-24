@@ -24,13 +24,13 @@ namespace CourseReviewApp.Services.Classes
             return await DbContext.ReviewReports.FirstOrDefaultAsync(filter);
         }
 
-        public IEnumerable<ReviewReport> GetReviewReports(Expression<Func<ReviewReport, bool>> filter = null)
+        public async Task<IEnumerable<ReviewReport>> GetReviewReports(Expression<Func<ReviewReport, bool>> filter = null)
         {
             IQueryable<ReviewReport> reviewReports = DbContext.ReviewReports.AsQueryable();
             if (filter != null)
                 reviewReports = reviewReports.Where(filter);
 
-            return reviewReports;
+            return await reviewReports.ToListAsync();
         }
 
         public async Task AddReviewReport(ReviewReport reviewReport)
@@ -41,7 +41,7 @@ namespace CourseReviewApp.Services.Classes
                 throw new InvalidOperationException($"User with id: {reviewReport.ReportingUserId} not found.");
             if (await DbContext.ReviewReports.AnyAsync(rr => rr.ReportingUserId == reviewReport.ReportingUserId
                && rr.ReviewId == reviewReport.ReviewId))
-                throw new ArgumentException("User's report for this review already exists");
+                throw new InvalidOperationException("User's report for this review already exists");
 
             reviewReport.DateAdded = DateTimeOffset.Now;
             await DbContext.ReviewReports.AddAsync(reviewReport);

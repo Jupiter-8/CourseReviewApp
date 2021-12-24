@@ -20,7 +20,7 @@ namespace CourseReviewApp.Web.Components
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            IEnumerable<CategoryVm> categoryVms = Mapper.Map<IEnumerable<CategoryVm>>(_categoryService.GetCategories());
+            IEnumerable<CategoryVm> categoryVms = Mapper.Map<IEnumerable<CategoryVm>>(await _categoryService.GetCategories());
             return View(categoryVms);
         }
     }

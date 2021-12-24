@@ -215,9 +215,9 @@ namespace CourseReviewApp.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetReviews(int courseId, string sortOrder, int filterValue, bool loadMore, int numberOfReviews = 0)
+        public async Task<IActionResult> GetReviews(int courseId, string sortOrder, int filterValue, bool loadMore, int numberOfReviews = 0)
         {
-            IEnumerable<Review> reviews = _reviewService.GetReviews(r => r.CourseId == courseId);
+            IEnumerable<Review> reviews = await _reviewService.GetReviews(r => r.CourseId == courseId);
             int reviewsCount = reviews.Count();
             if (reviewsCount == 0)
                 return StatusCode(204);
@@ -252,7 +252,7 @@ namespace CourseReviewApp.Web.Controllers
 
                 if (!reviews.Any())
                 {
-                    reviews = _reviewService.GetReviews(r => r.CourseId == courseId);
+                    reviews = await _reviewService.GetReviews(r => r.CourseId == courseId);
                     filterResultsExists = false;
                 }
                 else
@@ -345,9 +345,9 @@ namespace CourseReviewApp.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult LastAddedReviews()
+        public async Task<IActionResult> LastAddedReviews()
         {
-            IEnumerable<Review> reviews = _reviewService.GetReviews().OrderByDescending(r => r.DateAdded).Take(5);
+            IEnumerable<Review> reviews = (await _reviewService.GetReviews()).OrderByDescending(r => r.DateAdded).Take(5);
             if (!reviews.Any())
                 return StatusCode(204);
 
