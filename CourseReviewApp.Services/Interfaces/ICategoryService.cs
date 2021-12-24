@@ -12,5 +12,6 @@ namespace CourseReviewApp.Services.Interfaces
         Task<IEnumerable<Category>> GetCategories(Expression<Func<Category, bool>> filter = null);
         Task AddOrEditCategory(Category category);
         Task DeleteCategory(int categoryId);
+        Task<IEnumerable<string>> GetCourseOwnersEmails(int categoryId);
     }
 }

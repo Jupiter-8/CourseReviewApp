@@ -50,7 +50,6 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(userTuple.Item1, userTuple.Item2.Name);
-                    AppUser user = await _userManager.FindByEmailAsync(userTuple.Item1.Email);
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(userTuple.Item1);

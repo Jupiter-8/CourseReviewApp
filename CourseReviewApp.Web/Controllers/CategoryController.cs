@@ -43,13 +43,11 @@ namespace CourseReviewApp.Web.Controllers
             List<SelectListItem> categoriesSelect = parentCategories
                 .Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name }).ToList();
             ViewBag.ParentCategories = categoriesSelect;
-
             if (id.HasValue && id.Value != 0)
             {
                 Category category = await _categoryService.GetCategory(c => c.Id == id);
                 if (category == null)
                     throw new InvalidOperationException($"Category with id: {id} not found.");
-
                 AddOrEditCategoryVm viewModel = Mapper.Map<AddOrEditCategoryVm>(category);
                 TempData["PreviousCategoryState"] = JsonSerializer.Serialize(viewModel);
 
@@ -70,10 +68,9 @@ namespace CourseReviewApp.Web.Controllers
                     TempData["CategoryManagementMsgModal"] = "Category has not been edited.";
                     return RedirectToAction("CategoryManagement");
                 }
-
                 await _categoryService.AddOrEditCategory(Mapper.Map<Category>(viewModel));
                 TempData["CategoryManagementMsgModal"] = viewModel.Id.HasValue ?
-                    "Category has been edited." : $"The {viewModel.Name} category has been added.";
+                    $"'{viewModel.Name}' category has been edited." : $"'{viewModel.Name}' category has been added.";
 
                 return RedirectToAction("CategoryManagement");
             }
@@ -97,14 +94,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                Category category = await _categoryService.GetCategory(c => c.Id == viewModel.Id);
-                if (category == null)
-                    throw new InvalidOperationException($"Category with id: {viewModel.Id} not found.");
-
-                List<Course> courses = category.ParentCategoryId.HasValue ? category.Courses.ToList()
-                    : category.SubCategories.SelectMany(sc => sc.Courses).ToList();
-                List<string> recipients = courses.Select(c => c.Owner.Email).Distinct().ToList();
-
+                List<string> recipients = (await _categoryService.GetCourseOwnersEmails(viewModel.Id)).ToList();
                 await _categoryService.DeleteCategory(viewModel.Id);
                 if (recipients.Any())
                 {
@@ -112,7 +102,7 @@ namespace CourseReviewApp.Web.Controllers
                         $"Category: {viewModel.Name} has been deleted. Now your courses which were assigned to it are available in category:" +
                         $"Not assigned to category. Please log in to your account and choose a new category for your courses.", null, recipients);
                 }
-                TempData["CategoryManagementMsgModal"] = $"The {viewModel.Name} category has been deleted.";
+                TempData["CategoryManagementMsgModal"] = $"'{viewModel.Name}' category has been deleted.";
 
                 return RedirectToAction("CategoryManagement");
             }
@@ -124,9 +114,8 @@ namespace CourseReviewApp.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetSubCategories(int id)
         {
-            IEnumerable<Category> categories = await _categoryService.GetCategories(c => c.ParentCategoryId == id);
-            var subCategories = categories.Select(c => new { id = c.Id, name = c.Name }).ToList();
-
+            var subCategories = (await _categoryService.GetCategories(c => c.ParentCategoryId == id))
+                .Select(c => new { id = c.Id, name = c.Name }).ToList();
             return Json(subCategories);
         }
     }

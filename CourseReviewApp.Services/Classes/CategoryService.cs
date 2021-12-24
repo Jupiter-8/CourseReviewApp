@@ -62,5 +62,12 @@ namespace CourseReviewApp.Services.Classes
 
             await DbContext.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<string>> GetCourseOwnersEmails(int categoryId)
+        {
+            return await DbContext.Courses
+                             .Where(c => c.CategoryId == categoryId || c.Category.ParentCategoryId == categoryId)
+                             .Select(co => co.Owner.Email).Distinct().ToListAsync();
+        }
     }
 }

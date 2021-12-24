@@ -55,7 +55,7 @@ namespace CourseReviewApp.Web.Controllers
 
             if(notAssignedToCategory)
             {
-                courses = await _courseService.GetCourses(c => c.CategoryId == null);
+                courses = await _courseService.GetCourses(c => c.CategoryId == null && c.Status == CourseStatus.Active);
                 ViewBag.NotAssignedToCategory = true;
             }
             else if (ownerId.HasValue)
@@ -140,8 +140,7 @@ namespace CourseReviewApp.Web.Controllers
         [Authorize(Roles = "Course_owner")]
         public async Task<IActionResult> OwnerCoursesManagement()
         {
-            string userId = UserManager.GetUserId(User);
-            IEnumerable<Course> courses = await _courseService.GetCourses(c => c.OwnerId == int.Parse(userId));
+            IEnumerable<Course> courses = await _courseService.GetCourses(c => c.OwnerId == int.Parse(UserManager.GetUserId(User)));
             ViewBag.ModeratingActions = false;
 
             return View("CourseManagement", Mapper.Map<IEnumerable<CourseVm>>(courses));
@@ -160,21 +159,7 @@ namespace CourseReviewApp.Web.Controllers
             {
                 if (User.IsInRole("Course_client"))
                     ViewBag.IsObserved = course.ObservingUsers.Any(o => o.UserId == int.Parse(userId));
-
-                int reviewCount = course.Reviews.Count > 0 ? course.Reviews.Count : 1;
-                double starPercent = 0.00;
-
-                starPercent = Math.Round(((double)course.Reviews.Where(r => r.RatingValue == RatingValue.Rating_5).Count() / reviewCount) * 100);
-                ViewBag.fiveStarPercent = double.IsNaN(starPercent) ? 0 : starPercent;
-                starPercent = Math.Round(((double)course.Reviews.Where(r => r.RatingValue == RatingValue.Rating_4).Count() / reviewCount) * 100);
-                ViewBag.fourStarPercent = double.IsNaN(starPercent) ? 0 : starPercent;
-                starPercent = Math.Round(((double)course.Reviews.Where(r => r.RatingValue == RatingValue.Rating_3).Count() / reviewCount) * 100);
-                ViewBag.threeStarPercent = double.IsNaN(starPercent) ? 0 : starPercent;
-                starPercent = Math.Round(((double)course.Reviews.Where(r => r.RatingValue == RatingValue.Rating_2).Count() / reviewCount) * 100);
-                ViewBag.twoStarPercent = double.IsNaN(starPercent) ? 0 : starPercent;
-                starPercent = Math.Round(((double)course.Reviews.Where(r => r.RatingValue == RatingValue.Rating_1).Count() / reviewCount) * 100);
-                ViewBag.oneStarPercent = double.IsNaN(starPercent) ? 0 : starPercent;
-
+                ViewBag.Percentage = CalculateRatingPercentage(course.Reviews);
                 if (course.CategoryId.HasValue)
                 {
                     ViewBag.CategoryName = course.Category.Name;
@@ -187,6 +172,21 @@ namespace CourseReviewApp.Web.Controllers
             }
 
             throw new UnauthorizedAccessException("No access to a resource.");
+        }
+
+        private static List<(int, double)> CalculateRatingPercentage(IList<Review> reviews)
+        {
+            List<(int, double)> percentages = new(5);
+            int reviewsCount = reviews.Count;
+            double percentage = 0.0;
+            for (int i = 1; i < 6; i++)
+            {
+                percentage = Math.Round((double)reviews.Count(r => (int)r.RatingValue == i) / reviewsCount * 100);
+                (int, double) item = (reviews.Count(r => (int)r.RatingValue == i), double.IsNaN(percentage) ? 0.0 : percentage);
+                percentages.Add(item);
+            }
+
+            return percentages;
         }
 
         [HttpGet]
@@ -265,10 +265,7 @@ namespace CourseReviewApp.Web.Controllers
 
                 string destFolder = "Images\\Courses";
                 if (viewModel.Image != null)
-                {
-                    string imgPath = await _fileService.SaveCourseImage(viewModel, destFolder);
-                    viewModel.ImagePath = imgPath;
-                }
+                    viewModel.ImagePath = await _fileService.SaveCourseImage(viewModel, destFolder);
                 else if (viewModel.Image == null && !string.IsNullOrEmpty(viewModel.ImagePath) && viewModel.ImgToDelete
                     && viewModel.ImagePath != "default_course_image.jpg")
                 {
@@ -279,9 +276,8 @@ namespace CourseReviewApp.Web.Controllers
                     viewModel.ImagePath = "default_course_image.jpg";
 
                 await _courseService.AddOrEditCourse(Mapper.Map<Course>(viewModel));
-
                 string word = viewModel.Id.HasValue ? "edited" : "added";
-                TempData["CourseManagementMsgModal"] = $"The {viewModel.Name} course has been {word}. It will receive an Active status after positive verification by moderation.";
+                TempData["CourseManagementMsgModal"] = $"'{viewModel.Name}' course has been {word}. It will receive an Active status after positive verification by moderation.";
 
                 return RedirectToAction("OwnerCoursesManagement");
             }
@@ -312,19 +308,15 @@ namespace CourseReviewApp.Web.Controllers
         public async Task<IActionResult> DeleteCourse(DeleteCourseVm viewModel)
         {
             if (viewModel.ImagePath != "default_course_image.jpg")
-            {
-                string destFolder = Path.Combine(_hostingEnv.WebRootPath, "Images\\Courses");
-                _fileService.DeleteFile(Path.Combine(destFolder, viewModel.ImagePath));
-            }
+                _fileService.DeleteFile(Path.Combine("Images\\Courses", viewModel.ImagePath));
             await _courseService.DeleteCourse(viewModel.Id);
-
             if (User.IsInRole("Admin") || viewModel.OwnerHasCourseInfoEmailsEnabled)
             {
                 await _emailSenderService.SendDefaultMessageEmailAsync("Course deletion",
                         $"Your course: {viewModel.Name} has been deleted by Admin.", viewModel.OwnerEmail);
             }
+            TempData["CourseManagementMsgModal"] = $"'{viewModel.Name}' course has been deleted";
 
-            TempData["CourseManagementMsgModal"] = $"The {viewModel.Name} course has been deleted";
             if (User.IsInRole("Course_owner"))
                 return RedirectToAction("OwnerCoursesManagement");
             else
@@ -338,7 +330,6 @@ namespace CourseReviewApp.Web.Controllers
             Course course = await _courseService.GetCourse(c => c.Id == id);
             if (course == null)
                 throw new InvalidOperationException($"Course with id: {id} not found.");
-
             var enumValues = from CourseStatus s in Enum.GetValues(typeof(CourseStatus))
                              select new
                              {
@@ -361,7 +352,7 @@ namespace CourseReviewApp.Web.Controllers
             {
                 if (viewModel.Status.ToString() == TempData["PreviousCourseStatus"].ToString())
                 {
-                    TempData["CourseManagementMsgModal"] = $"The status of the course {viewModel.Name} has not been changed.";
+                    TempData["CourseManagementMsgModal"] = $"The status of the '{viewModel.Name}' course has not been changed.";
                     return RedirectToAction("CourseManagement");
                 }
                 await _courseService.ChangeCourseStatus(viewModel.Id, viewModel.Status);
@@ -371,7 +362,7 @@ namespace CourseReviewApp.Web.Controllers
                     await _emailSenderService.SendDefaultMessageEmailAsync("Course status",
                         $"The status of your course: {viewModel.Name} has been changed to {viewModel.Status} by moderation.", viewModel.OwnerEmail);
                 }
-                TempData["CourseManagementMsgModal"] = $"The status of the {viewModel.Name} course has been changed to {viewModel.Status}";
+                TempData["CourseManagementMsgModal"] = $"The status of the '{viewModel.Name}' course has been changed to {viewModel.Status}";
 
                 return RedirectToAction("CourseManagement");
             }
@@ -407,16 +398,14 @@ namespace CourseReviewApp.Web.Controllers
         [Authorize(Roles = "Course_client")]
         public async Task AddCourseToObservedList(int id) 
         {
-            string userId = UserManager.GetUserId(User);
-            await _courseService.AddCourseToObservedList(int.Parse(userId), id);
+            await _courseService.AddCourseToObservedList(int.Parse(UserManager.GetUserId(User)), id);
         }
 
         [HttpPost]
         [Authorize(Roles = "Course_client")]
         public async Task RemoveCourseFromObservedList(int id)
         {
-            string userId = UserManager.GetUserId(User);
-            await _courseService.RemoveCourseFromObservedList(int.Parse(userId), id); 
+            await _courseService.RemoveCourseFromObservedList(int.Parse(UserManager.GetUserId(User)), id); 
         }
 
         [HttpGet]

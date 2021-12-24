@@ -111,7 +111,7 @@ namespace CourseReviewApp.Web.Controllers
                 throw new InvalidOperationException($"User with id: {id} not found.");
             if (user.Roles.Contains("Moderator"))
             {
-                TempData["UsersManagementMsgModal"] = $"Selected user already has the Moderator role.";
+                TempData["UsersManagementMsgModal"] = $"Selected user already has got the Moderator role.";
                 return RedirectToAction("UserManagement");
             }
             ViewBag.Title = "Assign moderator role to user";

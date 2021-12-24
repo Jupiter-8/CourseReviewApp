@@ -78,7 +78,7 @@ namespace CourseReviewApp.Web.Controllers
                 if (viewModel.Id.HasValue && viewModel.Contents == TempData["PreviousReviewContents"].ToString() &&
                     viewModel.RatingValue.ToString() == TempData["PreviousReviewRating"].ToString())
                 {
-                    TempData["CourseDetailsMsgModal"] = "No changes made. Review has not been edited.";
+                    TempData["CourseDetailsMsgModal"] = "Review has not been edited.";
                     return RedirectToAction("Details", "Course", new { id = viewModel.CourseId });
                 }
 
@@ -125,7 +125,7 @@ namespace CourseReviewApp.Web.Controllers
                 if ((User.IsInRole("Admin") || User.IsInRole("Moderator")) && viewModel.Author.ReviewInfoEmailsEnabled)
                 {
                     await _emailSenderService.SendDefaultMessageEmailAsync("Review deletion",
-                            $"Your review for course: {viewModel.CourseName} has been deleted by moderation due to violation of the rules.",
+                            $"Your review for the {viewModel.CourseName} course has been deleted by moderation due to violation of the rules.",
                             viewModel.Author.Email);
                     TempData["ReportManagementMsgModal"] = "Review has been deleted.";
 
@@ -179,7 +179,7 @@ namespace CourseReviewApp.Web.Controllers
             {
                 if (viewModel.Id.HasValue && viewModel.Contents == TempData["PreviousCommentContents"].ToString())
                 {
-                    TempData["CourseDetailsMsgModal"] = "No changes made. Comment has not been edited.";
+                    TempData["CourseDetailsMsgModal"] = "Comment has not been edited.";
                     return RedirectToAction("Details", "Course", new { id = viewModel.CourseId });
                 }
 
@@ -208,9 +208,7 @@ namespace CourseReviewApp.Web.Controllers
         [Authorize(Roles = "Course_client")]
         public async Task<string> VoteForReviewHelpfullness(int id)
         {
-            string userId = UserManager.GetUserId(User);
-            bool result = await _reviewService.VoteForReviewHelpfullness(int.Parse(userId), id);
-
+            bool result = await _reviewService.VoteForReviewHelpfullness(int.Parse(UserManager.GetUserId(User)), id);
             return result.ToString();
         }
 
