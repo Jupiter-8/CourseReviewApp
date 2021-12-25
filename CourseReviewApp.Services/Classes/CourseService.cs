@@ -8,13 +8,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
+
 namespace CourseReviewApp.Services.Classes
 {
     public class CourseService : BaseService, ICourseService
     {
-        public CourseService(AppDbContext dbContext) : base(dbContext)
-        {
-        }
+        public CourseService(AppDbContext dbContext) : base(dbContext) { }
 
         public async Task<Course> GetCourse(Expression<Func<Course, bool>> filter)
         {
@@ -34,12 +33,7 @@ namespace CourseReviewApp.Services.Classes
         }
 
         public async Task<int> GetCoursesCount(Expression<Func<Course, bool>> filter = null)
-        {
-            int coursesCount = filter == null ? await DbContext.Courses.CountAsync() 
-                : await DbContext.Courses.CountAsync(filter);
-
-            return coursesCount;
-        }
+            => filter == null ? await DbContext.Courses.CountAsync() : await DbContext.Courses.CountAsync(filter);
 
         public async Task AddOrEditCourse(Course course)
         {
