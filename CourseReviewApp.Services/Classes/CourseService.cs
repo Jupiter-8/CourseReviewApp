@@ -32,6 +32,17 @@ namespace CourseReviewApp.Services.Classes
             return await courses.ToListAsync();
         }
 
+        public async Task<IEnumerable<Course>> GetLastAddedCourses(int numberOfCourses)
+            => await DbContext.Courses.OrderByDescending(c => c.DateAdded).Take(numberOfCourses).ToListAsync();
+
+        public async Task<IEnumerable<Course>> GetBestRatedCourses(int numberOfCourses)
+        {
+            IQueryable<Course> courses = DbContext.Courses.OrderByDescending(c 
+                => Math.Round(c.Reviews.Average(r => (int)r.RatingValue), 1)).Take(numberOfCourses);
+
+            return await courses.ToListAsync();
+        }
+
         public async Task<int> GetCoursesCount(Expression<Func<Course, bool>> filter = null)
             => filter == null ? await DbContext.Courses.CountAsync() : await DbContext.Courses.CountAsync(filter);
 

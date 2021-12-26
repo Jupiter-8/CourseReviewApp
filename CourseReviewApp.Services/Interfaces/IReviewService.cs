@@ -10,6 +10,7 @@ namespace CourseReviewApp.Services.Interfaces
     {
         Task<Review> GetReview(Expression<Func<Review, bool>> filter);
         Task<IEnumerable<Review>> GetReviews(Expression<Func<Review, bool>> filter = null);
+        Task<IEnumerable<Review>> GetLastAddedReviews(int numberOfReviews);
         Task AddOrEditReview(Review review);
         Task DeleteReview(int reviewId);
         Task<bool> VoteForReviewHelpfullness(int userId, int reviewId);

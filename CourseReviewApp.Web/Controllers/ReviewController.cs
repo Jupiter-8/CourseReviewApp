@@ -345,7 +345,7 @@ namespace CourseReviewApp.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> LastAddedReviews()
         {
-            IEnumerable<Review> reviews = (await _reviewService.GetReviews()).OrderByDescending(r => r.DateAdded).Take(5);
+            IEnumerable<Review> reviews = await _reviewService.GetLastAddedReviews(5);
             if (!reviews.Any())
                 return StatusCode(204);
 

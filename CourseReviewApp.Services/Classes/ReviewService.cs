@@ -34,6 +34,9 @@ namespace CourseReviewApp.Services.Classes
             return await reviews.ToListAsync();
         }
 
+        public async Task<IEnumerable<Review>> GetLastAddedReviews(int numberOfReviews)
+            => await DbContext.Reviews.OrderByDescending(r => r.DateAdded).Take(numberOfReviews).ToListAsync();
+
         public async Task AddOrEditReview(Review review)
         {
             if (review == null)
