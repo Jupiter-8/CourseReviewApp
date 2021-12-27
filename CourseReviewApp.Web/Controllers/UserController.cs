@@ -40,7 +40,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             AppUser user = await _userService.GetUser(u => u.Id == id);
             if (user == null)
-                throw new InvalidOperationException($"User with id: {id} not found.");
+                return NotFound();
             ViewBag.Title = user.IsActive ? "Block user account" : "Unblock user account";
             ViewBag.Action = "ChangeUserStatus";
 
@@ -71,7 +71,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             AppUser user = await _userService.GetUser(u => u.Id == id);
             if (user == null)
-                throw new InvalidOperationException($"User with id: {id} not found.");
+                return NotFound();
 
             return View(Mapper.Map<UserVm>(user));
         }
@@ -98,7 +98,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             AppUser user = await _userService.GetUser(u => u.Id == id);
             if (user == null)
-                throw new InvalidOperationException($"User with id: {id} not found.");
+                return NotFound();
 
             return View(Mapper.Map<UserVm>(user));
         }
@@ -108,7 +108,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             AppUser user = await _userService.GetUser(u => u.Id == id);
             if (user == null)
-                throw new InvalidOperationException($"User with id: {id} not found.");
+                return NotFound();
             if (user.Roles.Contains("Moderator"))
             {
                 TempData["UsersManagementMsgModal"] = $"Selected user already has got the Moderator role.";
@@ -141,7 +141,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             AppUser user = await _userService.GetUser(u => u.Id == id);
             if (user == null)
-                throw new InvalidOperationException($"User with id: {id} not found.");
+                return NotFound();
             if (!user.Roles.Contains("Moderator"))
             {
                 TempData["UsersManagementMsgModal"] = $"Selected user hasn't got the Moderator role.";
@@ -174,7 +174,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             AppUser user = await _userService.GetUser(u => u.Id == id);
             if (user == null)
-                throw new InvalidOperationException($"User with id: {id} not found.");
+                return NotFound();
             if (user.LockoutEnd.Value <= DateTimeOffset.Now)
             {
                 TempData["UsersManagementMsgModal"] = $"Selected user account is not locked out.";

@@ -37,7 +37,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             Course course = await _courseService.GetCourse(c => c.Id == courseId);
             if (course == null)
-                throw new InvalidOperationException($"Course with id: {courseId} not found.");
+                return NotFound();
 
             AddOrEditReviewVm viewModel = null;
             ViewBag.CourseName = course.Name;
@@ -47,9 +47,9 @@ namespace CourseReviewApp.Web.Controllers
             {
                 Review review = await _reviewService.GetReview(r => r.Id == reviewId);
                 if (review == null)
-                    throw new InvalidOperationException($"Review with id: {reviewId} not found.");
+                    return NotFound();
                 if (review.AuthorId != userId)
-                    throw new UnauthorizedAccessException("No access to a resource.");
+                    return Forbid();
 
                 viewModel = Mapper.Map<AddOrEditReviewVm>(review);
                 TempData["PreviousReviewContents"] = viewModel.Contents;
@@ -104,11 +104,11 @@ namespace CourseReviewApp.Web.Controllers
         {
             Review review = await _reviewService.GetReview(r => r.Id == id);
             if (review == null)
-                throw new InvalidOperationException($"Review with id: {id} not found.");
+                return NotFound();
             if (User.IsInRole("Course_client"))
             {
                 if (review.AuthorId != int.Parse(UserManager.GetUserId(User)))
-                    throw new UnauthorizedAccessException("No access to a resource.");
+                    return Forbid();
             }
 
             return View(Mapper.Map<ReviewVm>(review));
@@ -145,11 +145,11 @@ namespace CourseReviewApp.Web.Controllers
         {
             Review review = await _reviewService.GetReview(r => r.Id == reviewId);
             if (review == null)
-                throw new InvalidOperationException($"Review with id: {reviewId} not found.");
+                return NotFound();
 
             int userId = int.Parse(UserManager.GetUserId(User));
             if (review.Course.OwnerId != userId)
-                throw new UnauthorizedAccessException("No access to a resource.");
+                return Forbid();
 
             AddOrEditOwnerCommentVm viewModel = new()
             {
@@ -199,7 +199,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             Review review = await _reviewService.GetReview(r => r.Id == id);
             if (review == null)
-                throw new InvalidOperationException($"Review with id: {id} not found.");
+                return NotFound();
 
             return View(Mapper.Map<ReviewVm>(review));
         }
@@ -312,9 +312,9 @@ namespace CourseReviewApp.Web.Controllers
         {
             OwnerComment ownerComment = await _reviewService.GetOwnerComment(ow => ow.Id == id);
             if (ownerComment == null)
-                throw new InvalidOperationException($"Owner's comment with id: {id} not found.");
+                return NotFound();
             if (User.IsInRole("Course_owner") && ownerComment.AuthorId != int.Parse(UserManager.GetUserId(User)))
-                throw new UnauthorizedAccessException("No access to a resource.");
+                return Forbid();
 
             return View(Mapper.Map<OwnerCommentVm>(ownerComment));
         }

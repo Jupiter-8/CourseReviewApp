@@ -32,6 +32,9 @@ namespace CourseReviewApp.Services.Classes
             return await courses.ToListAsync();
         }
 
+        public async Task<int> GetCoursesCount(Expression<Func<Course, bool>> filter = null)
+            => filter == null ? await DbContext.Courses.CountAsync() : await DbContext.Courses.CountAsync(filter);
+
         public async Task<IEnumerable<Course>> GetLastAddedCourses(int numberOfCourses)
             => await DbContext.Courses.OrderByDescending(c => c.DateAdded).Take(numberOfCourses).ToListAsync();
 
@@ -42,10 +45,7 @@ namespace CourseReviewApp.Services.Classes
 
             return await courses.ToListAsync();
         }
-
-        public async Task<int> GetCoursesCount(Expression<Func<Course, bool>> filter = null)
-            => filter == null ? await DbContext.Courses.CountAsync() : await DbContext.Courses.CountAsync(filter);
-
+        
         public async Task AddOrEditCourse(Course course)
         {
             if (course == null)

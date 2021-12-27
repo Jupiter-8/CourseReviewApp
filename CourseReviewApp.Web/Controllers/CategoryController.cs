@@ -47,7 +47,7 @@ namespace CourseReviewApp.Web.Controllers
             {
                 Category category = await _categoryService.GetCategory(c => c.Id == id);
                 if (category == null)
-                    throw new InvalidOperationException($"Category with id: {id} not found.");
+                    return NotFound();
                 AddOrEditCategoryVm viewModel = Mapper.Map<AddOrEditCategoryVm>(category);
                 TempData["PreviousCategoryState"] = JsonSerializer.Serialize(viewModel);
 
@@ -83,7 +83,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             Category category = await _categoryService.GetCategory(c => c.Id == id);
             if (category == null)
-                throw new InvalidOperationException($"Category with id: {id} not found.");
+                return NotFound();
 
             return View(Mapper.Map<CategoryVm>(category));
         }

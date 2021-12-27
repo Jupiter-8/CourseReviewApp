@@ -10,7 +10,6 @@ namespace CourseReviewApp.Web.Configuration.Profiles
     {
         public MainProfile()
         {
-            //--- Course
             CreateMap<Course, CourseVm>()
                 .ForMember(dest => dest.CategoryName, x => x.MapFrom(src => src.Category.Name));
 

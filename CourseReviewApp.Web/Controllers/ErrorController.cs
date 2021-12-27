@@ -14,9 +14,14 @@ namespace CourseReviewApp.Web.Controllers
         {
         }
 
-        [Route("Error")]
-        public IActionResult Error()
+        [Route("Error/{code:int}")]
+        public IActionResult Error(int code)
         {
+            if(code == 403)
+                return View("Error403");
+            else if (code == 404)
+                return View("Error404");
+
             IExceptionHandlerPathFeature exceptionDetails = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
             Logger.LogError(exceptionDetails.Error.ToString());
 

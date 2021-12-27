@@ -40,7 +40,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             Review review = await _reviewService.GetReview(r => r.Id == id);
             if (review == null)
-                throw new InvalidOperationException($"Review with id: {id} not found.");
+                return NotFound();
 
             ReportReviewVm viewModel = new()
             {
@@ -82,7 +82,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             ReviewReport reviewReport = await _reportService.GetReviewReport(rr => rr.Id == id);
             if (reviewReport == null)
-                throw new InvalidOperationException($"Review with id: {id} not found.");
+                return NotFound();
 
             return View(Mapper.Map<ReviewReportVm>(reviewReport));
         }
@@ -109,7 +109,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             ReviewReport reviewReport = await _reportService.GetReviewReport(rr => rr.Id == id);
             if (reviewReport == null)
-                throw new InvalidOperationException($"Review with id: {id} not found.");
+                return NotFound();
 
             return View(Mapper.Map<ReviewReportVm>(reviewReport));
         }

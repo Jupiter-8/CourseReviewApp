@@ -6,6 +6,7 @@ using CourseReviewApp.Web.Services.Classes;
 using CourseReviewApp.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -48,6 +49,11 @@ namespace CourseReviewApp.Web
                 .AddUserManager<UserManager<AppUser>>()
                 .AddEntityFrameworkStores<AppDbContext>();
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = "/Error/403";
+            });
+
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IReviewService, ReviewService>();
@@ -81,8 +87,8 @@ namespace CourseReviewApp.Web
             if (env.IsDevelopment())
             {
                 //app.UseExceptionHandler("/Error");
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
                 app.UseDeveloperExceptionPage();
-                app.UseStatusCodePages();
                 app.UseMigrationsEndPoint();
                 app.UseBrowserLink();
             }
@@ -105,4 +111,4 @@ namespace CourseReviewApp.Web
             });
         }
     }
-}//t
+}

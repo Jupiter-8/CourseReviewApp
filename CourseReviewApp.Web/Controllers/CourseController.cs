@@ -140,7 +140,8 @@ namespace CourseReviewApp.Web.Controllers
         [Authorize(Roles = "Course_owner")]
         public async Task<IActionResult> OwnerCoursesManagement()
         {
-            IEnumerable<Course> courses = await _courseService.GetCourses(c => c.OwnerId == int.Parse(UserManager.GetUserId(User)));
+            IEnumerable<Course> courses = await _courseService.GetCourses(
+                c => c.OwnerId == int.Parse(UserManager.GetUserId(User)));
             ViewBag.ModeratingActions = false;
 
             return View("CourseManagement", Mapper.Map<IEnumerable<CourseVm>>(courses));
@@ -151,7 +152,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             Course course = await _courseService.GetCourse(c => c.Id == id);
             if (course == null)
-                throw new InvalidOperationException($"Course with id: {id} not found.");
+                return NotFound();
 
             string userId = UserManager.GetUserId(User);
             if (course.Status == CourseStatus.Active || (!string.IsNullOrEmpty(userId) && (User.IsInRole("Admin") || User.IsInRole("Moderator")
@@ -171,7 +172,7 @@ namespace CourseReviewApp.Web.Controllers
                 return View(Mapper.Map<CourseVm>(course));
             }
 
-            throw new UnauthorizedAccessException("No access to a resource.");
+            return Forbid();
         }
 
         private static List<(int, double)> CalculateRatingPercentage(IList<Review> reviews)
@@ -195,13 +196,13 @@ namespace CourseReviewApp.Web.Controllers
         {
             Course course = await _courseService.GetCourse(c => c.Id == id);
             if (course == null)
-                throw new InvalidOperationException($"Course with id: {id} not found.");
+                return NotFound();
             if (User.IsInRole("Course_owner"))
             {
                 if (course.OwnerId != int.Parse(UserManager.GetUserId(User)))
-                    throw new UnauthorizedAccessException("No access to a resource.");
+                    return Forbid();
             }
-
+            
             return View(Mapper.Map<CourseVm>(course));
         }
 
@@ -220,9 +221,9 @@ namespace CourseReviewApp.Web.Controllers
             {
                 Course course = await _courseService.GetCourse(c => c.Id == id);
                 if (course == null)
-                    throw new InvalidOperationException($"Course with id: {id} not found.");
+                    return NotFound();
                 if (course.OwnerId != userId)
-                    throw new UnauthorizedAccessException("No access to a resource.");
+                    return Forbid();
 
                 viewModel = Mapper.Map<AddOrEditCourseVm>(course);
                 viewModel.ParentCategoryId = course.Category?.ParentCategoryId;
@@ -291,12 +292,12 @@ namespace CourseReviewApp.Web.Controllers
         {
             Course course = await _courseService.GetCourse(c => c.Id == id);
             if (course == null)
-                throw new InvalidOperationException($"Course with id: {id} not found.");
+                return NotFound();
             if (User.IsInRole("Course_owner"))
             {
                 int ownerId = int.Parse(UserManager.GetUserId(User));
                 if (course.OwnerId != ownerId)
-                    throw new UnauthorizedAccessException("No access to a resource.");
+                    return Forbid();
             }
 
             return View(Mapper.Map<DeleteCourseVm>(course));
@@ -329,7 +330,7 @@ namespace CourseReviewApp.Web.Controllers
         {
             Course course = await _courseService.GetCourse(c => c.Id == id);
             if (course == null)
-                throw new InvalidOperationException($"Course with id: {id} not found.");
+                return NotFound();
             var enumValues = from CourseStatus s in Enum.GetValues(typeof(CourseStatus))
                              select new
                              {
