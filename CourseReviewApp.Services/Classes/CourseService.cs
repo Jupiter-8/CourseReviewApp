@@ -36,11 +36,11 @@ namespace CourseReviewApp.Services.Classes
             => filter == null ? await DbContext.Courses.CountAsync() : await DbContext.Courses.CountAsync(filter);
 
         public async Task<IEnumerable<Course>> GetLastAddedCourses(int numberOfCourses)
-            => await DbContext.Courses.OrderByDescending(c => c.DateAdded).Take(numberOfCourses).ToListAsync();
+            => await DbContext.Courses.Where(c => c.Status == CourseStatus.Active).OrderByDescending(c => c.DateAdded).Take(numberOfCourses).ToListAsync();
 
         public async Task<IEnumerable<Course>> GetBestRatedCourses(int numberOfCourses)
         {
-            IQueryable<Course> courses = DbContext.Courses.OrderByDescending(c 
+            IQueryable<Course> courses = DbContext.Courses.Where(c => c.Status == CourseStatus.Active).OrderByDescending(c 
                 => Math.Round(c.Reviews.Average(r => (int)r.RatingValue), 1)).Take(numberOfCourses);
 
             return await courses.ToListAsync();
