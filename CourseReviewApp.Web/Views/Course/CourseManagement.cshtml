@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CourseVm>
+﻿@model IEnumerable<BaseCourseVm>
 @{
     ViewData["Title"] = ViewBag.ModeratingActions ? "Course management" : "Your courses";
 }
@@ -55,7 +55,7 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.CategoryName)
                                 </td>
-                                <td data-order="@item.DateAdded.ToString("yyyyMMdd HH:mm")">
+                                <td data-order="@item.DateAdded.ToString("yyyyMMdd HH:mm:ss")">
                                     @item.DateAdded.ToString("dd.MM.yyyy HH:mm:ss")
                                 </td>
                                 <td>
@@ -65,7 +65,7 @@
                                     @Html.DisplayFor(modelItem => item.AvgRating)
                                 </td>
                                 <td>
-                                    @item.Reviews.Count
+                                    @item.ReviewsCount
                                 </td>
                                 <td>
                                     <div class="dropdown mb-5">

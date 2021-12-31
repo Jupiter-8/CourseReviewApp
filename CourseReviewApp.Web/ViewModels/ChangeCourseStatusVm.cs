@@ -8,7 +8,6 @@ namespace CourseReviewApp.Web.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string OwnerEmail { get; set; }
-        public int OwnerId { get; set; }
         public bool OwnerHasCourseInfoEmailsEnabled { get; set; }
 
         [Required]

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CourseVm>
+﻿@model IEnumerable<CourseLessDetailsVm>
 
 <div class="col-12">
     <div id="@ViewBag.CarouselId" class="carousel slide" data-ride="carousel">
@@ -25,7 +25,7 @@
                             <div>
                                 <span class="text-secondary font-weight-bold mr-1">@course.AvgRating.ToString("0.00")</span>
                                 <partial name="_StarRatingHalfsPartial" model="@course.AvgRating" />
-                                <span class="text-secondary ml-1">(@course.Reviews.Count)</span>
+                                <span class="text-secondary ml-1">(@course.ReviewsCount)</span>
                             </div>
                             <span class="text-secondary"><small><i class="fas fa-calendar-alt"></i> @course.DateAdded.ToString("dd.MM.yyyy")</small></span>
                         </div>

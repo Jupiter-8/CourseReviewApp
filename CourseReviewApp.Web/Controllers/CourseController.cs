@@ -120,7 +120,7 @@ namespace CourseReviewApp.Web.Controllers
 
             int pageSize = 5;
             int pageNumber = (page ?? 1);
-            IEnumerable<CourseVm> courseVms = Mapper.Map<IEnumerable<CourseVm>>(courses);
+            IEnumerable<CourseLessDetailsVm> courseVms = Mapper.Map<IEnumerable<CourseLessDetailsVm>>(courses);
             ViewBag.ResultsExist = courseVms.Any() ? "hidden" : string.Empty;
 
             return View(courseVms.ToPagedList(pageNumber, pageSize));
@@ -133,7 +133,7 @@ namespace CourseReviewApp.Web.Controllers
             IEnumerable<Course> courses = await _courseService.GetCourses();
             ViewBag.ModeratingActions = true;
 
-            return View(Mapper.Map<IEnumerable<CourseVm>>(courses));
+            return View(Mapper.Map<IEnumerable<BaseCourseVm>>(courses));
         }
 
         [HttpGet]
@@ -144,7 +144,7 @@ namespace CourseReviewApp.Web.Controllers
                 c => c.OwnerId == int.Parse(UserManager.GetUserId(User)));
             ViewBag.ModeratingActions = false;
 
-            return View("CourseManagement", Mapper.Map<IEnumerable<CourseVm>>(courses));
+            return View("CourseManagement", Mapper.Map<IEnumerable<BaseCourseVm>>(courses));
         }
 
         [HttpGet]
@@ -155,8 +155,8 @@ namespace CourseReviewApp.Web.Controllers
                 return NotFound();
 
             string userId = UserManager.GetUserId(User);
-            if (course.Status == CourseStatus.Active || (!string.IsNullOrEmpty(userId) && (User.IsInRole("Admin") || User.IsInRole("Moderator")
-                || course.OwnerId == int.Parse(userId))))
+            if (course.Status == CourseStatus.Active || (!string.IsNullOrEmpty(userId) && (User.IsInRole("Admin") 
+                || User.IsInRole("Moderator") || course.OwnerId == int.Parse(userId))))
             {
                 if (User.IsInRole("Course_client"))
                     ViewBag.IsObserved = course.ObservingUsers.Any(o => o.UserId == int.Parse(userId));
@@ -169,7 +169,7 @@ namespace CourseReviewApp.Web.Controllers
                     ViewBag.ParentCategoryId = course.Category.ParentCategoryId;
                 }
 
-                return View(Mapper.Map<CourseVm>(course));
+                return View(Mapper.Map<CourseFullDetailsVm>(course));
             }
 
             return Forbid();
@@ -202,8 +202,8 @@ namespace CourseReviewApp.Web.Controllers
                 if (course.OwnerId != int.Parse(UserManager.GetUserId(User)))
                     return Forbid();
             }
-            
-            return View(Mapper.Map<CourseVm>(course));
+
+            return View(Mapper.Map<CourseFullDetailsVm>(course));
         }
 
         [HttpGet]
@@ -295,8 +295,7 @@ namespace CourseReviewApp.Web.Controllers
                 return NotFound();
             if (User.IsInRole("Course_owner"))
             {
-                int ownerId = int.Parse(UserManager.GetUserId(User));
-                if (course.OwnerId != ownerId)
+                if (course.OwnerId != int.Parse(UserManager.GetUserId(User)))
                     return Forbid();
             }
 
@@ -331,14 +330,10 @@ namespace CourseReviewApp.Web.Controllers
             Course course = await _courseService.GetCourse(c => c.Id == id);
             if (course == null)
                 return NotFound();
-            var enumValues = from CourseStatus s in Enum.GetValues(typeof(CourseStatus))
-                             select new
-                             {
-                                 id = (int)s,
-                                 name = s.ToString()
-                             };
+            var statusValues = from CourseStatus status in Enum.GetValues(typeof(CourseStatus))
+                             select new { id = (int)status, name = status.ToString() };
 
-            ViewBag.StatusValues = new SelectList(enumValues, "id", "name");
+            ViewBag.StatusValues = new SelectList(statusValues, "id", "name");
             TempData["PreviousCourseStatus"] = course.Status.ToString();
 
             return View(Mapper.Map<ChangeCourseStatusVm>(course));
@@ -379,7 +374,7 @@ namespace CourseReviewApp.Web.Controllers
                 return StatusCode(204);
             ViewBag.CarouselId = "last-added-courses-carousel";
 
-            return PartialView("_CarouselCoursesPartial", Mapper.Map<IEnumerable<CourseVm>>(courses));
+            return PartialView("_CarouselCoursesPartial", Mapper.Map<IEnumerable<CourseLessDetailsVm>>(courses));
         }
 
         [HttpGet]
@@ -390,7 +385,7 @@ namespace CourseReviewApp.Web.Controllers
                 return StatusCode(204);
             ViewBag.CarouselId = "best-rated-courses-carousel";
 
-            return PartialView("_CarouselCoursesPartial", Mapper.Map<IEnumerable<CourseVm>>(courses));
+            return PartialView("_CarouselCoursesPartial", Mapper.Map<IEnumerable<CourseLessDetailsVm>>(courses));
         }
 
         [HttpPost]

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CourseVm>
+﻿@model IEnumerable<CourseLessDetailsVm>
 @using X.PagedList;
 @using X.PagedList.Mvc.Core;
 @using X.PagedList.Web.Common;
@@ -121,7 +121,7 @@
                                     <div class="ml-2">
                                         <partial name="_StarRatingHalfsPartial" model="@item.AvgRating" />
                                     </div>
-                                    <span class="text-secondary ml-1">(@item.Reviews.Count)</span>
+                                    <span class="text-secondary ml-1">(@item.ReviewsCount)</span>
                                 </div>
                                 <div class="d-flex">
                                     <span class="mr-auto"></span>

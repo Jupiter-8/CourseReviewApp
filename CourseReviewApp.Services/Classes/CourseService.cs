@@ -23,7 +23,8 @@ namespace CourseReviewApp.Services.Classes
             return await DbContext.Courses.FirstOrDefaultAsync(filter);
         }
 
-        public async Task<IEnumerable<Course>> GetCourses(Expression<Func<Course, bool>> filter = null)
+        public async Task<IEnumerable<Course>> GetCourses(
+            Expression<Func<Course, bool>> filter = null)
         {
             IQueryable<Course> courses = DbContext.Courses.AsQueryable();
             if (filter != null)
@@ -33,7 +34,8 @@ namespace CourseReviewApp.Services.Classes
         }
 
         public async Task<int> GetCoursesCount(Expression<Func<Course, bool>> filter = null)
-            => filter == null ? await DbContext.Courses.CountAsync() : await DbContext.Courses.CountAsync(filter);
+            => filter == null ? await DbContext.Courses.CountAsync() 
+                : await DbContext.Courses.CountAsync(filter);
 
         public async Task<IEnumerable<Course>> GetLastAddedCourses(int numberOfCourses)
             => await DbContext.Courses.Where(c => c.Status == CourseStatus.Active).OrderByDescending(c => c.DateAdded).Take(numberOfCourses).ToListAsync();
