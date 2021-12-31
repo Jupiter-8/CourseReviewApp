@@ -9,6 +9,7 @@ namespace CourseReviewApp.Web.ViewModels
         public int Duration { get; set; }
         public string Language { get; set; }
         public string LongDescription { get; set; }
+        public UserVm Owner { get; set; }
         public IList<ReviewVm> Reviews { get; set; }
         public IList<LearningSkillVm> LearningSkills { get; set; }
 

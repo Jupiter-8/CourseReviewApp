@@ -15,7 +15,8 @@ namespace CourseReviewApp.Web.Configuration.Profiles
                 .IncludeAllDerived();
 
             CreateMap<Course, CourseLessDetailsVm>()
-                .IncludeAllDerived();
+                .IncludeAllDerived()
+                .ForMember(dest => dest.OwnerFullName, x => x.MapFrom(src => $"{src.Owner.FirstName} {src.Owner.LastName}"));
 
             CreateMap<Course, CourseFullDetailsVm>();
             CreateMap<AddOrEditCourseVm, Course>();

@@ -10,8 +10,12 @@ namespace CourseReviewApp.Web.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public CourseStatus Status { get; set; }
-        public UserVm Owner { get; set; }
+
+        [Display(Name = "Reviews")]
         public int ReviewsCount { get; set; }
+
+        [Display(Name = "Owner")]
+        public string OwnerUsername { get; set; }
 
         [Display(Name = "Category")]
         public string CategoryName { get; set; }

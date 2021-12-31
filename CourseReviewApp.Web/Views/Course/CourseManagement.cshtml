@@ -18,7 +18,7 @@
                             @if (!User.IsInRole("Course_owner") && !User.IsInRole("Moderator"))
                             {
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Owner)
+                                    @Html.DisplayNameFor(model => model.OwnerUsername)
                                 </th>
                             }
                             <th>
@@ -34,7 +34,7 @@
                                 @Html.DisplayNameFor(model => model.AvgRating)
                             </th>
                             <th>
-                                Reviews
+                                @Html.DisplayNameFor(model => model.ReviewsCount)
                             </th>
                             <th></th>
                         </tr>
@@ -49,7 +49,7 @@
                                 @if (!User.IsInRole("Course_owner") && !User.IsInRole("Moderator"))
                                  {
                                     <td>
-                                        @Html.DisplayFor(model => item.Owner.Username)
+                                        @Html.DisplayFor(model => item.OwnerUsername)
                                     </td>
                                  }
                                 <td>
