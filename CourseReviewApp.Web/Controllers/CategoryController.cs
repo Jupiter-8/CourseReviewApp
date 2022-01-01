@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -22,7 +21,8 @@ namespace CourseReviewApp.Web.Controllers
         private readonly ICategoryService _categoryService;
         private readonly IEmailSenderService _emailSenderService;
 
-        public CategoryController(ILogger logger, IMapper mapper, ICategoryService categoryService, UserManager<AppUser> userManager, IEmailSenderService emailSenderService)
+        public CategoryController(ILogger logger, IMapper mapper, ICategoryService categoryService,
+            UserManager<AppUser> userManager, IEmailSenderService emailSenderService)
             : base(logger, mapper, userManager)
         {
             _categoryService = categoryService;
@@ -99,8 +99,10 @@ namespace CourseReviewApp.Web.Controllers
                 if (recipients.Any())
                 {
                     await _emailSenderService.SendDefaultMessageEmailAsync("Deleted category",
-                        $"Category: {viewModel.Name} has been deleted. Now your courses which were assigned to it are available in category:" +
-                        $"Not assigned to category. Please log in to your account and choose a new category for your courses.", null, recipients);
+                        $"Category: {viewModel.Name} has been deleted." +
+                        $" Now your courses which were assigned to it are available in category:" +
+                        $"Not assigned to category. Please log in to your account and choose a new category for your courses.",
+                        null, recipients);
                 }
                 TempData["CategoryManagementMsgModal"] = $"'{viewModel.Name}' category has been deleted.";
 

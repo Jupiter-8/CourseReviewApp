@@ -29,7 +29,8 @@ namespace CourseReviewApp.Web.Controllers
         private readonly IEmailSenderService _emailSenderService;
 
         public CourseController(ILogger logger, IMapper mapper, ICourseService courseService, ICategoryService categoryService,
-            UserManager<AppUser> userManager, IWebHostEnvironment hostingEnv, IFileService fileTool, IEmailSenderService emailSenderService, IUserService userService)
+            UserManager<AppUser> userManager, IWebHostEnvironment hostingEnv, IFileService fileTool,
+            IEmailSenderService emailSenderService, IUserService userService)
             : base(logger, mapper, userManager)
         {
             _courseService = courseService;
@@ -41,8 +42,8 @@ namespace CourseReviewApp.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string sortOrder, string searchString, bool isMainCategory, bool notAssignedToCategory,
-            int? page = 1, int? categoryId = null, int? ownerId = null)
+        public async Task<IActionResult> Index(string sortOrder, string searchString, bool isMainCategory,
+            bool notAssignedToCategory, int? page = 1, int? categoryId = null, int? ownerId = null)
         {
             if ((await _courseService.GetCoursesCount()) == 0)
                 return View();
@@ -278,7 +279,8 @@ namespace CourseReviewApp.Web.Controllers
 
                 await _courseService.AddOrEditCourse(Mapper.Map<Course>(viewModel));
                 string word = viewModel.Id.HasValue ? "edited" : "added";
-                TempData["CourseManagementMsgModal"] = $"'{viewModel.Name}' course has been {word}. It will receive an Active status after positive verification by moderation.";
+                TempData["CourseManagementMsgModal"] = $"'{viewModel.Name}' course has been {word}." +
+                    $" It will receive an Active status after positive verification by moderation.";
 
                 return RedirectToAction("OwnerCoursesManagement");
             }
@@ -317,10 +319,8 @@ namespace CourseReviewApp.Web.Controllers
             }
             TempData["CourseManagementMsgModal"] = $"'{viewModel.Name}' course has been deleted";
 
-            if (User.IsInRole("Course_owner"))
-                return RedirectToAction("OwnerCoursesManagement");
-            else
-                return RedirectToAction("CourseManagement");
+            return RedirectToAction(User.IsInRole("Course_owner") 
+                ? "OwnerCoursesManagement" : "CourseManagement");
         }
 
         [HttpGet]
@@ -356,7 +356,8 @@ namespace CourseReviewApp.Web.Controllers
                 if (viewModel.OwnerHasCourseInfoEmailsEnabled)
                 {
                     await _emailSenderService.SendDefaultMessageEmailAsync("Course status",
-                        $"The status of your course: {viewModel.Name} has been changed to {viewModel.Status} by moderation.", viewModel.OwnerEmail);
+                        $"The status of your course: {viewModel.Name} has been changed to {viewModel.Status} by moderation.",
+                        viewModel.OwnerEmail);
                 }
                 TempData["CourseManagementMsgModal"] = $"The status of the '{viewModel.Name}' course has been changed to {viewModel.Status}";
 

@@ -19,7 +19,8 @@ namespace CourseReviewApp.Web.Controllers
         private readonly IReportService _reportService;
         private readonly IReviewService _reviewService;
 
-        public ReportController(ILogger logger, IMapper mapper, UserManager<AppUser> userManager, IReportService reportService, IReviewService reviewService)
+        public ReportController(ILogger logger, IMapper mapper, UserManager<AppUser> userManager,
+            IReportService reportService, IReviewService reviewService)
             : base(logger, mapper, userManager)
         {
             _reportService = reportService;

@@ -38,6 +38,8 @@ namespace CourseReviewApp.Web.Controllers
             Course course = await _courseService.GetCourse(c => c.Id == courseId);
             if (course == null)
                 return NotFound();
+            if (course.Status != CourseStatus.Active)
+                return Forbid();
 
             AddOrEditReviewVm viewModel = null;
             ViewBag.CourseName = course.Name;
@@ -213,7 +215,8 @@ namespace CourseReviewApp.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetReviews(int courseId, string sortOrder, int filterValue, bool loadMore, int numberOfReviews = 0)
+        public async Task<IActionResult> GetReviews(int courseId, string sortOrder, int filterValue,
+            bool loadMore, int numberOfReviews = 0)
         {
             IEnumerable<Review> reviews = await _reviewService.GetReviews(r => r.CourseId == courseId);
             int reviewsCount = reviews.Count();
