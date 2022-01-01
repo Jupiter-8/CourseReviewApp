@@ -64,8 +64,10 @@ namespace CourseReviewApp.Web.Controllers
             {
                 CourseId = courseId,
                 AuthorId = userId,
-                CourseName = course.Name
+                CourseName = course.Name,
             };
+
+            TempData["OwnerEmail"] = course.Owner.CourseInfoEmailsEnabled ? course.Owner.Email : string.Empty;
 
             return View(viewModel);
         }
@@ -83,14 +85,18 @@ namespace CourseReviewApp.Web.Controllers
                     TempData["CourseDetailsMsgModal"] = "Review has not been edited.";
                     return RedirectToAction("Details", "Course", new { id = viewModel.CourseId });
                 }
-
                 await _reviewService.AddOrEditReview(Mapper.Map<Review>(viewModel));
-                IEnumerable<string> observingUsers = await _courseService.GetObservingUsersEmails(viewModel.CourseId, int.Parse(UserManager.GetUserId(User)));
-                if (observingUsers.Any())
+
+                IList<string> observingUsers = (await _courseService.GetObservingUsersEmails(viewModel.CourseId,
+                    int.Parse(UserManager.GetUserId(User)))).ToList();
+                if (!string.IsNullOrEmpty(TempData["OwnerEmail"].ToString()))
                 {
-                    await _emailSenderService.SendDefaultMessageEmailAsync("New course review",
-                        $"There is a new review for the {viewModel.CourseName} course.", bccs: observingUsers.ToList());
+                    observingUsers.Add(TempData["OwnerEmail"].ToString());
+                    TempData.Remove("OwnerEmail");
                 }
+                if (observingUsers.Any())
+                    await _emailSenderService.SendDefaultMessageEmailAsync("New course review",
+                            $"There is a new review for the {viewModel.CourseName} course.", bccs: observingUsers);
                 TempData["CourseDetailsMsgModal"] = viewModel.Id.HasValue ? "Your review has been edited."
                     : "Your review has been added.";
 
