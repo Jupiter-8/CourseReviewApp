@@ -19,9 +19,16 @@
                 <div class="d-flex">
                     <i class="fas fa-filter mt-1"></i>
                     <span class="mx-2">
-                        @if (ViewBag.FilterValue != 0)
+                        @if (!string.IsNullOrEmpty(ViewBag.FilterValue))
                         {
-                            <partial name="_StarRatingPartial" model="@(RatingValue)ViewBag.FilterValue" />
+                            @if (ViewBag.FilterValue != "My_review")
+                            {
+                                <partial name="_StarRatingPartial" model="@Enum.Parse(typeof(RatingValue), ViewBag.FilterValue)" />
+                            }
+                            else
+                            {
+                                <span>My review</span>
+                            }
                         }
                         else
                         {
@@ -31,12 +38,16 @@
                 </div>
             </a>
             <div class="dropdown-menu">
-                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', 0, false, 0)">No filter</button>
-                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', 1, false, @Model.Count())"><partial name="_StarRatingPartial" model="@RatingValue.Rating_1"></button>
-                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', 2, false, @Model.Count())"><partial name="_StarRatingPartial" model="@RatingValue.Rating_2"></button>
-                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', 3, false, @Model.Count())"><partial name="_StarRatingPartial" model="@RatingValue.Rating_3"></button>
-                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', 4, false, @Model.Count())"><partial name="_StarRatingPartial" model="@RatingValue.Rating_4"></button>
-                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', 5, false, @Model.Count())"><partial name="_StarRatingPartial" model="@RatingValue.Rating_5"></button>
+                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', null, false, 0)">No filter</button>
+                @if (User.IsInRole("Course_client") && Model.Any(r => r.AuthorId == int.Parse(userManager.GetUserId(User))))
+                {
+                    <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', 'My_review', false, 0)">My review</button>
+                }
+                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', 'Rating_1', false, @Model.Count())"><partial name="_StarRatingPartial" model="@RatingValue.Rating_1"></button>
+                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', 'Rating_2', false, @Model.Count())"><partial name="_StarRatingPartial" model="@RatingValue.Rating_2"></button>
+                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', 'Rating_3', false, @Model.Count())"><partial name="_StarRatingPartial" model="@RatingValue.Rating_3"></button>
+                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', 'Rating_4', false, @Model.Count())"><partial name="_StarRatingPartial" model="@RatingValue.Rating_4"></button>
+                <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', 'Rating_5', false, @Model.Count())"><partial name="_StarRatingPartial" model="@RatingValue.Rating_5"></button>
             </div>
         </div>
     </div>

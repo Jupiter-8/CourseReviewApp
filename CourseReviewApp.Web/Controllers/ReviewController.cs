@@ -215,7 +215,7 @@ namespace CourseReviewApp.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetReviews(int courseId, string sortOrder, int filterValue,
+        public async Task<IActionResult> GetReviews(int courseId, string sortOrder, string filterValue,
             bool loadMore, int numberOfReviews = 0)
         {
             IEnumerable<Review> reviews = await _reviewService.GetReviews(r => r.CourseId == courseId);
@@ -230,24 +230,27 @@ namespace CourseReviewApp.Web.Controllers
             TempData["CourseId"] = courseId;
 
             bool filterResultsExists = true;
-            if (filterValue != 0)
+            if (!string.IsNullOrEmpty(filterValue))
             {
                 switch (filterValue)
                 {
-                    case 1:
+                    case "Rating_1":
                         reviews = reviews.Where(r => r.RatingValue == RatingValue.Rating_1);
                         break;
-                    case 2:
+                    case "Rating_2":
                         reviews = reviews.Where(r => r.RatingValue == RatingValue.Rating_2);
                         break;
-                    case 3:
+                    case "Rating_3":
                         reviews = reviews.Where(r => r.RatingValue == RatingValue.Rating_3);
                         break;
-                    case 4:
+                    case "Rating_4":
                         reviews = reviews.Where(r => r.RatingValue == RatingValue.Rating_4);
                         break;
-                    case 5:
+                    case "Rating_5":
                         reviews = reviews.Where(r => r.RatingValue == RatingValue.Rating_5);
+                        break;
+                    case "My_review":
+                        reviews = reviews.Where(r => r.AuthorId == int.Parse(UserManager.GetUserId(User)));
                         break;
                 }
 
@@ -289,7 +292,7 @@ namespace CourseReviewApp.Web.Controllers
                 reviews = reviews.Take(5);
             else if (filterResultsExists)
             {
-                if ((!string.IsNullOrEmpty(sortOrder) || filterValue != 0) && !loadMore)
+                if ((!string.IsNullOrEmpty(sortOrder) || !string.IsNullOrEmpty(filterValue)) && !loadMore)
                     reviews = reviews.Take(numberOfReviews >= 5 ? numberOfReviews : 5);
                 else
                     reviews = reviews.Take(numberOfReviews + 5);
