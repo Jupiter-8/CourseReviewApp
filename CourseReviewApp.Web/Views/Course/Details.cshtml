@@ -5,7 +5,7 @@
 
 <div class="container">
     <div class="row mt-4">
-        <div>
+        <div class="col-12 p-0">
             @if (Model.Status == CourseStatus.Active)
             {
                 <nav aria-label="breadcrumb" class="shadow">
@@ -85,17 +85,16 @@
                     <p class="card-text">
                         @if (Model.LongDescription.Length > 1500)
                         {
-                            <span>@Model.LongDescription.Substring(0, 1500)</span><span id="dots-span">...</span>
+                            <span>@Html.Raw(Model.LongDescription.Substring(0, 1500).Replace("\n", "<br/>"))</span><span id="dots-span">...</span>
                             <!--
-                    -->
-                            <span id="more-span" style="display: none;">@Model.LongDescription.Substring(1500, Model.LongDescription.Length - 1500)</span>
-                            <button class="btn btn-sm btn-outline-info" id="read-more-btn" onclick="readMore()">Read more</button>
+        -->
+                    <span id="more-span" style="display: none;">@Html.Raw(Model.LongDescription.Substring(1500, Model.LongDescription.Length - 1500).Replace("\n", "<br/>"))</span>
+                            <button class="btn btn-sm btn-outline-info shadow-none" id="read-more-btn" onclick="readMore()">Read more</button>
                         }
                         else
                         {
-                            <span>@Model.LongDescription</span>
+                            @Html.Raw(Model.LongDescription.Replace("\n", "<br/>"))
                         }
-
                     </p>
                     <hr />
                     <div class="row">

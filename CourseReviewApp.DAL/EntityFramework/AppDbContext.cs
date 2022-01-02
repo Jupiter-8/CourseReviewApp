@@ -202,7 +202,7 @@ namespace CourseReviewApp.DAL.EntityFramework
 
             modelBuilder.Entity<ReviewReport>()
                 .Property(rr => rr.ReportContents)
-                .HasColumnType("nvarchar(200)");
+                .HasColumnType("nvarchar(400)");
             //*--------------------------------------------- ReviewReport
 
             //---------------------------------------------- CourseOwner

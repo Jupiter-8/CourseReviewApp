@@ -19,14 +19,23 @@
                     <input asp-for="Id" type="hidden" class="form-control" />
                 </div>
                 <div class="form-group">
-                    <label asp-for="Contents" class="control-label"></label>
                     <div class="d-flex">
-                        <textarea asp-for="Contents" class="form-control col-12" rows="9"></textarea>
+                        <label asp-for="Contents" class="control-label mr-auto"></label>
+                        <span class="font-weight-bold text-secondary mr-2" id="contents-count">
+                            @(Model.Id.HasValue ? 500 - Model.Contents.Length : 500)
+                        </span>
+                        <span>
+                            characters left
+                        </span>
+                    </div>
+                    <div class="d-flex">
+                        <textarea asp-for="Contents" class="form-control col-12" rows="9" id="contents"></textarea>
                         <button class="btn btn-transparent btn-pos btn-clear h-25" type="button">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
                     <span asp-validation-for="Contents" class="text-danger"></span>
+                    <p class="text-danger" id="contents-val" hidden></p>
                 </div>
                 <div class="form-group">
                     <input asp-for="DateAdded" type="hidden" class="form-control" />
@@ -44,7 +53,7 @@
                     <input asp-for="CourseId" type="hidden" class="form-control" />
                 </div>
                 <div class="form-group row d-flex justify-content-center mt-5">
-                    <button class="btn btn-success shadow mr-3"><i class="fas fa-check mr-2"></i><span>Confirm</span></button>
+                    <button id="confirm-btn" class="btn btn-success shadow mr-3"><i class="fas fa-check mr-2"></i><span>Confirm</span></button>
                     <button type="button" class="btn btn-danger btn-back shadow"><i class="fas fa-times mr-2"></i><span>Cancel</span></button>
                 </div>
             </form>
@@ -54,4 +63,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/Views/Review/add-or-edit-owner-comment.js"></script>
 }

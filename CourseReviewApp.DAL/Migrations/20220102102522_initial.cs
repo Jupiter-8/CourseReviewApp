@@ -356,7 +356,7 @@ namespace CourseReviewApp.DAL.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ReportContents = table.Column<string>(type: "nvarchar(200)", nullable: true),
+                    ReportContents = table.Column<string>(type: "nvarchar(400)", nullable: true),
                     DateAdded = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ReportReason = table.Column<int>(type: "int", nullable: false),
                     ReviewId = table.Column<int>(type: "int", nullable: false),

@@ -35,12 +35,8 @@
                                     <em class="ml-4 mr-3 font-weight-lighter">for course</em>
                                     <a class="text-info text-decoration-none font-weight-lighter" asp-action="Details" asp-controller="Course" asp-route-id="@review.CourseId">@review.CourseName</a>
                                 </p>
-                                <p id="review-carousel-content" class="mt-3">
-                                    @(review.Contents.Length > 400 ? review.Contents.Substring(0, 400) : review.Contents)
-                                    @if (review.Contents.Length > 400)
-                                    {
-                                        <span>...</span>
-                                    }
+                                <p id="review-carousel-content" class="mt-3 mb-5">
+                                    @Html.Raw(review.Contents.Replace("\n", "<br/>"))
                                 </p>
                             </div>
                         </div>

@@ -86,7 +86,9 @@
                                 </span>
                                 <partial name="_StarRatingPartial" model="review.RatingValue" />
                             </p>
-                            <p>@review.Contents</p>
+                            <p class="col-10 p-0">
+                                @Html.Raw(review.Contents.Replace("\n", "<br/>"))
+                            </p>
                             <div class="float-right">
                                 @{
                                     var userId = userManager.GetUserId(User);
@@ -162,7 +164,7 @@
                                         }
                                         <span><small><i class="fas fa-calendar-alt"></i> @review.OwnerComment.DateAdded.ToString("dd/MM/yyyy HH:mm")</small></span>
                                     </div>
-                                    <p class="card-text mt-3 mb-2">@review.OwnerComment.Contents</p>
+                                    <p class="card-text mt-3 mb-2 col-10 p-0">@Html.Raw(review.OwnerComment.Contents.Replace("\n", "<br/>"))</p>
                                 </div>
                                 @if (User.IsInRole("Course_owner") && review.OwnerComment.AuthorId == int.Parse(userManager.GetUserId(User)))
                                 {

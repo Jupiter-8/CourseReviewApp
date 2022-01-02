@@ -39,7 +39,7 @@
                     @Html.DisplayNameFor(model => model.ReportContents)
                 </dt>
                 <dd class="col-sm-9">
-                    @Html.DisplayFor(model => model.ReportContents)
+                    @Html.Raw(Model.ReportContents.Replace("\n", "<br/>"))
                 </dd>
             </dl>
             <div class="accordion my-4" id="accordion">

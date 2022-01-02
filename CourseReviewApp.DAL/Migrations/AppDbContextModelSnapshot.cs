@@ -313,7 +313,7 @@ namespace CourseReviewApp.DAL.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("ReportContents")
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(400)");
 
                     b.Property<int>("ReportReason")
                         .HasColumnType("int");

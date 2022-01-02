@@ -44,15 +44,17 @@
                     @Html.DisplayFor(model => model.WasHelpfullCount)
                     <span>@(Model.WasHelpfullCount > 1 || Model.WasHelpfullCount == 0 ? "times" : "time")</span>
                 </dd>
+
                 <dt class="col-sm-3">
                     @Html.DisplayNameFor(model => model.Contents)
                 </dt>
                 <dd class="col-sm-9">
-                    @Html.DisplayFor(model => model.Contents)
+                    @Html.Raw(Model.Contents.Replace("\n", "<br/>"))
                 </dd>
             </dl>
             @if (Model.OwnerComment != null)
             {
+                <hr/>
                 <div class="accordion" id="accordion">
                     <div class="card">
                         <div class="card-header" id="heading-1">

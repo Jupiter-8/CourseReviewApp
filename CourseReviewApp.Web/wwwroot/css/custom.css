@@ -188,11 +188,12 @@ body {
 
 #review-carousel-content {
     height: 220px;
+    overflow-y: auto;
 }
 
 @media (max-width: 576px) {
     #review-carousel-content {
-        height: 350px;
+        height: 300px;
     }
 }
 

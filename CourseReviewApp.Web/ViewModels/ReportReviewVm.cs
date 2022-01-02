@@ -11,7 +11,7 @@ namespace CourseReviewApp.Web.ViewModels
 
         [Required]
         [Display(Name = "Contents")]
-        [StringLength(200, ErrorMessage = "Report contents must be between {2} and {1} characters long", MinimumLength = 20)]
+        [StringLength(400, ErrorMessage = "Report contents must be between {2} and {1} characters long", MinimumLength = 20)]
         public string ReportContents { get; set; }
 
         [Required]

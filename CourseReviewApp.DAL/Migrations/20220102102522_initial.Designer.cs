@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseReviewApp.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20211222170958_initial")]
+    [Migration("20220102102522_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -315,7 +315,7 @@ namespace CourseReviewApp.DAL.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("ReportContents")
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(400)");
 
                     b.Property<int>("ReportReason")
                         .HasColumnType("int");

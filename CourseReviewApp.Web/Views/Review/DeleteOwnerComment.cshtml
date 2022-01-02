@@ -35,7 +35,7 @@
                     Contents
                 </dt>
                 <dd class="col-sm-9">
-                    @Html.DisplayFor(model => model.Contents)
+                    @Html.Raw(Model.Contents.Replace("\n", "<br/>"))
                 </dd>
             </dl>
             <hr />
