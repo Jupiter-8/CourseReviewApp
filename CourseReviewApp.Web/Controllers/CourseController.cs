@@ -370,7 +370,7 @@ namespace CourseReviewApp.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> LastAddedCourses()
         {
-            IEnumerable<Course> courses = await _courseService.GetLastAddedCourses(5);
+            IEnumerable<Course> courses = await _courseService.GetLastAddedCourses(10);
             if (!courses.Any())
                 return StatusCode(204);
             ViewBag.CarouselId = "last-added-courses-carousel";
@@ -381,7 +381,7 @@ namespace CourseReviewApp.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> BestRatedCourses()
         {
-            IEnumerable<Course> courses = await _courseService.GetBestRatedCourses(5);
+            IEnumerable<Course> courses = await _courseService.GetBestRatedCourses(10);
             if (!courses.Any())
                 return StatusCode(204);
             ViewBag.CarouselId = "best-rated-courses-carousel";

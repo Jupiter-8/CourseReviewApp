@@ -62,7 +62,7 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
                 protocol: Request.Scheme);
 
             string body = await _fileService.LoadMessageHtml("account_confirmation.html");
-            body = body.Replace("{username}", Input.Email);
+            body = body.Replace("{username}", $"{user.FirstName} {user.LastName}");
             body = body.Replace("{href}", callbackUrl);
             await _emailSenderService.SendEmailAsync("Confirm your email", body, Input.Email);
             

@@ -55,6 +55,7 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
 
                 string body = await _fileService.LoadMessageHtml("reset_password.html");
                 body = body.Replace("{href}", callbackUrl);
+                body = body.Replace("{username}", $"{user.FirstName} {user.LastName}");
                 await _emailSenderService.SendEmailAsync("Password reset", body, Input.Email);
 
                 return LocalRedirect("~/Identity/Account/Login");
