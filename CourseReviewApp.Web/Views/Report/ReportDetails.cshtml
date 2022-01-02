@@ -11,7 +11,22 @@
                     @Html.DisplayNameFor(model => model.ReportingUserName)
                 </dt>
                 <dd class="col-sm-8">
-                    @(Model.ReportingUserId.HasValue ? Model.ReportingUserName : "User doesn't exist")
+                    @if (Model.ReportingUserId.HasValue)
+                    {
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a class="text-decoration-none text-info" asp-controller="User" asp-action="UserDetails"
+                               asp-route-id="@Model.ReportingUserId">@Model.ReportingUserName</a>
+                        }
+                        else
+                        {
+                            @Model.ReportingUserName
+                        }
+                    }
+                    else
+                    {
+                        <span>User doesn't exist</span>
+                    }
                 </dd>
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.DateAdded)

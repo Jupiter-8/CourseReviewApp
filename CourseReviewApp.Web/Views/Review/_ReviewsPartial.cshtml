@@ -39,7 +39,7 @@
             </a>
             <div class="dropdown-menu">
                 <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', null, false, 0)">No filter</button>
-                @if (User.IsInRole("Course_client") && Model.Any(r => r.AuthorId == int.Parse(userManager.GetUserId(User))))
+                @if (User.IsInRole("Course_client") && Model.Any(r => r.Author.Id == int.Parse(userManager.GetUserId(User))))
                 {
                     <button class="dropdown-item" type="button" onclick="loadReviews(@Model.First().CourseId, '@ViewBag.SortOrder', 'My_review', false, 0)">My review</button>
                 }
@@ -118,14 +118,14 @@
                                 <div class="helpfull-btn-container"><p id=@($"msg-id-{revId}") @hidden>Thanks for your vote</p></div>
                             </div>
                             <div>
-                                @if (User.IsInRole("Course_client") && review.AuthorId == int.Parse(userManager.GetUserId(User)))
+                                @if (User.IsInRole("Course_client") && review.Author.Id == int.Parse(userManager.GetUserId(User)))
                                 {
                                     <a class="btn btn-sm btn-outline-success mb-2 mt-1"
                                        asp-action="AddOrEditReview" asp-controller="Review" asp-route-courseId="@review.CourseId" asp-route-reviewId="@review.Id">
                                         <i class="fas fa-edit mr-2"></i><span>Edit</span>
                                     </a>
                                 }
-                                @if ((User.IsInRole("Course_client") || User.IsInRole("Course_owner")) && review.AuthorId != int.Parse(userManager.GetUserId(User))
+                                @if ((User.IsInRole("Course_client") || User.IsInRole("Course_owner")) && review.Author.Id != int.Parse(userManager.GetUserId(User))
                                 && !review.ReviewReports.Any(rr => rr.ReportingUserId == int.Parse(userManager.GetUserId(User))))
                                 {
                                     <a class="btn btn-sm btn-outline-primary mb-2 mt-1"
@@ -141,7 +141,7 @@
                                         <i class="fas fa-comment mr-2"></i><span>Add comment</span>
                                     </a>
                                 }
-                                @if (User.IsInRole("Course_client") && review.AuthorId == int.Parse(userManager.GetUserId(User)))
+                                @if (User.IsInRole("Course_client") && review.Author.Id == int.Parse(userManager.GetUserId(User)))
                                 {
                                     <a class="btn btn-sm btn-outline-danger ml-2 mb-2 mt-1" asp-action="DeleteReview" asp-route-id="@review.Id">
                                         <i class="fas fa-trash-alt mr-2"></i><span>Delete</span>

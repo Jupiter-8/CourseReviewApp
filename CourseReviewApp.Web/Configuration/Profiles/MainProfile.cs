@@ -12,11 +12,11 @@ namespace CourseReviewApp.Web.Configuration.Profiles
         {
             //--- Course
             CreateMap<Course, BaseCourseVm>()
-                .IncludeAllDerived();
-
-            CreateMap<Course, CourseLessDetailsVm>()
                 .IncludeAllDerived()
                 .ForMember(dest => dest.OwnerFullName, x => x.MapFrom(src => $"{src.Owner.FirstName} {src.Owner.LastName}"));
+
+            CreateMap<Course, CourseLessDetailsVm>()
+                .IncludeAllDerived();
 
             CreateMap<Course, CourseFullDetailsVm>();
             CreateMap<AddOrEditCourseVm, Course>();
@@ -25,6 +25,7 @@ namespace CourseReviewApp.Web.Configuration.Profiles
             CreateMap<LearningSkillVm, LearningSkill>();
 
             CreateMap<Course, ChangeCourseStatusVm>()
+                .ForMember(dest => dest.OwnerName, x => x.MapFrom(src => $"{src.Owner.FirstName} {src.Owner.LastName}"))
                 .ForMember(dest => dest.OwnerHasCourseInfoEmailsEnabled, x => x.MapFrom(src => src.Owner.CourseInfoEmailsEnabled));
 
             CreateMap<Course, DeleteCourseVm>()

@@ -15,12 +15,9 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
-                            @if (!User.IsInRole("Course_owner") && !User.IsInRole("Moderator"))
-                            {
-                                <th>
-                                    @Html.DisplayNameFor(model => model.OwnerUsername)
-                                </th>
-                            }
+                            <th>
+                                @Html.DisplayNameFor(model => model.OwnerFullName)
+                            </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.CategoryName)
                             </th>
@@ -46,12 +43,17 @@
                                 <td>
                                     <a class="card-link text-info" asp-action="Details" asp-controller="Course" asp-route-id="@item.Id">@item.Name</a>
                                 </td>
-                                @if (!User.IsInRole("Course_owner") && !User.IsInRole("Moderator"))
-                                 {
-                                    <td>
-                                        @Html.DisplayFor(model => item.OwnerUsername)
-                                    </td>
-                                 }
+                                <td>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <a class="text-decoration-none text-info" asp-controller="User" asp-action="UserDetails"
+                                           asp-route-id="@item.OwnerId" >@item.OwnerFullName</a>
+                                    }
+                                    else
+                                    {
+                                        @item.OwnerFullName
+                                    }
+                                </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.CategoryName)
                                 </td>

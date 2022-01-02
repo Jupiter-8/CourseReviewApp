@@ -162,7 +162,7 @@
                 </div>
             </div>
         </div>
-        @if (User.IsInRole("Course_client") && !Model.Reviews.Any(r => r.AuthorId == int.Parse(userManager.GetUserId(User))))
+        @if (User.IsInRole("Course_client") && !Model.Reviews.Any(r => r.Author.Id == int.Parse(userManager.GetUserId(User))))
         {
             <div class="d-flex justify-content-center col-12">
                 <a class="btn btn-success shadow mt-3" asp-controller="Review" asp-action="AddOrEditReview" asp-route-courseId="@Model.Id">

@@ -16,7 +16,15 @@
                         @Html.DisplayNameFor(model => model.AuthorName)
                     </dt>
                     <dd class="col-sm-9">
-                        @Html.DisplayFor(model => model.AuthorName)
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a class="text-decoration-none text-info" asp-controller="User" asp-action="UserDetails"
+                               asp-route-id="@Model.AuthorId">@Model.AuthorName</a>
+                        }
+                        else
+                        {
+                            @Model.AuthorName
+                        }
                     </dd>
                 }
                 <dt class="col-sm-3">

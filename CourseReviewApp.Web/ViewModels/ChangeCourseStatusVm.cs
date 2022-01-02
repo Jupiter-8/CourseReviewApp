@@ -11,6 +11,12 @@ namespace CourseReviewApp.Web.ViewModels
         public bool OwnerHasCourseInfoEmailsEnabled { get; set; }
 
         [Required]
-        public CourseStatus Status { get; set; }  
+        public CourseStatus Status { get; set; }
+
+        [Display(Name = "Category")]
+        public string CategoryName { get; set; }
+
+        [Display(Name = "Owner")]
+        public string OwnerName { get; set; }
     }
 }

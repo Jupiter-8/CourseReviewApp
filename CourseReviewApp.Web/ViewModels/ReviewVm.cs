@@ -8,7 +8,6 @@ namespace CourseReviewApp.Web.ViewModels
     public class ReviewVm
     {
         public int Id { get; set; } 
-        public int AuthorId { get; set; }
         public int CourseId { get; set; }
         public int CourseOwnerId { get; set; }
         public string Contents { get; set; }

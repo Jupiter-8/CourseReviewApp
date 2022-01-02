@@ -8,6 +8,7 @@ namespace CourseReviewApp.Web.ViewModels
     public class BaseCourseVm
     {
         public int Id { get; set; }
+        public int OwnerId { get; set; }
         public string Name { get; set; }
         public CourseStatus Status { get; set; }
 
@@ -15,7 +16,7 @@ namespace CourseReviewApp.Web.ViewModels
         public int ReviewsCount { get; set; }
 
         [Display(Name = "Owner")]
-        public string OwnerUsername { get; set; }
+        public string OwnerFullName { get; set; }
 
         [Display(Name = "Category")]
         public string CategoryName { get; set; }

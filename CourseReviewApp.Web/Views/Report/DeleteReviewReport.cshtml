@@ -16,11 +16,19 @@
                 <dd class="col-sm-9">
                     @if (Model.ReportingUserId.HasValue)
                     {
-                        <span>@Model.ReportingUserName</span>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a class="text-decoration-none text-info" asp-controller="User" asp-action="UserDetails"
+                               asp-route-id="@Model.ReportingUserId">@Model.ReportingUserName</a>
+                        }
+                        else
+                        {
+                            @Model.ReportingUserName
+                        }
                     }
                     else
                     {
-                        <span class="font-italic">User doesn't exist</span>
+                        <span>User doesn't exist</span>
                     }
                 </dd>
                 <dt class="col-sm-3">

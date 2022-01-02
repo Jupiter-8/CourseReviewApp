@@ -8,9 +8,28 @@
         <div class="card bg-light p-3 col-12 col-sm-11 col-md-10 col-lg-8 col-xl-7">
             <h1 class="font-weight-light text-center">Change course status</h1>
             <hr />
+            <dl class="row ml-1">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CategoryName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CategoryName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.OwnerName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.OwnerName)
+                </dd>
+            </dl>
             <form asp-action="ChangeCourseStatus">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <h4 class="font-weight-light ml-3">Course: <span class="font-weight-bolder">@Model.Name</span></h4>
                 <div class="form-group">
                     <input asp-for="Id" type="hidden" class="form-control" />
                     <input asp-for="OwnerHasCourseInfoEmailsEnabled" type="hidden" />

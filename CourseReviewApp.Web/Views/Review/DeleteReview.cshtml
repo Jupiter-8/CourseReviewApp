@@ -16,9 +16,23 @@
                         Author
                     </dt>
                     <dd class="col-sm-9">
-                        @Html.DisplayFor(model => model.Author.FullName)
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a class="text-decoration-none text-info" asp-controller="User" asp-action="UserDetails"
+                               asp-route-id="@Model.Author.Id">@Model.Author.FullName</a>
+                        }
+                        else
+                        {
+                            @Model.Author.FullName
+                        }
                     </dd>
                 }
+                <dt class="col-sm-3">
+                    For course
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.CourseName)
+                </dd>
                 <dt class="col-sm-3">
                     @Html.DisplayNameFor(model => model.DateAdded)
                 </dt>
@@ -76,7 +90,6 @@
             <form asp-action="DeleteReview">
                 <div class="form-group row d-flex justify-content-center mt-5">
                     <input type="hidden" asp-for="CourseId" />
-                    <input type="hidden" asp-for="AuthorId" />
                     <input type="hidden" asp-for="CourseName" />
                     <input type="hidden" asp-for="Author.ReviewInfoEmailsEnabled" />
                     <input type="hidden" asp-for="Author.Email" />
