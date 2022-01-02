@@ -64,7 +64,7 @@ namespace CourseReviewApp.Web.Controllers
             {
                 CourseId = courseId,
                 AuthorId = userId,
-                CourseName = course.Name,
+                CourseName = course.Name
             };
 
             TempData["OwnerEmail"] = course.Owner.CourseInfoEmailsEnabled ? course.Owner.Email : string.Empty;
@@ -87,16 +87,19 @@ namespace CourseReviewApp.Web.Controllers
                 }
                 await _reviewService.AddOrEditReview(Mapper.Map<Review>(viewModel));
 
-                IList<string> observingUsers = (await _courseService.GetObservingUsersEmails(viewModel.CourseId,
-                    int.Parse(UserManager.GetUserId(User)))).ToList();
-                if (!string.IsNullOrEmpty(TempData["OwnerEmail"].ToString()))
+                if(!viewModel.Id.HasValue)
                 {
-                    observingUsers.Add(TempData["OwnerEmail"].ToString());
-                    TempData.Remove("OwnerEmail");
+                    IList<string> observingUsers = (await _courseService.GetObservingUsersEmails(viewModel.CourseId,
+                    int.Parse(UserManager.GetUserId(User)))).ToList();
+                    if (!string.IsNullOrEmpty(TempData["OwnerEmail"].ToString()))
+                    {
+                        observingUsers.Add(TempData["OwnerEmail"].ToString());
+                        TempData.Remove("OwnerEmail");
+                    }
+                    if (observingUsers.Any())
+                        await _emailSenderService.SendDefaultMessageEmailAsync("New course review",
+                                $"There is a new review for the {viewModel.CourseName} course.", bccs: observingUsers);
                 }
-                if (observingUsers.Any())
-                    await _emailSenderService.SendDefaultMessageEmailAsync("New course review",
-                            $"There is a new review for the {viewModel.CourseName} course.", bccs: observingUsers);
                 TempData["CourseDetailsMsgModal"] = viewModel.Id.HasValue ? "Your review has been edited."
                     : "Your review has been added.";
 
@@ -108,40 +111,44 @@ namespace CourseReviewApp.Web.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Course_client, Admin, Moderator")]
-        public async Task<IActionResult> DeleteReview(int id)
+        public async Task<IActionResult> DeleteReview(int id, bool isModeratingDeletion = false,
+            bool returnToReportManagement = false)
         {
             Review review = await _reviewService.GetReview(r => r.Id == id);
             if (review == null)
                 return NotFound();
-            if (User.IsInRole("Course_client"))
-            {
-                if (review.AuthorId != int.Parse(UserManager.GetUserId(User)))
-                    return Forbid();
-            }
+            if (User.IsInRole("Course_client") && !User.IsInRole("Moderator") &&
+               review.AuthorId != int.Parse(UserManager.GetUserId(User)))
+                return Forbid();
 
-            return View(Mapper.Map<ReviewVm>(review));
+            DeleteReviewVm viewModel = Mapper.Map<DeleteReviewVm>(review);
+            viewModel.ReturnUrl = Request.Headers["Referer"].ToString();
+            viewModel.IsModeratingDeletion = isModeratingDeletion;
+            viewModel.ReturnToReportManagement = returnToReportManagement;
+
+            return View(viewModel);
         }
 
         [HttpPost]
         [Authorize(Roles = "Course_client, Admin, Moderator")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteReview(ReviewVm viewModel)
+        public async Task<IActionResult> DeleteReview(DeleteReviewVm viewModel)
         {
             if (ModelState.IsValid)
             {
                 await _reviewService.DeleteReview(viewModel.Id);
-                if ((User.IsInRole("Admin") || User.IsInRole("Moderator")) && viewModel.Author.ReviewInfoEmailsEnabled)
-                {
+                if(viewModel.IsModeratingDeletion)
+                    TempData["ReportManagementMsgModal"] = "Review has been deleted.";
+                else
+                    TempData["CourseDetailsMsgModal"] = "Your review has been deleted.";
+                if (viewModel.IsModeratingDeletion && viewModel.Author.ReviewInfoEmailsEnabled)
                     await _emailSenderService.SendDefaultMessageEmailAsync("Review deletion",
                             $"Your review for the {viewModel.CourseName} course has been deleted by moderation due to violation of the rules.",
                             viewModel.Author.Email);
-                    TempData["ReportManagementMsgModal"] = "Review has been deleted.";
 
+                if (viewModel.ReturnToReportManagement)
                     return RedirectToAction("ReportManagement", "Report");
-                }
-                TempData["CourseDetailsMsgModal"] = "Your review has been deleted.";
-
-                return RedirectToAction("Details", "Course", new { id = viewModel.CourseId });
+                return Redirect(viewModel.ReturnUrl);
             }
 
             return View(viewModel);
@@ -199,17 +206,6 @@ namespace CourseReviewApp.Web.Controllers
             }
 
             return View(viewModel);
-        }
-
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> ReviewDetails(int id)
-        {
-            Review review = await _reviewService.GetReview(r => r.Id == id);
-            if (review == null)
-                return NotFound();
-
-            return View(Mapper.Map<ReviewVm>(review));
         }
 
         [HttpPost]
@@ -320,38 +316,39 @@ namespace CourseReviewApp.Web.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Course_owner, Admin, Moderator")]
-        public async Task<IActionResult> DeleteOwnerComment(int id)
+        public async Task<IActionResult> DeleteOwnerComment(int id, bool isModeratingDeletion = false)
         {
             OwnerComment ownerComment = await _reviewService.GetOwnerComment(ow => ow.Id == id);
             if (ownerComment == null)
                 return NotFound();
-            if (User.IsInRole("Course_owner") && ownerComment.AuthorId != int.Parse(UserManager.GetUserId(User)))
+            if (User.IsInRole("Course_owner") && !User.IsInRole("Moderator") &&
+               ownerComment.AuthorId != int.Parse(UserManager.GetUserId(User)))
                 return Forbid();
 
-            return View(Mapper.Map<OwnerCommentVm>(ownerComment));
+            DeleteOwnerCommentVm viewModel = Mapper.Map<DeleteOwnerCommentVm>(ownerComment);
+            viewModel.ReturnUrl = Request.Headers["Referer"].ToString();
+            viewModel.IsModeratingDeletion = isModeratingDeletion;
+
+            return View(viewModel);
         }
 
         [HttpPost]
         [Authorize(Roles = "Course_owner, Admin, Moderator")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteOwnerComment(OwnerCommentVm viewModel)
+        public async Task<IActionResult> DeleteOwnerComment(DeleteOwnerCommentVm viewModel)
         {
             if (ModelState.IsValid)
             {
                 await _reviewService.DeleteOwnerComment(viewModel.Id);
-                if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
-                {
+                if(viewModel.IsModeratingDeletion)
                     TempData["ReportManagementMsgModal"] = "Owner's comment has been deleted.";
-                    return RedirectToAction("ReportManagement", "Report");
-                }
                 else
-                {
                     TempData["CourseDetailsMsgModal"] = "Your comment has been deleted.";
-                    return RedirectToAction("Details", "Course", new { id = TempData["CourseId"] });
-                }
+
+                return Redirect(viewModel.ReturnUrl);
             }
 
-            return View();
+            return View(viewModel);
         }
 
         [HttpGet]

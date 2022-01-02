@@ -1,4 +1,4 @@
-﻿@model CourseReviewApp.Web.ViewModels.ReviewVm
+﻿@model CourseReviewApp.Web.ViewModels.DeleteReviewVm
 @{
     ViewData["Title"] = "Delete review";
 }
@@ -8,9 +8,9 @@
         <div class="card bg-light p-3 col-12 col-sm-11 col-md-10 col-lg-8 col-xl-7">
             <h1 class="font-weight-light text-center">Confirm review deletion</h1>
             <hr />
-            <h3 class="font-weight-light mb-3">@(User.IsInRole("Admin") ? "Review" : "Your review")</h3>
+            <h3 class="font-weight-light mb-3">@(Model.IsModeratingDeletion ? "Review" : "Your review")</h3>
             <dl class="row">
-                @if (User.IsInRole("Admin"))
+                @if (Model.IsModeratingDeletion)
                 {
                     <dt class="col-sm-3">
                         Author
@@ -80,6 +80,9 @@
                     <input type="hidden" asp-for="CourseName" />
                     <input type="hidden" asp-for="Author.ReviewInfoEmailsEnabled" />
                     <input type="hidden" asp-for="Author.Email" />
+                    <input asp-for="ReturnUrl" type="hidden" />
+                    <input asp-for="IsModeratingDeletion" type="hidden" />
+                    <input asp-for="ReturnToReportManagement" type="hidden" />
                     <button class="btn btn-success shadow mr-3"><i class="fas fa-check mr-2"></i><span>Confirm</span></button>
                     <button type="button" class="btn btn-danger btn-back shadow"><i class="fas fa-times mr-2"></i><span>Cancel</span></button>
                 </div>

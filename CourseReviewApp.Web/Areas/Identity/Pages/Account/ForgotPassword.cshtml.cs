@@ -40,11 +40,10 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(Input.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
-                {
-                    ModelState.AddModelError(string.Empty, "User does not exist or his email is not confirmed.");
-                    return Page();
-                }
+                TempData["LoginModalMsg"] = "If the provided email belongs to a registered user," +
+                    " we will send to it a message with a password reset link.";
+                if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
+                    return LocalRedirect("~/Identity/Account/Login");
 
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -56,9 +55,7 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
 
                 string body = await _fileService.LoadMessageHtml("reset_password.html");
                 body = body.Replace("{href}", callbackUrl);
-
                 await _emailSenderService.SendEmailAsync("Password reset", body, Input.Email);
-                TempData["LoginModalMsg"] = "A message with a password reset link has been sent to your email adress.";
 
                 return LocalRedirect("~/Identity/Account/Login");
             }

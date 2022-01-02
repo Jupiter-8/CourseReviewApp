@@ -46,12 +46,11 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
                 return Page();
             }
 
+            TempData["LoginModalMsg"] = "If the provided email belongs to a registered user," +
+                " we will send to it a message with a account confirmation link.";
             var user = await _userManager.FindByEmailAsync(Input.Email);
             if (user == null)
-            {
-                ModelState.AddModelError(string.Empty, "User not found.");
-                return Page();
-            }
+                return LocalRedirect("~/Identity/Account/Login");
 
             var userId = await _userManager.GetUserIdAsync(user);
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -65,10 +64,8 @@ namespace CourseReviewApp.Web.Areas.Identity.Pages.Account
             string body = await _fileService.LoadMessageHtml("account_confirmation.html");
             body = body.Replace("{username}", Input.Email);
             body = body.Replace("{href}", callbackUrl);
-
             await _emailSenderService.SendEmailAsync("Confirm your email", body, Input.Email);
-            TempData["LoginModalMsg"] = "A message with a confirmation link has been sent to your email adress.";
-
+            
             return LocalRedirect("~/Identity/Account/Login");
         }
     }

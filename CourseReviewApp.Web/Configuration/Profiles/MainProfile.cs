@@ -32,7 +32,8 @@ namespace CourseReviewApp.Web.Configuration.Profiles
                 .ForMember(dest => dest.OwnerHasCourseInfoEmailsEnabled, x => x.MapFrom(src => src.Owner.CourseInfoEmailsEnabled));
 
             CreateMap<ObservedCourse, ObservedCourseVm>()
-                .ForMember(dest => dest.CourseCategoryName, x => x.MapFrom(src => src.Course.Category != null ? src.Course.Category.Name : string.Empty));
+                .ForMember(dest => dest.CourseCategoryName, x => x.MapFrom(src => src.Course.Category != null ? src.Course.Category.Name : string.Empty))
+                .ForMember(dest => dest.IsCourseActive, x => x.MapFrom(src => src.Course.Status == CourseStatus.Active ? true : false));
             //--- Course
 
             //--- Category
@@ -55,15 +56,20 @@ namespace CourseReviewApp.Web.Configuration.Profiles
             CreateMap<AddOrEditOwnerCommentVm, OwnerComment>();
             CreateMap<HelpfullReview, HelpfullReviewVm>();
             CreateMap<Review, AddOrEditReviewVm>();
+            CreateMap<Review, DeleteReviewVm>();
 
             CreateMap<Review, ReviewVm>()
+                .IncludeAllDerived()
                 .ForMember(dest => dest.WasHelpfullCount, x => x.MapFrom(src => src.HelpfullReviews.Count));
 
             CreateMap<ReviewReport, ReviewReportVm>()
                 .ForMember(dest => dest.ReportingUserName, x => x.MapFrom(src => $"{src.ReportingUser.FirstName} {src.ReportingUser.LastName}"));
 
             CreateMap<OwnerComment, OwnerCommentVm>()
+                .IncludeAllDerived()
                 .ForMember(dest => dest.AuthorName, x => x.MapFrom(src => $"{src.Author.FirstName} {src.Author.LastName}"));
+
+            CreateMap<OwnerComment, DeleteOwnerCommentVm>();
             //--- Review and report
 
             //--- User

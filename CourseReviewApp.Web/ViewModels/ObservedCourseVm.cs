@@ -6,6 +6,7 @@ namespace CourseReviewApp.Web.ViewModels
     {
         public int UserId { get; set; }
         public int CourseId { get; set; }
+        public bool IsCourseActive { get; set; }
 
         [Display(Name = "Course name")]
         public string CourseName { get; set; }

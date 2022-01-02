@@ -26,7 +26,14 @@
                         {
                             <tr id="@item.CourseId">
                                 <td>
-                                    <a class="card-link text-info" asp-action="Details" asp-controller="Course" asp-route-id="@item.CourseId">@item.CourseName</a>
+                                    @if (item.IsCourseActive)
+                                    {
+                                        <a class="card-link text-info" asp-action="Details" asp-controller="Course" asp-route-id="@item.CourseId">@item.CourseName</a>
+                                    }
+                                    else
+                                    {
+                                        @item.CourseName
+                                    }
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.CourseCategoryName)

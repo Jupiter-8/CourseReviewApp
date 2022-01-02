@@ -50,34 +50,40 @@
                         </div>
                     </div>
                     <div class="col-lg-7 mt-3">
-                        @{
+                        <h5 class="mb-3">You will learn:</h5>
+                        @if (Model.LearningSkills.Any())
+                        {
                             int half = Model.LearningSkills.Count / 2;
                             if (Model.LearningSkills.Count % 2 != 0)
                             {
                                 half += 1;
                             }
+                            <div class="d-flex">
+                                <div>
+                                    @for (int i = 0; i < half; i++)
+                                    {
+                                        <div class="d-flex">
+                                            <i class="fa fa-check mt-1" aria-hidden="true"></i>
+                                            <p class="ml-1">@Model.LearningSkills[i].Name</p>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="ml-3">
+                                    @for (int i = half; i < Model.LearningSkills.Count; i++)
+                                    {
+                                        <div class="d-flex">
+                                            <i class="fa fa-check mt-1" aria-hidden="true"></i>
+                                            <p class="ml-1">@Model.LearningSkills[i].Name</p>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
                         }
-                        <h5 class="mb-3">You will learn:</h5>
-                        <div class="d-flex">
-                            <div>
-                                @for (int i = 0; i < half; i++)
-                                {
-                                    <div class="d-flex">
-                                        <i class="fa fa-check mt-1" aria-hidden="true"></i>
-                                        <p class="ml-1">@Model.LearningSkills[i].Name</p>
-                                    </div>
-                                }
-                            </div>
-                            <div class="ml-3">
-                                @for (int i = half; i < Model.LearningSkills.Count; i++)
-                                {
-                                    <div class="d-flex">
-                                        <i class="fa fa-check mt-1" aria-hidden="true"></i>
-                                        <p class="ml-1">@Model.LearningSkills[i].Name</p>
-                                    </div>
-                                }
-                            </div>
-                        </div>
+                        else
+                        {
+                            <p class="font-weight-bold text-secondary ml-3">Course owner did not add any skill yet</p>
+                        }
+
                     </div>
                 </div>
                 <div class="card-body col-lg-10">

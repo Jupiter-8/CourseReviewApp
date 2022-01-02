@@ -1,4 +1,4 @@
-﻿@model CourseReviewApp.Web.ViewModels.OwnerCommentVm
+﻿@model CourseReviewApp.Web.ViewModels.DeleteOwnerCommentVm
 @{
     ViewData["Title"] = "Delete owner's comment";
 }
@@ -6,11 +6,11 @@
 <div class="container">
     <div class="row d-flex justify-content-center mt-4">
         <div class="card bg-light p-3 col-12 col-sm-11 col-md-10 col-lg-8 col-xl-7">
-            <h1 class="font-weight-light text-center">Owner's comment deletion confirmation</h1>
+            <h1 class="font-weight-light text-center">Confirm owner's comment deletion</h1>
             <hr />
-            <h4 class="font-weight-light mb-3">@(User.IsInRole("Admin") ? "Owner's comment" : "Your comment")</h4>
+            <h4 class="font-weight-light mb-3">@(Model.IsModeratingDeletion ? "Owner's comment" : "Your comment")</h4>
             <dl class="row">
-                @if (User.IsInRole("Admin"))
+                @if (Model.IsModeratingDeletion)
                 {
                     <dt class="col-sm-3">
                         @Html.DisplayNameFor(model => model.AuthorName)
@@ -59,6 +59,8 @@
                 </div>
             </div>
             <form asp-action="DeleteOwnerComment">
+                <input asp-for="ReturnUrl" type="hidden" />
+                <input asp-for="IsModeratingDeletion" type="hidden" />
                 <div class="form-group row d-flex justify-content-center mt-5">
                     <button class="btn btn-success shadow mr-3"><i class="fas fa-check mr-2"></i><span>Confirm</span></button>
                     <button type="button" class="btn btn-danger shadow btn-back"><i class="fas fa-times mr-2"></i><span>Cancel</span></button>
