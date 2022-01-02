@@ -58,7 +58,7 @@ namespace CourseReviewApp.Web.Controllers
                 await _userService.ChangeUserStatus(viewModel.Id, viewModel.IsActive);
                 await _emailSenderService.SendDefaultMessageEmailAsync("User information message",
                     $"The status of your account has been changed to {word} by admin.", viewModel.Email);
-                TempData["UsersManagementMsgModal"] = $"The status of the {viewModel.UserName} user has been changed to {word}.";
+                TempData["UsersManagementMsgModal"] = $"The status of the {viewModel.FullName} user has been changed to {word}.";
 
                 return RedirectToAction("UserManagement");
             }
@@ -85,7 +85,7 @@ namespace CourseReviewApp.Web.Controllers
                 await _userService.DeleteUser(viewModel.Id, viewModel.Roles);
                 await _emailSenderService.SendDefaultMessageEmailAsync("User information message",
                     "Your account has been deleted by admin.", viewModel.Email);
-                TempData["UsersManagementMsgModal"] = $"The {viewModel.Username} user has been deleted.";
+                TempData["UsersManagementMsgModal"] = $"The {viewModel.FullName} user has been deleted.";
 
                 return RedirectToAction("UserManagement");
             }
@@ -128,7 +128,7 @@ namespace CourseReviewApp.Web.Controllers
                 await _userService.AssignModeratorRoleToUser(viewModel.Id);
                 await _emailSenderService.SendDefaultMessageEmailAsync("User information message",
                     "A moderator role has been assigned to your account.", viewModel.Email);
-                TempData["UsersManagementMsgModal"] = $"The moderator role has been assigned to the user {viewModel.UserName}";
+                TempData["UsersManagementMsgModal"] = $"The moderator role has been assigned to the user {viewModel.FullName}";
 
                 return RedirectToAction("UserManagement");
             }
@@ -161,7 +161,7 @@ namespace CourseReviewApp.Web.Controllers
                 await _userService.UnassignModeratorRoleFromUser(viewModel.Id);
                 await _emailSenderService.SendDefaultMessageEmailAsync("User information message",
                     "Your account has lost its moderator role.", viewModel.Email);
-                TempData["UsersManagementMsgModal"] = $"The moderator role has been unassigned from the user {viewModel.UserName}";
+                TempData["UsersManagementMsgModal"] = $"The moderator role has been unassigned from the user {viewModel.FullName}";
 
                 return RedirectToAction("UserManagement");
             }
@@ -194,7 +194,7 @@ namespace CourseReviewApp.Web.Controllers
                 await _userService.DisableUserLockout(viewModel.Id);
                 await _emailSenderService.SendDefaultMessageEmailAsync("User information message",
                     "Your account lockout has been removed by Admin.", viewModel.Email);
-                TempData["UsersManagementMsgModal"] = $"The lockout has been removed from the user {viewModel.UserName}";
+                TempData["UsersManagementMsgModal"] = $"The lockout has been removed from the user {viewModel.FullName}";
 
                 return RedirectToAction("UserManagement");
             }

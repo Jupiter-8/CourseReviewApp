@@ -153,7 +153,7 @@ namespace CourseReviewApp.Services.Classes
             Course course = await DbContext.Courses.FirstOrDefaultAsync(c => c.Id == courseId);
             if (course == null)
                 throw new InvalidOperationException($"Course with id {courseId} not found.");
-            var c = course.ObservingUsers.Where(oc => oc.UserId != currentUserId);
+
             return course.ObservingUsers.Where(oc => oc.UserId != currentUserId).Select(oc => oc.User.Email);
         }
     }
