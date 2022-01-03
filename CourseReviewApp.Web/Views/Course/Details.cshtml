@@ -131,11 +131,11 @@
                             </div>
                         </div>
                         <div class="col-12 col-sm-12 col-md-12 col-lg-8 mt-3">
-                            <h5 class="">Author</h5>
+                            <h5 class="">Owner</h5>
                             <div class="row d-flex mb-4 ml-0">
                                 <div>
                                     <span class="d-block font-weight-bold text-secondary"><i class="fas fa-user-tie"></i> @Model.Owner.FullName</span>
-                                    <span class="d-block mt-2 text-secondary"><i class="fas fa-book"></i> Courses: @Model.Owner.CoursesCount</span>
+                                    <span class="d-block mt-2 text-secondary"><i class="fas fa-book"></i><a class="card-link text-info" asp-action="Index" asp-route-ownerId="@Model.Owner.Id"> Courses:</a> @Model.Owner.CoursesCount</span>
                                     <span class="d-block mt-1 text-secondary"><i class="fas fa-calendar-alt"></i> Joined: @Model.Owner.RegistrationDate.ToString("dd.MM.yyyy")</span>
                                     <span class="d-block mt-1 text-secondary"><i class="fas fa-star-half-alt"></i> Avg course rating: @Model.Owner.AvgCoursesRating</span>
                                     <span class="d-block mt-1 text-secondary"><i class="fas fa-comment-alt"></i> Earned reviews: @Model.Owner.CoursesReviewsCount</span>
@@ -143,9 +143,6 @@
                                     {
                                         <span class="d-block mt-1 text-secondary"><i class="fas fa-building"></i> Brand name: @Model.Owner.BrandName</span>
                                     }
-                                    <span class="d-block mt-1 text-secondary">
-                                        <i class="fas fa-external-link-square-alt"></i><a class="card-link text-info" asp-action="Index" asp-route-ownerId="@Model.Owner.Id"> Other courses</a>
-                                    </span>
                                     @if (!string.IsNullOrEmpty(Model.Owner.WebsiteUrl))
                                     {
                                         <span class="d-block mt-1 text-secondary">

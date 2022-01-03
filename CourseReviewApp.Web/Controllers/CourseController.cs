@@ -119,7 +119,7 @@ namespace CourseReviewApp.Web.Controllers
                     break;
             }
 
-            int pageSize = 5;
+            int pageSize = 10;
             int pageNumber = (page ?? 1);
             IEnumerable<CourseLessDetailsVm> courseVms = Mapper.Map<IEnumerable<CourseLessDetailsVm>>(courses);
             ViewBag.ResultsExist = courseVms.Any() ? "hidden" : string.Empty;
