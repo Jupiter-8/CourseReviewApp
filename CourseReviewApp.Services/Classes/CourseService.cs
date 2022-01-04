@@ -35,7 +35,7 @@ namespace CourseReviewApp.Services.Classes
 
         public async Task<int> GetCoursesCount(Expression<Func<Course, bool>> filter = null)
             => filter == null ? await DbContext.Courses.CountAsync() 
-                : await DbContext.Courses.CountAsync(filter);
+                              : await DbContext.Courses.CountAsync(filter);
 
         public async Task<IEnumerable<Course>> GetLastAddedCourses(int numberOfCourses)
             => await DbContext.Courses.Where(c => c.Status == CourseStatus.Active)

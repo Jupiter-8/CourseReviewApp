@@ -75,6 +75,11 @@ function observeCourseButton(courseId, isObserved, button) {
     });
 }
 
+function showMsgModal(message) {
+    $("#msg-modal-body").html(message);
+    $("#msg-modal").modal("show");
+}
+
 function removeCourseFromObservedList(courseId, button) {
     $.ajax({
         type: "POST",
@@ -86,8 +91,7 @@ function removeCourseFromObservedList(courseId, button) {
             $(button).removeClass("btn-info text-white shadow").addClass("btn-outline-info text-info");
         })
         .fail(function () {
-            $("#msg-modal-body").html("Error while adding course to the observed courses list.");
-            $("#msg-modal").modal("show");
+            showMsgModal("Error while removing course to the observed courses list.");
         });
 };
 
@@ -98,13 +102,12 @@ function addCourseToObservedList(courseId, button) {
         data: { "id": courseId }
     })
         .done(function () {
-            $(button).removeClass("btn-outline-info text-info").addClass("btn-info text-white shadow");
+            $(button).removeClass("btn-outline-info text-info")
+                     .addClass("btn-info text-white shadow");
             $(button).find("span").text(" Stop observing this course");
-            $("#msg-modal-body").html("Thanks for observing this course. When there is a new review for this course you will receive an email notification.");
-            $("#msg-modal").modal("show");
+            showMsgModal("You will be notified when a new review will appear.");
         })
         .fail(function () {
-            $("#msg-modal-body").html("Error while removing course from the observed courses list.");
-            $("#msg-modal").modal("show");
+            showMsgModal("Error while adding course to the observed courses list.");
         });
 };

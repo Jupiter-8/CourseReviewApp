@@ -16,9 +16,8 @@ namespace CourseReviewApp.DAL.EntityFramework
         public DbSet<LearningSkill> LearningSkills { get; set; }
         public DbSet<ObservedCourse> ObservedCourses { get; set; } 
 
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        {
-        }
+        public AppDbContext(DbContextOptions<AppDbContext> options) 
+            : base(options) { }
 
         public static readonly LoggerFactory _myLoggerFactory =
             new LoggerFactory(new[] {
