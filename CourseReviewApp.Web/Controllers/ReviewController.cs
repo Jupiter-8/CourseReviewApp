@@ -220,7 +220,8 @@ namespace CourseReviewApp.Web.Controllers
         public async Task<IActionResult> GetReviews(int courseId, string sortOrder, string filterValue,
             bool loadMore, int numberOfReviews = 0)
         {
-            IEnumerable<Review> reviews = await _reviewService.GetReviews(r => r.CourseId == courseId);
+            IEnumerable<Review> reviews = (await _reviewService.GetReviews(r => r.CourseId == courseId))
+                                                               .OrderByDescending(r => r.DateAdded);
             int reviewsCount = reviews.Count();
             if (reviewsCount == 0)
                 return StatusCode(204);
