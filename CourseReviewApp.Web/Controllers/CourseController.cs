@@ -42,8 +42,8 @@ namespace CourseReviewApp.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string sortOrder, string searchString, bool isMainCategory,
-            bool notAssignedToCategory, int? page = 1, int? categoryId = null, int? ownerId = null)
+        public async Task<IActionResult> Index(string searchString, bool isMainCategory,
+            bool notAssignedToCategory, string sortOrder = "Mostly rated", int? page = 1, int? categoryId = null, int? ownerId = null)
         {
             if ((await _courseService.GetCoursesCount()) == 0)
                 return View();
@@ -99,16 +99,19 @@ namespace CourseReviewApp.Web.Controllers
 
             switch (sortOrder)
             {
+                case "Mostly rated":
+                    courses = courses.OrderByDescending(c => c.Reviews.Count);
+                    break;
                 case "Oldest":
                     courses = courses.OrderBy(c => c.DateAdded);
                     break;
                 case "Newest":
                     courses = courses.OrderByDescending(c => c.DateAdded);
                     break;
-                case "Worst rating":
+                case "Worst rated":
                     courses = courses.OrderBy(c => c.AvgRating);
                     break;
-                case "Best rating":
+                case "Best rated":
                     courses = courses.OrderByDescending(c => c.AvgRating);
                     break;
                 case "Name ascending":

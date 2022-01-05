@@ -65,6 +65,9 @@
                     </a>
                     <div class="dropdown-menu">
                         <a asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller asp-route-ownerId="@ViewBag.OwnerId" asp-route-isMainCategory="@ViewBag.IsMainCategory"
+                           asp-route-sortOrder="Mostly rated" asp-route-searchString=@ViewBag.SearchString asp-route-categoryId="@ViewBag.CategoryId"
+                           asp-route-notAssignedToCategory="@ViewBag.NotAssignedToCategory" class="dropdown-item">Mostly rated</a>
+                        <a asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller asp-route-ownerId="@ViewBag.OwnerId" asp-route-isMainCategory="@ViewBag.IsMainCategory"
                            asp-route-sortOrder="Name ascending" asp-route-searchString=@ViewBag.SearchString asp-route-categoryId="@ViewBag.CategoryId"
                            asp-route-notAssignedToCategory="@ViewBag.NotAssignedToCategory" class="dropdown-item">Name ascending</a>
                         <a asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller asp-route-ownerId="@ViewBag.OwnerId" asp-route-isMainCategory="@ViewBag.IsMainCategory"
@@ -77,11 +80,11 @@
                            asp-route-sortOrder="Newest" asp-route-searchString=@ViewBag.SearchString asp-route-categoryId="@ViewBag.CategoryId"
                            asp-route-notAssignedToCategory="@ViewBag.NotAssignedToCategory" class="dropdown-item">Newest</a>
                         <a asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller asp-route-ownerId="@ViewBag.OwnerId" asp-route-isMainCategory="@ViewBag.IsMainCategory"
-                           asp-route-sortOrder="Best rating" asp-route-searchString=@ViewBag.SearchString asp-route-categoryId="@ViewBag.CategoryId"
-                           asp-route-notAssignedToCategory="@ViewBag.NotAssignedToCategory" class="dropdown-item">Best rating</a>
+                           asp-route-sortOrder="Best rated" asp-route-searchString=@ViewBag.SearchString asp-route-categoryId="@ViewBag.CategoryId"
+                           asp-route-notAssignedToCategory="@ViewBag.NotAssignedToCategory" class="dropdown-item">Best rated</a>
                         <a asp-action=@ViewBag.Action asp-controller=@ViewBag.Controller asp-route-ownerId="@ViewBag.OwnerId" asp-route-isMainCategory="@ViewBag.IsMainCategory"
-                           asp-route-sortOrder="Worst rating" asp-route-searchString=@ViewBag.SearchString asp-route-categoryId="@ViewBag.CategoryId"
-                           asp-route-notAssignedToCategory="@ViewBag.NotAssignedToCategory" class="dropdown-item">Worst rating</a>
+                           asp-route-sortOrder="Worst rated" asp-route-searchString=@ViewBag.SearchString asp-route-categoryId="@ViewBag.CategoryId"
+                           asp-route-notAssignedToCategory="@ViewBag.NotAssignedToCategory" class="dropdown-item">Worst rated</a>
                     </div>
                 </div>
             </div>
