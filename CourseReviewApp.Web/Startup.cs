@@ -6,7 +6,6 @@ using CourseReviewApp.Web.Services.Classes;
 using CourseReviewApp.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -86,7 +85,6 @@ namespace CourseReviewApp.Web
             factory.AddFile("Logs/log.txt");
             if (env.IsDevelopment())
             {
-                //app.UseExceptionHandler("/Error");
                 app.UseStatusCodePagesWithReExecute("/Error/{0}");
                 app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
