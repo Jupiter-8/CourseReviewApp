@@ -66,13 +66,13 @@ namespace CourseReviewApp.Web.Controllers
                 if (viewModel.Id.HasValue && JsonSerializer.Serialize(viewModel) == TempData["PreviousCategoryState"].ToString())
                 {
                     TempData["CategoryManagementMsgModal"] = "Category has not been edited.";
-                    return RedirectToAction("CategoryManagement");
+                    return RedirectToAction(nameof(CategoryManagement));
                 }
                 await _categoryService.AddOrEditCategory(Mapper.Map<Category>(viewModel));
                 TempData["CategoryManagementMsgModal"] = viewModel.Id.HasValue ?
                     $"'{viewModel.Name}' category has been edited." : $"'{viewModel.Name}' category has been added.";
 
-                return RedirectToAction("CategoryManagement");
+                return RedirectToAction(nameof(CategoryManagement));
             }
 
             return View(viewModel);
@@ -106,7 +106,7 @@ namespace CourseReviewApp.Web.Controllers
                 }
                 TempData["CategoryManagementMsgModal"] = $"'{viewModel.Name}' category has been deleted.";
 
-                return RedirectToAction("CategoryManagement");
+                return RedirectToAction(nameof(CategoryManagement));
             }
 
             return View(viewModel);

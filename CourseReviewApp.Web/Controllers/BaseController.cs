@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using CourseReviewApp.Model.DataModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using CourseReviewApp.Model.DataModels;
 
 namespace CourseReviewApp.Web.Controllers
 {

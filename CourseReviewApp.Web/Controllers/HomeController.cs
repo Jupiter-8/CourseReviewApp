@@ -53,7 +53,7 @@ namespace CourseReviewApp.Web.Controllers
                     await _fileService.SaveTermsAndConditionsFile(viewModel, "Documents", "terms_and_conditions_file.pdf");
                     TempData["TermsAndConditionsMsgModal"] = "Terms and conditions file has been updated.";
 
-                    return RedirectToAction("TermsAndConditions");
+                    return RedirectToAction(nameof(TermsAndConditions));
                 }
             }
 
@@ -76,7 +76,7 @@ namespace CourseReviewApp.Web.Controllers
             _fileService.DeleteFile("Documents\\terms_and_conditions_file.pdf");
             TempData["TermsAndConditionsMsgModal"] = "Terms and conditions file has been deleted.";
 
-            return RedirectToAction("TermsAndConditions");
+            return RedirectToAction(nameof(TermsAndConditions));
         }
     }
 }

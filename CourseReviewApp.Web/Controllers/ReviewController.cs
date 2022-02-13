@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -83,11 +82,11 @@ namespace CourseReviewApp.Web.Controllers
                     viewModel.RatingValue.ToString() == TempData["PreviousReviewRating"].ToString())
                 {
                     TempData["CourseDetailsMsgModal"] = "Review has not been edited.";
-                    return RedirectToAction("Details", "Course", new { id = viewModel.CourseId });
+                    return RedirectToAction(nameof(CourseController.Details), "Course", new { id = viewModel.CourseId });
                 }
                 await _reviewService.AddOrEditReview(Mapper.Map<Review>(viewModel));
 
-                if(!viewModel.Id.HasValue)
+                if (!viewModel.Id.HasValue)
                 {
                     IList<string> observingUsers = (await _courseService.GetObservingUsersEmails(viewModel.CourseId,
                     int.Parse(UserManager.GetUserId(User)))).ToList();
@@ -103,7 +102,7 @@ namespace CourseReviewApp.Web.Controllers
                 TempData["CourseDetailsMsgModal"] = viewModel.Id.HasValue ? "Your review has been edited."
                     : "Your review has been added.";
 
-                return RedirectToAction("Details", "Course", new { id = viewModel.CourseId });
+                return RedirectToAction(nameof(CourseController.Details), "Course", new { id = viewModel.CourseId });
             }
 
             return View(viewModel);
@@ -137,7 +136,7 @@ namespace CourseReviewApp.Web.Controllers
             if (ModelState.IsValid)
             {
                 await _reviewService.DeleteReview(viewModel.Id);
-                if(viewModel.IsModeratingDeletion)
+                if (viewModel.IsModeratingDeletion)
                     TempData["ReportManagementMsgModal"] = "Review has been deleted.";
                 else
                     TempData["CourseDetailsMsgModal"] = "Your review has been deleted.";
@@ -147,7 +146,7 @@ namespace CourseReviewApp.Web.Controllers
                             viewModel.Author.Email);
 
                 if (viewModel.ReturnToReportManagement)
-                    return RedirectToAction("ReportManagement", "Report");
+                    return RedirectToAction(nameof(ReportController.ReportManagement), "Report");
                 return Redirect(viewModel.ReturnUrl);
             }
 
@@ -195,14 +194,14 @@ namespace CourseReviewApp.Web.Controllers
                 if (viewModel.Id.HasValue && viewModel.Contents == TempData["PreviousCommentContents"].ToString())
                 {
                     TempData["CourseDetailsMsgModal"] = "Comment has not been edited.";
-                    return RedirectToAction("Details", "Course", new { id = viewModel.CourseId });
+                    return RedirectToAction(nameof(CourseController.Details), "Course", new { id = viewModel.CourseId });
                 }
 
                 await _reviewService.AddOrEditOwnerComment(Mapper.Map<OwnerComment>(viewModel));
                 TempData["CourseDetailsMsgModal"] = viewModel.Id.HasValue ? "Your comment has been edited."
                     : "Your comment has been added.";
 
-                return RedirectToAction("Details", "Course", new { id = viewModel.CourseId });
+                return RedirectToAction(nameof(CourseController.Details), "Course", new { id = viewModel.CourseId });
             }
 
             return View(viewModel);
@@ -341,7 +340,7 @@ namespace CourseReviewApp.Web.Controllers
             if (ModelState.IsValid)
             {
                 await _reviewService.DeleteOwnerComment(viewModel.Id);
-                if(viewModel.IsModeratingDeletion)
+                if (viewModel.IsModeratingDeletion)
                     TempData["ReportManagementMsgModal"] = "Owner's comment has been deleted.";
                 else
                     TempData["CourseDetailsMsgModal"] = "Your comment has been deleted.";

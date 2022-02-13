@@ -6,7 +6,6 @@ using CourseReviewApp.Web.Services.Classes;
 using CourseReviewApp.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -32,7 +31,7 @@ namespace CourseReviewApp.Web
         {
             services.AddAutoMapper(typeof(Startup));
             services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
             services.AddDatabaseDeveloperPageExceptionFilter();
 

@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
-using CourseReviewApp.Web.Services.Interfaces;
+﻿using CourseReviewApp.Web.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System;
 
 namespace CourseReviewApp.Web.Services.Classes
 {

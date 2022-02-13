@@ -54,7 +54,7 @@ namespace CourseReviewApp.Web.Controllers
             ViewBag.Controller = "Course";
             ViewBag.NotAssignedToCategoryCount = await _courseService.GetCoursesCount(c => c.CategoryId == null);
 
-            if(notAssignedToCategory)
+            if (notAssignedToCategory)
             {
                 courses = await _courseService.GetCourses(c => c.CategoryId == null && c.Status == CourseStatus.Active);
                 ViewBag.NotAssignedToCategory = true;
@@ -159,7 +159,7 @@ namespace CourseReviewApp.Web.Controllers
                 return NotFound();
 
             string userId = UserManager.GetUserId(User);
-            if (course.Status == CourseStatus.Active || (!string.IsNullOrEmpty(userId) && (User.IsInRole("Admin") 
+            if (course.Status == CourseStatus.Active || (!string.IsNullOrEmpty(userId) && (User.IsInRole("Admin")
                 || User.IsInRole("Moderator") || course.OwnerId == int.Parse(userId))))
             {
                 if (User.IsInRole("Course_client"))
@@ -265,7 +265,7 @@ namespace CourseReviewApp.Web.Controllers
                     viewModel.DateAdded = JsonSerializer.Deserialize<DateTimeOffset>(TempData["PreviousCourseDate"].ToString());
                     TempData["CourseManagementMsgModal"] = "Course has not been edited.";
 
-                    return RedirectToAction("OwnerCoursesManagement");
+                    return RedirectToAction(nameof(OwnerCoursesManagement));
                 }
 
                 string destFolder = "Images\\Courses";
@@ -285,7 +285,7 @@ namespace CourseReviewApp.Web.Controllers
                 TempData["CourseManagementMsgModal"] = $"'{viewModel.Name}' course has been {word}." +
                     $" It will receive an Active status after positive verification by moderation.";
 
-                return RedirectToAction("OwnerCoursesManagement");
+                return RedirectToAction(nameof(OwnerCoursesManagement));
             }
 
             return View(viewModel);
@@ -322,8 +322,8 @@ namespace CourseReviewApp.Web.Controllers
             }
             TempData["CourseManagementMsgModal"] = $"'{viewModel.Name}' course has been deleted";
 
-            return RedirectToAction(User.IsInRole("Course_owner") 
-                ? "OwnerCoursesManagement" : "CourseManagement");
+            return RedirectToAction(User.IsInRole("Course_owner")
+                ? nameof(OwnerCoursesManagement) : nameof(CourseManagement));
         }
 
         [HttpGet]
@@ -334,7 +334,7 @@ namespace CourseReviewApp.Web.Controllers
             if (course == null)
                 return NotFound();
             var statusValues = from CourseStatus status in Enum.GetValues(typeof(CourseStatus))
-                             select new { id = (int)status, name = status.ToString() };
+                               select new { id = (int)status, name = status.ToString() };
 
             ViewBag.StatusValues = new SelectList(statusValues, "id", "name");
             TempData["PreviousCourseStatus"] = course.Status.ToString();
@@ -352,7 +352,7 @@ namespace CourseReviewApp.Web.Controllers
                 if (viewModel.Status.ToString() == TempData["PreviousCourseStatus"].ToString())
                 {
                     TempData["CourseManagementMsgModal"] = $"The status of the '{viewModel.Name}' course has not been changed.";
-                    return RedirectToAction("CourseManagement");
+                    return RedirectToAction(nameof(CourseManagement));
                 }
                 await _courseService.ChangeCourseStatus(viewModel.Id, viewModel.Status);
 
@@ -364,7 +364,7 @@ namespace CourseReviewApp.Web.Controllers
                 }
                 TempData["CourseManagementMsgModal"] = $"The status of the '{viewModel.Name}' course has been changed to {viewModel.Status}";
 
-                return RedirectToAction("CourseManagement");
+                return RedirectToAction(nameof(CourseManagement));
             }
 
             return View(viewModel);
@@ -394,7 +394,7 @@ namespace CourseReviewApp.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Course_client")]
-        public async Task AddCourseToObservedList(int id) 
+        public async Task AddCourseToObservedList(int id)
         {
             await _courseService.AddCourseToObservedList(int.Parse(UserManager.GetUserId(User)), id);
         }
@@ -403,7 +403,7 @@ namespace CourseReviewApp.Web.Controllers
         [Authorize(Roles = "Course_client")]
         public async Task RemoveCourseFromObservedList(int id)
         {
-            await _courseService.RemoveCourseFromObservedList(int.Parse(UserManager.GetUserId(User)), id); 
+            await _courseService.RemoveCourseFromObservedList(int.Parse(UserManager.GetUserId(User)), id);
         }
 
         [HttpGet]

@@ -9,7 +9,7 @@ namespace CourseReviewApp.Web.Controllers
 {
     public class ErrorController : BaseController
     {
-        public ErrorController(ILogger logger, IMapper mapper, UserManager<AppUser> userManager) 
+        public ErrorController(ILogger logger, IMapper mapper, UserManager<AppUser> userManager)
             : base(logger, mapper, userManager)
         {
         }
@@ -17,7 +17,7 @@ namespace CourseReviewApp.Web.Controllers
         [Route("Error/{code:int}")]
         public IActionResult Error(int code)
         {
-            if(code == 403)
+            if (code == 403)
                 return View("Error403");
             else if (code == 404)
                 return View("Error404");

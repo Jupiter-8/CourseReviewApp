@@ -71,7 +71,7 @@ namespace CourseReviewApp.Web.Controllers
                 await _reportService.AddReviewReport(Mapper.Map<ReviewReport>(viewModel));
                 TempData["CourseDetailsMsgModal"] = "Review has been reported.";
 
-                return RedirectToAction("Details", "Course", new { id = TempData["CourseId"].ToString() });
+                return RedirectToAction(nameof(CourseController.Details), "Course", new { id = TempData["CourseId"].ToString() });
             }
 
             return View(viewModel);
@@ -98,7 +98,7 @@ namespace CourseReviewApp.Web.Controllers
                 await _reportService.DeleteReviewReport(viewModel.Id);
                 TempData["ReportManagementMsgModal"] = "Review report has been deleted.";
 
-                return RedirectToAction("ReportManagement");
+                return RedirectToAction(nameof(ReportManagement));
             }
 
             return View(viewModel);

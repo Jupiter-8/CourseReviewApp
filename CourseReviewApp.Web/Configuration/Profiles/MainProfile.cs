@@ -41,8 +41,8 @@ namespace CourseReviewApp.Web.Configuration.Profiles
             CreateMap<Category, CategoryVm>()
                 .ForMember(dest => dest.CoursesCount, x => x.MapFrom(
                     src => src.ParentCategoryId.HasValue ? src.Courses.Count : src.SubCategories.Sum(sc => sc.Courses.Count)))
-                .ForMember(dest => dest.ActiveCoursesCount, x => x.MapFrom(src => src.ParentCategoryId.HasValue ? 
-                    src.Courses.Where(c => c.Status == CourseStatus.Active).Count() 
+                .ForMember(dest => dest.ActiveCoursesCount, x => x.MapFrom(src => src.ParentCategoryId.HasValue ?
+                    src.Courses.Where(c => c.Status == CourseStatus.Active).Count()
                     : src.SubCategories.Sum(sc => sc.Courses.Where(c => c.Status == CourseStatus.Active).Count())));
 
             CreateMap<Category, AddOrEditCategoryVm>();
