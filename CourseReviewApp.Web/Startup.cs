@@ -85,7 +85,6 @@ namespace CourseReviewApp.Web
             factory.AddFile("Logs/log.txt");
             if (env.IsDevelopment())
             {
-                //app.UseExceptionHandler("/Error");
                 app.UseStatusCodePagesWithReExecute("/Error/{0}");
                 app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
