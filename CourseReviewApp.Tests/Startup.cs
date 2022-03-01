@@ -2,16 +2,12 @@
 using CourseReviewApp.Model.DataModels;
 using CourseReviewApp.Services.Classes;
 using CourseReviewApp.Services.Interfaces;
-using CourseReviewApp.Web.Services.Classes;
-using CourseReviewApp.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
-using System.Net;
-using System.Net.Mail;
 
 namespace CourseReviewApp.Tests
 {
@@ -24,7 +20,7 @@ namespace CourseReviewApp.Tests
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>(opt =>
-                   opt.UseInMemoryDatabase("InMemoryDatabase"));
+                   opt.UseInMemoryDatabase(new Guid().ToString()));
 
             services.AddIdentityCore<AppUser>(options =>
             {
@@ -44,8 +40,6 @@ namespace CourseReviewApp.Tests
             services.AddTransient<IReviewService, ReviewService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IReportService, ReportService>();
-            services.AddTransient<IFileService, FileService>();
-            services.AddTransient<IEmailSenderService, EmailSenderService>();
 
             services.AddSingleton<IConfiguration>(x =>
             {
@@ -55,23 +49,6 @@ namespace CourseReviewApp.Tests
                 .AddEnvironmentVariables();
                 return builder.Build();
             });
-
-            services.AddTransient((serviceProvider) =>
-            {
-                var config = serviceProvider.GetRequiredService<IConfiguration>();
-                return new SmtpClient()
-                {
-                    Host = config.GetValue<string>("Email:Smtp:Host"),
-                    Port = config.GetValue<int>("Email:Smtp:Port"),
-                    EnableSsl = true,
-                    DeliveryMethod = SmtpDeliveryMethod.Network,
-                    UseDefaultCredentials = false,
-                    Credentials = new NetworkCredential(
-                            config.GetValue<string>("Email:Smtp:Username"), config.GetValue<string>("Email:Smtp:Password"))
-                };
-            });
-
-            services.SeedData();
         }
     }
 }
