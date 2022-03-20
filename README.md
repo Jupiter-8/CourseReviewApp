@@ -67,3 +67,33 @@ Steps:
 
 ## Running application
 
+Main page from annomyous user's perspective:
+
+![obraz](https://user-images.githubusercontent.com/77903617/159188574-3dd606af-b8dd-4b03-beaa-56513df672bc.png)
+
+Some users accounts you can log in and test features available for each role:
+
+| Username    | Role         |
+| ----------- | -----------  |
+| user1       | Course Owner |
+| user2       | Course Client|
+| user3       | Admin        |
+| user4       | Course Owner, Moderator |
+
+Password for each user is Pass123;
+
+Course details:
+
+![obraz](https://user-images.githubusercontent.com/77903617/159189307-6cd8b688-a13f-4b38-8c4c-ecdde5ff4f38.png)
+
+Reviews section (logged user is an author of the first review on the list):
+
+![obraz](https://user-images.githubusercontent.com/77903617/159189219-63ae2de0-4819-44b5-b284-dc1815018c7d.png)
+
+![obraz](https://user-images.githubusercontent.com/77903617/159189356-33ad05b1-37a7-4bd1-b83c-7eaf1a5760e1.png)
+
+Course management panel for the admin user:
+
+![obraz](https://user-images.githubusercontent.com/77903617/159189469-8c9f5b7e-9f98-4482-9f28-93fa6cc2c5a7.png)
+
+
