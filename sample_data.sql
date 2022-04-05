@@ -272,7 +272,7 @@ SET IDENTITY_INSERT [dbo].[Courses] OFF
 SET IDENTITY_INSERT [dbo].[Reviews] ON
 
 INSERT [dbo].[Reviews] ([Id], [Contents], [RatingValue], [CourseId], [AuthorId], DateAdded)
-	VALUES(1, N'Very good course, I have learned very much. Thanks.',
+	VALUES(1, N'Very good course, I have learned a lot. Thanks.',
 	  5, 1, 2, CAST(N'2022-01-03T18:21:00.0000000' AS DateTime2));
 
 INSERT [dbo].[Reviews] ([Id], [Contents], [RatingValue], [CourseId], [AuthorId], DateAdded)
