@@ -4,7 +4,7 @@ A simple application for reviewing online courses.
 
 ## Description
 
-Application is built built according to the MPA approach. You can register a new account with the user type "Course owner" or "Course client".
+Application is built according to the MPA approach. You can register a new account with the user type "Course owner" or "Course client".
 Course owner can add informations about his course to the application. Course client can review courses available in the application.
 Special users like Moderator or Admin manage the content and users.
 
@@ -69,7 +69,13 @@ Steps:
 
 Main page from annomyous user's perspective:
 
-![obraz](https://user-images.githubusercontent.com/77903617/159188574-3dd606af-b8dd-4b03-beaa-56513df672bc.png)
+![obraz](https://user-images.githubusercontent.com/77903617/161860165-68afbe64-4867-4332-b1c9-924f0a768177.png)
+
+The first carousel presents last added reviews. Below there are two carousels for presenting last added courses and best rated courses.
+In each carousel you can navigate to course by clicking its title.
+
+![obraz](https://user-images.githubusercontent.com/77903617/161860374-de7640b9-0aa4-4b09-83d0-f6c89c85cfc7.png)
+
 
 Some users accounts you can log in and test features available for each role:
 
