@@ -67,7 +67,7 @@ Steps:
 
 ## Running application
 
-Main page from annomyous user's perspective:
+The main page of the application:
 
 ![obraz](https://user-images.githubusercontent.com/77903617/161860165-68afbe64-4867-4332-b1c9-924f0a768177.png)
 
@@ -86,31 +86,57 @@ Some users accounts you can log in and test features available for each role:
 | user3       | Admin        |
 | user4       | Course Owner, Moderator |
 
-Password for each user is Pass123;
+Password for each user is Pass1234;
 
-Section with course list. You can view courses from selected main category or subcategory. There is a option for sorting
-results and filtering by name. You can navigate to course's description site by clicking its title. The list displays 10 results, at the bottom
+Section with course list. You can view courses from a selected main category or a subcategory. There is a option for sorting
+results and filtering by a name. You can navigate to a course's description site by clicking its title. The list displays 10 results, at the bottom
 of the list there is a pagination menu.
 
 ![obraz](https://user-images.githubusercontent.com/77903617/162021389-de9d291b-e1ce-4a2c-8a28-83259f52e80d.png)
 
 Course details:
 
-At the top there is a navigation bar from where you can navigate to viewed course's main category or subcategory.
+At the top there is a navigation bar from where you can navigate to the viewed course's main category or subcategory.
 Under the title there is a link for the course's website.
 
 ![obraz](https://user-images.githubusercontent.com/77903617/159189307-6cd8b688-a13f-4b38-8c4c-ecdde5ff4f38.png)
 
-![obraz](https://user-images.githubusercontent.com/77903617/162019813-6fbcc690-fc01-4b90-b908-8c953ca17424.png)
+You can add a course to the list of observed courses.
 
-Reviews section (logged user is an author of the first review on the list):
+![obraz](https://user-images.githubusercontent.com/77903617/162035423-5b3acaec-0c95-4a4e-a066-425f4f67a550.png)
+
+A message after adding a course to the list of observed courses. A notification will be send to a user's email.
+ 
+![obraz](https://user-images.githubusercontent.com/77903617/162035883-d428264f-6a48-452b-b229-497f089a683e.png)
+
+
+Reviews section:
+
+The currently logged user is an author of the first review on the list. You can edit or delete your review. 
+You can also vote or unvote that other user's review is helpfull. There are options for sorting and filtering results on the list.
 
 ![obraz](https://user-images.githubusercontent.com/77903617/159189219-63ae2de0-4819-44b5-b284-dc1815018c7d.png)
 
+You can report other user's review for a inappropriate content. By default, review list presents 5 newest results.
+You can load next 5 results by clicking the button at the bottom of the list.
+
 ![obraz](https://user-images.githubusercontent.com/77903617/159189356-33ad05b1-37a7-4bd1-b83c-7eaf1a5760e1.png)
+
+As an course's author you can add comments to its reviews, you can also edit or remove your existing comment and
+report a review for a inappropriate content.
+
+![obraz](https://user-images.githubusercontent.com/77903617/162033958-504f0cf9-f36e-4fa0-95c7-17dcfe8199a4.png)
+
+A form for adding a new review:
+
+![obraz](https://user-images.githubusercontent.com/77903617/162034858-3d8529de-6aab-4c5f-af59-f5c74216f32e.png)
 
 Course management panel for the admin user:
 
 ![obraz](https://user-images.githubusercontent.com/77903617/159189469-8c9f5b7e-9f98-4482-9f28-93fa6cc2c5a7.png)
 
+User settings panel:
 
+![obraz](https://user-images.githubusercontent.com/77903617/162036691-0f79701d-f4b7-4be6-a5bd-b7722b1f6bfc.png)
+
+Presented screens don't show all pages and features of the application.
