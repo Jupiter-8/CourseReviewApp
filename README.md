@@ -74,7 +74,7 @@ Main page from annomyous user's perspective:
 The first carousel presents last added reviews. Below there are two carousels for presenting last added courses and best rated courses.
 In each carousel you can navigate to course by clicking its title.
 
-![obraz](https://user-images.githubusercontent.com/77903617/161860374-de7640b9-0aa4-4b09-83d0-f6c89c85cfc7.png)
+![obraz](https://user-images.githubusercontent.com/77903617/162018098-496a9564-20de-47ec-94e7-e28e470a2d06.png)
 
 
 Some users accounts you can log in and test features available for each role:
@@ -88,9 +88,20 @@ Some users accounts you can log in and test features available for each role:
 
 Password for each user is Pass123;
 
+Section with course list. You can view courses from selected main category or subcategory. There is a option for sorting
+results and filtering by name. You can navigate to course's description site by clicking its title. The list displays 10 results, at the bottom
+of the list there is a pagination menu.
+
+![obraz](https://user-images.githubusercontent.com/77903617/162021389-de9d291b-e1ce-4a2c-8a28-83259f52e80d.png)
+
 Course details:
 
+At the top there is a navigation bar from where you can navigate to viewed course's main category or subcategory.
+Under the title there is a link for the course's website.
+
 ![obraz](https://user-images.githubusercontent.com/77903617/159189307-6cd8b688-a13f-4b38-8c4c-ecdde5ff4f38.png)
+
+![obraz](https://user-images.githubusercontent.com/77903617/162019813-6fbcc690-fc01-4b90-b908-8c953ca17424.png)
 
 Reviews section (logged user is an author of the first review on the list):
 
